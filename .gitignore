@@ -1,0 +1,10 @@
+yoda
+yoda.rebuilt
+*.o
+
+memory/
+examples/decision-state/memory/
+
+*~
+*.swp
+*.tmp
