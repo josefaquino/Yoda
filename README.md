@@ -2,6 +2,32 @@
 
 Yoda is a local, verifiable decision-state layer for autonomous software.
 
+## Try the Preview
+
+Download these two files from the current GitHub prerelease:
+
+    yoda-v0.1.0-preview.1-linux-x86_64.tar.gz
+    yoda-v0.1.0-preview.1-linux-x86_64.tar.gz.sha256
+
+Verify the downloaded archive:
+
+    sha256sum -c yoda-v0.1.0-preview.1-linux-x86_64.tar.gz.sha256
+
+Extract it:
+
+    tar -xzf yoda-v0.1.0-preview.1-linux-x86_64.tar.gz
+    cd yoda-v0.1.0-preview.1-linux-x86_64
+
+Run Yoda:
+
+    ./yoda init ./memory
+
+No server, account, network connection, Python, Node, or JVM is required.
+
+Release:
+
+    https://github.com/josefaquino/Yoda/releases/tag/v0.1.0-preview.1
+
 ## Platform
 
 Current validated binary:
