@@ -2,6 +2,14 @@
 
 Yoda is a local, verifiable decision-state layer for autonomous software.
 
+## Vision
+
+> The internet is a living organism. Data is born, changes, forms relationships, conflicts, ages, and is replaced. Yoda does not try to own the internet. It records the verifiable DNA of the data it observes: origin, identity, relationships, history, mutations, and the evidence produced by experiments.
+
+Yoda grows through propagation: real problems become reproducible evidence, reproducible evidence becomes reusable experiments, and reusable experiments generate new knowledge.
+
+See `PROPAGATION-MODEL.md` for the product and community growth model behind this idea.
+
 ## Try the Preview
 
 Download these two files from the current GitHub prerelease:
