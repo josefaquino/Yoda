@@ -1,0 +1,4 @@
+PUT	2026-10-01T09:21:12Z	1037c150088bea6dd727eac873a3ae5ec5b170900f724fb68eb30cff555d6246	-	production-validation	125
+LINK	2026-10-01T09:21:12Z	84217d06fedc6adb55cc32728dbb642cf2b9ed65c3deecd3399c851edff64603	supersedes	dependency/widget-2.4-validation	field-001
+LINK	2026-10-01T09:21:12Z	20b2f79677479df4a2e8d851492f18f9fd35d2b4bfb29c7c306f55a9f9876014	resolves	dependency/widget-2.4-security-advisory	field-001
+LINK	2026-10-01T09:21:12Z	89e3ab7f04445bab739783f3786dbacc9d0ce930fa6bcc878c98d2e15d9a0645	governed-by	policy/production-security	field-001

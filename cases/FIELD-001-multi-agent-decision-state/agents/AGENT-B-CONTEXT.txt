@@ -1,0 +1,15 @@
+--- dependency/widget-2.5-validation ---
+Widget 2.5 passed compatibility and production validation and addresses the critical security advisory affecting Widget 2.4.
+
+@link dependency/widget-2.5-validation --governed-by--> policy/production-security
+--- policy/production-security ---
+Production deployment requires a version that has passed validation and is not blocked by an active critical security advisory.
+
+@link dependency/widget-2.5-validation --resolves--> dependency/widget-2.4-security-advisory
+--- dependency/widget-2.4-security-advisory ---
+Widget 2.4 is affected by an active critical security advisory and must not be deployed to production.
+
+@link dependency/widget-2.5-validation --supersedes--> dependency/widget-2.4-validation
+--- dependency/widget-2.4-validation ---
+Widget 2.4 passed compatibility and production validation.
+

@@ -1,0 +1,3 @@
+PUT	2026-10-01T09:21:12Z	937dcdf40c4b33bda873edee85e741c9a96f9c36ddf447a83c4365258fd22974	-	security-advisory	103
+LINK	2026-10-01T09:21:12Z	3c1ce03e1b800fce4d48914dc824acea2a5aaaf9279e51036438ab8f323a9c65	conflicts-with	dependency/widget-2.4-validation	field-001
+LINK	2026-10-01T09:21:12Z	e9ce0fc21f8f460b714ea483951ef8eb92844b6418d3137b059dbacc6cd85fb3	governed-by	policy/production-security	field-001

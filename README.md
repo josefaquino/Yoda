@@ -141,6 +141,22 @@ After testing, see:
 
 ---
 
+## Field Cases
+
+Yoda grows by propagation: real problems become reproducible evidence, reproducible evidence becomes reusable experiments, and reusable experiments generate new knowledge.
+
+### FIELD-001 — Multi-Agent Decision State
+
+Can independent decision processes recover consistent, decision-relevant evidence from shared durable state without sharing transient conversational context?
+
+    cases/FIELD-001-multi-agent-decision-state/
+
+The case is designed to be reproduced, adapted, forked, and republished.
+
+See `PROPAGATION-MODEL.md` for the propagation model.
+
+---
+
 ## License
 
 Yoda v0.1.0-preview.1 is distributed under the Apache License, Version 2.0.
