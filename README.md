@@ -361,6 +361,29 @@ Using the public NASA FIRMS VIIRS sample dataset, the validated run ingested and
 
 FIRMS-001 does not claim fire detection, prediction, or database performance superiority. It establishes a narrower milestone: a second real-world domain can be represented and replayed by the existing Yoda kernel without a product change.
 
+### BGP-RIPE-RIS-001 — Real Routing-State Mutation Equivalence
+
+Can the KyberDB public embedded API apply a real stream of BGP announcements and withdrawals, persist it with full durability, close and reopen the database, and reconstruct exactly the same routing state as an independent oracle?
+
+    cases/BGP-RIPE-RIS-001-real-routing-state-equivalence/
+
+Using a frozen RIPE NCC RIS `rrc00` historical MRT update file, the validated run processed 50,000 real BGP events: 47,838 announcements and 2,162 withdrawals. The workload produced 19,059 distinct route identities using `peer_ip + peer_asn + prefix`.
+
+After five durable commit batches, database verification, close/reopen, and a second verification, KyberDB reconstructed 18,318 active routes. The independent oracle also produced 18,318 routes, and both final states had the exact same SHA-256:
+
+    edff6d9b57012b610a99c9c03dc9fd008c1632d8602186bc98c930cc1e611890
+
+Result:
+
+    POST_REOPEN_STATE_EQUIVALENCE=PASS
+    DATABASE_VERIFY_PRE_CLOSE=PASS
+    CLOSE_REOPEN=PASS
+    DATABASE_VERIFY_POST_REOPEN=PASS
+    EVIDENCE_INTEGRITY=PASS
+    ENGINE_CHANGE=NO
+
+This is a KyberDB Public Embedded ABI field case, not a Yoda CORE-015 CLI validation. It establishes exact mutation-state correctness and durability for the tested RIPE RIS workload; it does not claim BGP-system functionality or performance superiority.
+
 See `PROPAGATION-MODEL.md` for the propagation model.
 
 ---
