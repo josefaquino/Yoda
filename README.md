@@ -153,6 +153,16 @@ Can independent decision processes recover consistent, decision-relevant evidenc
 
 The case is designed to be reproduced, adapted, forked, and republished.
 
+### COMMAND-NATIVE-001 — Command Contract for Agents
+
+Can an autonomous agent recover decision-relevant durable state through a small Yoda command vocabulary without SQL, raw database access, or a full state dump?
+
+    cases/COMMAND-NATIVE-001-command-contract/
+
+The tested free-form textual command protocol produced a valid negative result for the tested model and task. The failure was at the agent-command transport boundary, not in Yoda storage. The result earned a narrower next experiment: keep the command vocabulary fixed and test typed/native tool transport.
+
+Negative results are evidence too.
+
 See `PROPAGATION-MODEL.md` for the propagation model.
 
 ---
