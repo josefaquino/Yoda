@@ -140,6 +140,194 @@ After testing, see:
     FEEDBACK.md
 
 ---
+## Cross-Domain Validation — Core-015
+
+Yoda is being validated incrementally against distinct real-world public datasets.
+
+The objective is not to optimize the engine for a single domain. Each experiment applies the same frozen core to a different type of data and asks a narrow, reproducible question.
+
+The current evidence shows that **Yoda Core-015 has passed two independent public-data validation cases without requiring an engine change**.
+
+```mermaid
+flowchart TB
+    A["YODA CORE-015"]
+
+    A --> B["NASA FIRMS"]
+    A --> C["USGS"]
+
+    B --> B1["observations"]
+    C --> C1["events"]
+
+    B1 --> B2["900 / 900"]
+    C1 --> C2["192 / 192"]
+
+    B2 --> B3["exact facts"]
+    B3 --> B4["exact decision"]
+    B4 --> B5["verify PASS"]
+    B5 --> B6["history PASS"]
+
+    C2 --> C3["external IDs"]
+    C3 --> C4["exact facts"]
+    C4 --> C5["exact decision"]
+    C5 --> C6["verify PASS"]
+    C6 --> C7["history PASS"]
+
+    B6 --> D["ENGINE CHANGES"]
+    C7 --> D
+
+    D --> E["ZERO"]
+```
+
+### Validation Cases
+
+| Case | Public authority | Domain | Records | Identity model | Fact equivalence | Decision equivalence | Verify | History | Engine changes |
+|---|---|---|---:|---|---|---|---|---|---:|
+| `FIRMS-001` | NASA FIRMS | Satellite observations | 900 | Content-derived SHA-256 | PASS | PASS | PASS | PASS | 0 |
+| `USGS-001` | USGS Earthquake Catalog | Seismic events | 192 | External USGS event ID | PASS | PASS | PASS | PASS | 0 |
+
+### FIRMS-001 — Public Observation Equivalence
+
+FIRMS-001 tested Yoda against a public NASA FIRMS VIIRS observation dataset.
+
+The source contained 74,605 observations. A deterministic geographic subset reproduced the NASA reference result of:
+
+    900 observations
+    324 2.0URT observations
+    576 other observations
+
+All 900 observations were persisted into Yoda Core-015 and replayed through the public database interface.
+
+Result:
+
+    OBSERVATIONS_INGESTED=900
+    OBSERVATIONS_REPLAYED=900
+
+    RECORDS_VERIFIED=900
+
+    FACT_EQUIVALENCE=PASS
+    DECISION_EQUIVALENCE=PASS
+    DURABLE_HISTORY=PASS
+    EVIDENCE_INTEGRITY=PASS
+
+No LLM, Python, or SQL was used in the tested path.
+
+See:
+
+    cases/FIRMS-001-public-observation-equivalence/
+
+### USGS-001 — Public Earthquake Event Equivalence
+
+USGS-001 moved the same engine into a different domain: public earthquake events from the USGS Earthquake Catalog.
+
+The experiment used a frozen historical query:
+
+    2025-01-01
+    through
+    2025-01-08
+
+    minimum magnitude = 4.5
+
+The independent USGS count endpoint and the downloaded catalog both reported:
+
+    192 events
+
+Unlike FIRMS-001, object identity was not derived from record content. Yoda preserved the external event identity assigned by USGS.
+
+Example:
+
+    usgs/event/nc75111126
+
+The deterministic magnitude classification produced:
+
+    4   M6_PLUS
+    188 BELOW_M6
+
+Yoda reproduced the same result after persistence and replay.
+
+Result:
+
+    EVENTS_INGESTED=192
+    EVENTS_REPLAYED=192
+
+    RECORDS_VERIFIED=192
+
+    EXTERNAL_IDENTITY_PRESERVED=PASS
+    FACT_EQUIVALENCE=PASS
+    DECISION_EQUIVALENCE=PASS
+    DURABLE_HISTORY=PASS
+    EVIDENCE_INTEGRITY=PASS
+
+No LLM, Python, or SQL was used in the tested path.
+
+See:
+
+    cases/USGS-001-public-earthquake-equivalence/
+
+### What These Results Demonstrate
+
+These experiments do not claim that Yoda detects fires, predicts earthquakes, outperforms specialized databases, or provides domain expertise.
+
+They demonstrate a narrower foundation:
+
+> The same frozen Yoda Core-015 can ingest data from distinct public domains, preserve deterministic identities and facts, verify authoritative state, maintain durable history, and reproduce independently computed results exactly.
+
+The two cases exercise different identity models:
+
+    FIRMS
+    observation content
+          ↓
+    SHA-256 identity
+          ↓
+    firms/obs/<sha256>
+
+and:
+
+    USGS
+    external authority
+          ↓
+    public event ID
+          ↓
+    usgs/event/<event-id>
+
+Both passed without changes to the storage engine.
+
+### Experimental Principle
+
+Yoda development follows an evidence-driven rule:
+
+> Do not adapt the engine to a dataset before the dataset demonstrates where the engine is insufficient.
+
+A successful experiment does not automatically justify a new feature.
+
+A failed experiment does not automatically justify a new feature.
+
+Structural changes should be earned by limitations that recur across independent real-world cases.
+
+The current state is therefore:
+
+    FIRMS-001 = PASS
+    USGS-001  = PASS
+
+    CORE-015 = RETAIN
+
+    ENGINE_CHANGES_EARNED = 0
+
+### Direction
+
+Future cases will deliberately expose the same engine to different workloads and different forms of pressure:
+
+    scientific observations
+    event streams
+    temporal revisions
+    graph relationships
+    market data
+    high-volume ingestion
+    crash recovery
+    point-in-time reconstruction
+
+The goal is not to prove one large thesis in a single experiment.
+
+The goal is to accumulate small, reproducible and independently verifiable pieces of evidence until the real properties — and real limitations — of Yoda emerge from practice.
 
 ## Field Cases
 
