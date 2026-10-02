@@ -163,6 +163,16 @@ The tested free-form textual command protocol produced a valid negative result f
 
 Negative results are evidence too.
 
+### FIRMS-001 — Public Observation Equivalence
+
+Can the same Yoda kernel preserve real public scientific observations and reproduce exactly the facts and deterministic classification derived independently from the original source?
+
+    cases/FIRMS-001-public-observation-equivalence/
+
+Using the public NASA FIRMS VIIRS sample dataset, the validated run ingested and replayed 900 USA (Conterminous) + Hawaii observations. All 900 records passed authoritative verification, and both canonical fact equivalence and deterministic classification equivalence passed exactly. The experiment used no LLM, Python, or SQL in the tested path.
+
+FIRMS-001 does not claim fire detection, prediction, or database performance superiority. It establishes a narrower milestone: a second real-world domain can be represented and replayed by the existing Yoda kernel without a product change.
+
 See `PROPAGATION-MODEL.md` for the propagation model.
 
 ---
