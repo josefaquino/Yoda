@@ -384,6 +384,35 @@ Result:
 
 This is a KyberDB Public Embedded ABI field case, not a Yoda CORE-015 CLI validation. It establishes exact mutation-state correctness and durability for the tested RIPE RIS workload; it does not claim BGP-system functionality or performance superiority.
 
+### GENOME-KMER-001 — Verifiable Genomic K-mer Index
+
+Can the KyberDB public embedded API transform a real genomic sequence into a local, durable and verifiable k-mer frequency index, then reconstruct exactly the same index after close/reopen?
+
+    cases/GENOME-KMER-001-verifiable-genomic-kmer-index/
+
+Using the public NCBI RefSeq *Escherichia coli* K-12 MG1655 reference (`GCF_000005845.2`, `NC_000913.3`), the validated 100K stage decomposed 100,000 valid 31-base windows into 99,926 unique k-mers and persisted each exact k-mer with its occurrence count.
+
+After 100 durable commits, pre-close verification, close/reopen and post-reopen verification, KyberDB recovered all 99,926 indexed k-mers with zero missing keys and zero value mismatches. The independent oracle and KyberDB post-reopen state produced the same SHA-256:
+
+    b561ab1e0d956d5108c42cf63c8c2220fee2746503027a446161f5044abb1b6a
+
+Result:
+
+    ORACLE_RECORD_COUNT=99926
+    KYBER_RECORD_COUNT=99926
+    POST_REOPEN_MISSING=0
+    POST_REOPEN_VALUE_MISMATCH=0
+    POST_REOPEN_STATE_EQUIVALENCE=PASS
+    DATABASE_VERIFY_PRE_CLOSE=PASS
+    CLOSE_REOPEN=PASS
+    DATABASE_VERIFY_POST_REOPEN=PASS
+    EVIDENCE_INTEGRITY=PASS
+    ENGINE_CHANGE=NO
+
+This case establishes a foundational genomic-storage capability: exact local identity and frequency for k-mers with deterministic reconstruction after persistence. It does not claim variant calling, sequence alignment, genome assembly, pangenome analysis or biological interpretation.
+
+This is a KyberDB Public Embedded ABI field case, not a Yoda CORE-015 CLI validation.
+
 See `PROPAGATION-MODEL.md` for the propagation model.
 
 ---
