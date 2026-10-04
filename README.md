@@ -413,6 +413,37 @@ This case establishes a foundational genomic-storage capability: exact local ide
 
 This is a KyberDB Public Embedded ABI field case, not a Yoda CORE-015 CLI validation.
 
+### AUDIT-FORENSICS-001 — Verifiable Authentication Event Ledger
+
+Can the KyberDB public embedded API preserve a real ordered authentication-event ledger exactly across durable persistence and close/reopen, then reject persisted storage after a controlled one-byte physical tamper?
+
+    cases/AUDIT-FORENSICS-001-verifiable-authentication-event-ledger/
+
+Using the public LANL User-Computer Authentication Associations in Time dataset, B0 froze 10,000 real `time,user,computer` events and stored each source line under a deterministic ledger ordinal.
+
+After 10 durable commits, pre-close verification, close/reopen and post-reopen verification, KyberDB recovered all 10,000 events with zero missing records and zero value mismatches. The independent oracle and post-reopen KyberDB ledger produced the same SHA-256:
+
+    e65fe0f6cdb8cbe378fb8bb2410bc549a0f329495a63f5806ad8d78ecc9cee85
+
+TAMPER-A then copied the homologated database, changed exactly one byte in one persisted segment while preserving file length, and attempted to open the altered copy. KyberDB rejected the database during environment open:
+
+    OPEN_STATUS=CORRUPT
+    DETECTION_STAGE=ENV_OPEN
+    TAMPER_DETECTION=PASS
+
+Result:
+
+    AUDIT_FORENSICS_001_B0_10K=PASS
+    POST_REOPEN_LEDGER_EQUIVALENCE=PASS
+    AUDIT_FORENSICS_001_TAMPER_A=PASS
+    SOURCE_B0_STILL_INTACT=PASS
+    EVIDENCE_INTEGRITY=PASS
+    ENGINE_CHANGE=NO
+
+This case establishes exact durable preservation of the tested authentication-event ledger and rejection of the tested one-byte persisted mutation. It does not claim intrusion detection, SIEM functionality, time-travel, automatic corruption localization, or detection of every possible corruption pattern.
+
+This is a KyberDB Public Embedded ABI field case, not a Yoda CORE-015 CLI validation.
+
 See `PROPAGATION-MODEL.md` for the propagation model.
 
 ---
