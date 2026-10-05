@@ -32,6 +32,26 @@ The authorities remain separate throughout the experiment.
 SynthID Bio computes the measurement from the biological sequence using the frozen official detector and parameters.
 Yoda stores and reconstructs the artifacts, measurement evidence, tool identity, parameters, relationships and history around those artifacts.
 
+This CASE therefore tests an **independent authority replay** pattern:
+
+```text
+independent authority
+        ↓
+measurement
+        ↓
+       Yoda
+        ↓
+byte-exact recovery + lineage
+        ↓
+same independent authority
+        ↓
+same measurement
+```
+
+The central architectural principle is:
+
+> **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
+
 ---
 
 ## Stage A0 — DeepMind oracle authority
@@ -196,6 +216,14 @@ Or more compactly:
 
 > **SynthID Bio measures an intrinsic provenance signal. Yoda preserves the external derivation required to inspect and replay the surrounding evidence.**
 
+The CASE therefore provides one controlled demonstration of **composed provenance**:
+
+```text
+intrinsic provenance
++
+external workflow provenance
+```
+
 ---
 
 ## What was not demonstrated
@@ -262,3 +290,9 @@ COMPOSED_PROVENANCE=PASS
 YODA_CHANGE=NO
 KYBER_CHANGE=NO
 ```
+
+For the experiment contract, detailed results and motivation, see:
+
+- [CASE.md](CASE.md)
+- [RESULTS.md](RESULTS.md)
+- [WHY-WE-BUILT-THIS.md](WHY-WE-BUILT-THIS.md)
