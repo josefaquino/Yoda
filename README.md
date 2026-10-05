@@ -1,13 +1,17 @@
 # Yoda
 
-**A local, verifiable knowledge layer for results you need to explain.**
+## The verifiable derivation layer
 
-Yoda is built around a simple question:
+**Information behaves less like inventory and more like lineage.**
+
+Yoda is an open-source, local-first system for preserving the evidence, identities, relationships and history behind important results.
+
+Its core question is simple:
 
 > **Where did this result come from?**
 
-Most systems are good at storing an artifact or producing an answer.
-Yoda is interested in the chain behind it:
+Most systems are optimized to produce or store the final artifact.
+Yoda is built to preserve the chain behind it.
 
 ```text
 observation
@@ -21,117 +25,122 @@ result
 verifiable derivation
 ```
 
-The goal is not to prove that a scientific result is biologically, mathematically, or operationally correct.
+Yoda does **not** claim that a scientific result is biologically, mathematically or operationally true.
 
-The goal is narrower and more concrete:
+It aims to make something narrower — and increasingly important — independently inspectable:
 
-> **Preserve the verifiable chain that produced what we are looking at.**
-
-That means identity, provenance, relationships, history, tools, evidence, and the state needed to reconstruct context later.
+> **Which verifiable chain produced what we are looking at?**
 
 ---
 
-## A useful mental model
+## The mission
 
-One internal contrast we use is:
+AI is making generation cheaper: more code, more hypotheses, more proofs, more biological designs, more experiments and more autonomous decisions.
 
-```text
-Axiom:
-Prove the reasoning.
+As generation scales, provenance and verification become harder.
 
-Yoda:
-Prove the origin of the result.
-```
-
-This is a conceptual contrast, not an official Axiom slogan.
-
-The distinction matters.
-
-A proof-oriented reasoning system may care about:
+Yoda is exploring the infrastructure needed on the other side of that transition:
 
 ```text
-premises
-   ↓
-reasoning
-   ↓
-mathematical result
+more generation
+      ↓
+more artifacts
+      ↓
+more transformations
+      ↓
+more results
+      ↓
+more need for lineage, evidence and verification
 ```
 
-Yoda is exploring a different problem:
+We are building toward a world in which an important result does not have to be accepted on trust alone.
+
+It should be possible to ask:
 
 ```text
-observation
-   ↓
-artifact
-   ↓
-transformation
-   ↓
-result
-   ↓
-verifiable lineage
+What is this?
+Where did it come from?
+What produced it?
+What came before it?
+What changed?
+What evidence supports it?
+Can the chain be reconstructed later?
 ```
 
-Yoda does not claim to prove scientific truth.
-
-It aims to make the origin of a result inspectable, durable, and independently verifiable.
+Read [MISSION.md](MISSION.md).
 
 ---
 
-# Yoda and KyberDB
+## Genesis
+
+The project began with one idea:
+
+> **The Internet is a living organism. Data is born, changes, forms relationships, conflicts, ages, and is replaced.**
+
+That idea evolved into a broader thesis:
+
+> **Information behaves less like inventory and more like lineage.**
+
+The architecture emerged one question at a time:
+
+```text
+Sputnik observes the living world of data.
+Kyber preserves its state.
+Yoda reconstructs its lineage.
+Agents decide from the evidence that survives.
+```
+
+Or:
+
+```text
+Sputnik
+OBSERVATION
+    ↓
+Kyber
+STATE
+    ↓
+Yoda
+DERIVATION
+    ↓
+Agents / Humans
+DECISION
+```
+
+Read [GENESIS.md](GENESIS.md).
+
+---
+
+## Yoda and KyberDB
 
 Yoda and KyberDB solve different problems.
 
-## KyberDB
+### KyberDB — state integrity
 
 KyberDB is the embedded C11 state engine and storage research substrate.
 
-Its job is to answer questions such as:
+Its questions are:
 
-> Can this state be persisted exactly?
+> Can this state survive commit, close and reopen exactly?
 
-> Can it survive commit, close, reopen, and verification?
+> Can it be verified?
 
 > Can corruption be detected?
 
-> Can the exact post-reopen state be compared with an independent oracle?
+> Can post-reopen state be compared against an independent oracle?
 
-KyberDB focuses on:
+KyberDB focuses on exact local state, durability, verification and reconstruction.
 
-- local embedded state;
-- C11 and POSIX;
-- exact key/value persistence;
-- durable commits;
-- explicit verification;
-- close/reopen reconstruction;
-- content identity;
-- corruption detection;
-- public embedded ABI experiments.
+### Yoda — derivation integrity
 
-KyberDB is deliberately domain-agnostic.
+Yoda is the user-facing evidence and lineage layer.
 
-It does not need to understand genomics, routing, security logs, earthquakes, or satellite observations.
+Its questions are:
 
-It needs to preserve state correctly.
+> Where did this result come from?
 
-## Yoda
+> Which artifacts, tools, transformations and evidence produced it?
 
-Yoda is the user-facing verifiable knowledge and evidence layer.
-
-Its job is to answer questions such as:
-
-> What is this result?
-
-> Where did it come from?
-
-> What produced it?
-
-> What evidence supports it?
-
-> What changed?
-
-> What is related to it?
-
-> What context should an agent or developer see before making a decision?
+> Can that context be recovered later?
 
 Yoda focuses on:
 
@@ -144,7 +153,241 @@ Yoda focuses on:
 - verification;
 - decision-relevant state.
 
-Its CLI intentionally remains small:
+The distinction is deliberate:
+
+```text
+KyberDB:
+Can the state survive exactly?
+
+Yoda:
+Can the derivation of that state be reconstructed?
+```
+
+> **Kyber makes state durable. Yoda makes derivation inspectable.**
+
+---
+
+## A useful contrast
+
+One internal mental model is:
+
+```text
+Axiom:
+Can the reasoning be proved?
+
+Yoda:
+Can the derivation be proved?
+```
+
+This is a conceptual contrast, not an official Axiom slogan.
+
+Formal systems such as Lean can verify whether a proof satisfies a formal statement.
+Yoda is exploring a complementary problem: preserving the lineage around results and artifacts that move through real software and scientific workflows.
+
+```text
+formal world                    empirical / software world
+
+premises                        observation
+   ↓                               ↓
+reasoning                       artifact
+   ↓                               ↓
+proof                           transformation
+   ↓                               ↓
+formal verification             result
+                                   ↓
+                                lineage
+```
+
+Current research direction: test whether those two properties can compose.
+
+See [RESEARCH.md](RESEARCH.md).
+
+---
+
+## Why now
+
+Three trends are colliding:
+
+### 1. Agent systems are scaling generation
+
+Parallel agents can increase the rate at which hypotheses, code, candidate solutions and research paths are explored.
+
+### 2. Provenance is becoming infrastructure
+
+Google DeepMind's SynthID Bio is an example of provenance moving into AI-generated biological artifacts themselves.
+
+### 3. Validation may become the bottleneck
+
+As AI produces more scientific outputs, the scarce resource may shift from generating candidates to validating, tracing and reproducing them.
+
+Yoda is not an agent orchestrator, watermarking system or scientific truth machine.
+
+It is exploring the layer that can connect these worlds:
+
+```text
+artifact identity
+      +
+workflow lineage
+      +
+evidence
+      +
+history
+      +
+verification
+```
+
+Read [WHY-NOW.md](WHY-NOW.md).
+
+---
+
+## Evidence before narrative
+
+Yoda is developed through small falsifiable CASEs.
+
+The rule is:
+
+> **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
+
+The project has been tested against independent real-world workloads including:
+
+- NASA FIRMS satellite observations;
+- USGS earthquake events;
+- RIPE RIS BGP routing mutations;
+- LANL authentication events;
+- NCBI / ENA genomic data;
+- BWA alignment workflows;
+- bcftools variant calling.
+
+The genomics ladder progressively changed the object under test:
+
+```text
+GENOME-KMER-001
+identity and exact reconstruction
+      ↓
+GENOME-REFERENCE-001
+reference-state equivalence
+      ↓
+GENOME-READ-001
+real read-set preservation
+      ↓
+GENOME-ALIGNMENT-001
+workflow-derived state
+      ↓
+GENOME-VARIANT-001
+workflow continuity
+      ↓
+GENOME-LINEAGE-001
+verifiable scientific lineage
+```
+
+The strongest current controlled result is not "we stored VCF".
+
+It is that Yoda recovered a scientific lineage connecting:
+
+```text
+Reference
+   +
+ReadSet
+   ↓
+Alignment
+   ↓
+Variant State
+```
+
+with explicit relationships to tools, evidence and cryptographic identities.
+
+See [EVIDENCE.md](EVIDENCE.md) and [`cases/`](cases/).
+
+---
+
+## What the genomics work demonstrated
+
+In a controlled public-data workflow:
+
+```text
+Reference GCA_009015325.1
+        +
+ReadSet SRR10058842
+        ↓
+BWA
+        ↓
+20,074 alignment records
+        ↓
+Kyber persist / verify / reopen
+        ↓
+rehydrated alignment state
+        ↓
+bcftools
+        ↓
+327 variant records
+        ↓
+Kyber persist / verify / reopen
+        ↓
+byte-exact reconstructed variant state
+```
+
+Then Yoda represented and recovered lineage around that result:
+
+```text
+Variant
+  ├── produced-by ─────► bcftools
+  ├── called-against ──► Reference
+  ├── has-evidence ────► Variant Evidence
+  └── derived-from ────► Alignment
+                            ├── produced-by ─────► BWA
+                            ├── aligned-against ─► Reference
+                            ├── has-evidence ────► Alignment Evidence
+                            └── derived-from ────► ReadSet
+```
+
+This supports a narrow claim:
+
+> **Verifiable scientific lineage has been demonstrated for one controlled genomic workflow.**
+
+It does not establish biological truth, clinical validity, biotech-scale operation or product-market fit.
+
+---
+
+## Current research program
+
+The next phase deliberately leaves the comfort of our own datasets.
+
+### AXIOM-YODA-PROOF-LINEAGE-001
+
+Use public AXLE proof-verification infrastructure to test whether Yoda can preserve and reconstruct the lineage of a formally verified proof such that recovered artifacts can be verified again.
+
+Goal:
+
+```text
+Proof of Derivation
+        +
+Proof Verification
+```
+
+### BIO-DESIGN-LINEAGE-001
+
+Work with a real biological R&D workflow to test whether a final candidate can be traced back through design, build, test, analysis and evidence without inventing biology-specific storage features.
+
+Goal:
+
+```text
+Design → Build → Test → Learn → Candidate
+                         ↑
+                  verifiable lineage
+```
+
+### Future direction: artifact provenance + workflow provenance
+
+Systems such as SynthID Bio suggest that provenance can travel *inside* an AI-generated artifact.
+Yoda is exploring provenance *across* the workflow around that artifact.
+
+The long-term question is whether both can compose.
+
+---
+
+## Product surface
+
+Yoda intentionally exposes a small CLI:
 
 ```text
 init
@@ -157,456 +400,36 @@ verify
 context
 ```
 
-The separation can be summarized like this:
-
-```text
-KyberDB:
-Can the state survive exactly?
-
-Yoda:
-Can the meaning and lineage of that state be reconstructed?
-```
-
-Or more simply:
-
-> **Kyber keeps state. Yoda keeps meaning attached to state.**
-
----
-
-# The architecture
-
-Yoda is not intended to replace scientific tools, agent runtimes, workflow engines, or domain software.
-
-It composes with them.
-
-```text
-observations / source data
-          │
-          ▼
-   domain tools and code
-          │
-          ▼
-     derived artifacts
-          │
-          ├──────────────► exact durable state
-          │                    │
-          │                    ▼
-          │                  KyberDB
-          │
-          ▼
-        Yoda
-   evidence + identity
-   relations + history
-   provenance + context
-          │
-          ▼
-   verifiable context
-          │
-          ▼
- developer / agent / decision process
-```
-
-Yoda does not need to make every decision itself.
-
-A healthier boundary is:
-
-```text
-Reality
-   ↓
-Evidence
-   ↓
-Yoda
-   ↓
-Verifiable Context
-   ↓
-External Decision
-   ↓
-Decision + Evidence IDs
-```
-
-The reasoning or policy layer may change.
-The evidence should remain inspectable.
-
----
-
-# What genomics taught us
-
-Genomics is currently Yoda's primary scientific proving ground and product-discovery lab.
-
-It is not a hard-coded product mode.
-
-We deliberately did **not** add a special Genome Mode, VCF engine, BAM subsystem, or biology-specific storage layer before the experiments demanded one.
-
-Instead, the same core was exposed to progressively stronger questions.
-
-The research ladder became:
-
-```text
-GENOME-KMER-001
-      ↓
-identity and exact reconstruction
-
-GENOME-REFERENCE-001
-      ↓
-reference state and coordinate equivalence
-
-GENOME-READ-001
-      ↓
-real paired-read preservation
-
-GENOME-ALIGNMENT-001
-      ↓
-workflow-native derived state
-
-GENOME-VARIANT-001
-      ↓
-downstream workflow continuity
-
-GENOME-LINEAGE-001
-      ↓
-verifiable scientific lineage
-```
-
-The important change was not scale.
-
-The object under test changed.
-
-At first the question was:
-
-```text
-Can Kyber preserve this state?
-```
-
-Later it became:
-
-```text
-Can Yoda explain how this state came to exist?
-```
-
----
-
-## A concrete genomic workflow
-
-The controlled validation path used real public genomic data and standard ecosystem tools.
-
-A matched reference and read set were carried through alignment and variant calling:
-
-```text
-Reference
-GCA_009015325.1
-
-        +
-
-ReadSet
-SRR10058842
-10,000 paired reads
-
-        ↓
-
-BWA alignment
-20,074 canonical alignment records
-
-        ↓
-
-Kyber persist / verify / reopen
-
-        ↓
-
-alignment state reconstructed exactly
-
-        ↓
-
-SAM/BAM rehydration
-
-        ↓
-
-bcftools mpileup / call
-
-        ↓
-
-327 variant records
-325 SNPs
-2 indels
-
-        ↓
-
-Kyber persist / verify / reopen
-
-        ↓
-
-variant state reconstructed exactly
-```
-
-The final variant oracle and the post-reopen Kyber state had the same SHA-256:
-
-```text
-7bb54f1c2786ec562e68e8f77c546e6f4da8f6d3a9abd21916cdc8c105b85ff1
-```
-
-The key property was not simply VCF persistence.
-
-The alignment consumed by `bcftools` had already been reconstructed from post-reopen Kyber state.
-
-That demonstrated a narrow but important property:
-
-> **Durable reconstructed state can participate in the next real scientific workflow step.**
-
-See:
-
-```text
-cases/GENOME-REFERENCE-001-faidx-region-equivalence/
-cases/GENOME-READ-001-verifiable-readset-state/
-cases/GENOME-ALIGNMENT-001-verifiable-workflow-alignment-state/
-cases/GENOME-VARIANT-001-verifiable-variant-state/
-```
-
----
-
-# From scientific state to scientific lineage
-
-The next question was not another file format.
-
-It was:
-
-> Given a result, can Yoda recover the chain that produced it?
-
-A controlled lineage experiment represented:
-
-```text
-Variant State
-    │
-    ├── produced-by ─────► bcftools
-    ├── called-against ──► Reference
-    ├── has-evidence ────► Variant Evidence
-    └── derived-from ────► Alignment State
-                              │
-                              ├── produced-by ─────► BWA
-                              ├── aligned-against ─► Reference
-                              ├── has-evidence ────► Alignment Evidence
-                              └── derived-from ────► ReadSet
-```
-
-Yoda's current `context` contract is intentionally bounded.
-
-It provides lexical retrieval plus direct one-hop relational expansion.
-It does **not** claim arbitrary multi-hop graph planning.
-
-The lineage experiment therefore composed two bounded neighborhoods externally:
-
-```text
-Variant context
-      +
-Alignment context
-      ↓
-Reference → ReadSet → Alignment → Variant
-      +
-Tools
-      +
-Evidence
-      +
-SHA-256 identities
-```
-
-This distinction is important.
-
-The knowledge is not hard-coded into a query.
-It is represented as durable evidence and explicit relationships, then reconstructed when needed.
-
----
-
-# What this proves — and what it does not
-
-The current evidence supports a narrow claim:
-
-> Yoda can represent and recover verifiable scientific lineage for a controlled genomic workflow using durable evidence, explicit relations, identities, tools, and independently frozen experimental results.
-
-It does **not** yet prove:
-
-- a general-purpose scientific lineage platform;
-- biotech-scale lineage;
-- arbitrary multi-project knowledge graphs;
-- biological correctness of a variant call;
-- replacement of FASTA, BAM, CRAM, VCF, BWA, samtools, bcftools, or HTSlib;
-- clinical suitability;
-- product-market fit;
-- production readiness for every scientific workload.
-
-A successful CASE demonstrates a capability.
-It does not magically turn that capability into a market claim.
-
----
-
-# Why this matters
-
-Scientific and autonomous systems increasingly produce results through chains of software, data, models, tools, transformations, and intermediate state.
-
-The final answer is often easier to store than the explanation of how it was produced.
-
-Yoda is exploring the opposite priority:
-
-```text
-result
-   ↓
-identity
-   ↓
-provenance
-   ↓
-relationships
-   ↓
-history
-   ↓
-evidence
-   ↓
-verification
-```
-
-The emerging product thesis is:
-
-> **Verifiable Scientific Knowledge**
-
-or, more specifically:
-
-> **Given a result, show its verifiable origin.**
-
-That is the bridge from storage to knowledge.
-
----
-
-# Cross-domain evidence
-
-Genomics is not the only workload used to test the underlying ideas.
-
-The project has also exercised the same evidence-first discipline against independent public datasets and workloads, including:
-
-- NASA FIRMS satellite observations;
-- USGS earthquake events;
-- RIPE RIS BGP routing-state mutations;
-- LANL authentication-event forensics;
-- genomic k-mer state;
-- genomic reference state;
-- sequencing reads;
-- alignment state;
-- variant state.
-
-The principle is consistent:
-
-> **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a real structural limitation.**
-
-Negative results count as evidence too.
-
----
-
-# Try Yoda
-
-The current preview is local-first and requires no server, account, Python, Node, JVM, or network connection at runtime.
-
-Download from the current prerelease:
-
-```text
-yoda-v0.1.0-preview.1-linux-x86_64.tar.gz
-yoda-v0.1.0-preview.1-linux-x86_64.tar.gz.sha256
-```
-
-Verify:
-
-```bash
-sha256sum -c yoda-v0.1.0-preview.1-linux-x86_64.tar.gz.sha256
-```
-
-Extract:
-
-```bash
-tar -xzf yoda-v0.1.0-preview.1-linux-x86_64.tar.gz
-cd yoda-v0.1.0-preview.1-linux-x86_64
-```
-
-Initialize a local store:
+No server is required.
+No account is required.
+The current preview is local-first.
+
+### Quick start
 
 ```bash
 ./yoda init ./memory
-```
 
-Store evidence:
+printf '%s\n' 'experiment result' |
+  ./yoda -d ./memory put evidence/result \
+    source=experiment-001
 
-```bash
-printf '%s\n' 'PostgreSQL 16 approved for production' |
-    ./yoda -d ./memory put evidence/db-validation \
-        source=production-validation
-```
-
-Retrieve it:
-
-```bash
-./yoda -d ./memory get evidence/db-validation
-```
-
-Find related evidence:
-
-```bash
-./yoda -d ./memory find production
-```
-
-Create an explicit relation:
-
-```bash
 ./yoda -d ./memory link \
-    evidence/new-result \
-    derived-from \
-    evidence/source-result \
-    source=experiment
-```
+  evidence/result \
+  derived-from \
+  evidence/source \
+  source=experiment-001
 
-Build bounded context:
-
-```bash
-./yoda -d ./memory context production
-```
-
-Verify authoritative state:
-
-```bash
+./yoda -d ./memory context result
 ./yoda -d ./memory verify
 ```
 
-Release:
+Current preview:
 
 https://github.com/josefaquino/Yoda/releases/tag/v0.1.0-preview.1
 
 ---
 
-# Platform
-
-Validated binary:
-
-- GNU/Linux;
-- x86_64;
-- dynamically linked against glibc.
-
-Source:
-
-- ISO C11;
-- POSIX.1-2008.
-
-Validated build flags:
-
-```text
--std=c11
--O2
--Wall
--Wextra
--Werror
--D_POSIX_C_SOURCE=200809L
-```
-
-Build from source:
-
-```bash
-make
-```
-
----
-
-# Authority model
+## Authority model
 
 For Yoda v0.1:
 
@@ -617,39 +440,32 @@ data.yoda
 is authoritative.
 
 Derived indexes accelerate access but do not define truth.
-They must remain rebuildable.
+They remain rebuildable.
 
-See:
-
-```text
-PRODUCT-CONTRACT.md
-PROPAGATION-MODEL.md
-```
+See [PRODUCT-CONTRACT.md](PRODUCT-CONTRACT.md).
 
 ---
 
-# What Yoda is not
+## What Yoda is not
 
-Yoda v0.1 is not trying to become:
+Yoda is not currently claiming to be:
 
+- a scientific truth oracle;
+- a theorem prover;
 - a bioinformatics suite;
-- a variant caller;
 - a workflow orchestrator;
 - an agent framework;
 - an LLM runtime;
 - a vector database;
 - a distributed database;
-- a cloud service;
-- a graph-database product;
-- a sandbox;
-- an IAM system;
+- a cloud platform;
 - a replacement for domain tools.
 
-Yoda should stay small enough to compose with those systems.
+The goal is composition, not absorption.
 
 ---
 
-# Product principles
+## Principles
 
 ```text
 Local first.
@@ -661,40 +477,41 @@ Composition over expansion.
 Evidence before features.
 ```
 
-And the engineering rule behind the project remains:
-
 > **Big vision. Small steps. Evidence always.**
 
 ---
 
-# Current status
+## Collaborate
 
-The controlled genomics research ladder has reached its planned technical endpoint:
+We are looking for researchers, engineers, scientific teams and early partners who have a result whose origin matters.
 
-```text
-state
-  ↓
-workflow
-  ↓
-derived state
-  ↓
-lineage
-```
+Good collaboration candidates include workflows where it is important to reconstruct:
 
-That is a technical research milestone, not a claim of commercial maturity.
+- which data produced a result;
+- which tools and versions transformed it;
+- which evidence justified a decision;
+- what changed over time;
+- whether the derivation can be independently replayed or checked.
 
-The next product question is no longer:
+We are also interested in conversations with investors who believe that as AI makes generation abundant, **verification, provenance and reproducibility become infrastructure**.
 
-> Can we store another scientific format?
-
-It is:
-
-> **What decision becomes possible because Yoda supplied verifiable evidence and lineage?**
+The project is early. The claims are intentionally narrow. The ambition is not.
 
 ---
 
-# License
+## Further reading
 
-Yoda v0.1.0-preview.1 is distributed under the Apache License, Version 2.0.
+- [MISSION.md](MISSION.md)
+- [GENESIS.md](GENESIS.md)
+- [WHY-NOW.md](WHY-NOW.md)
+- [EVIDENCE.md](EVIDENCE.md)
+- [RESEARCH.md](RESEARCH.md)
+- [PRODUCT-CONTRACT.md](PRODUCT-CONTRACT.md)
+- [PROPAGATION-MODEL.md](PROPAGATION-MODEL.md)
+- [`cases/`](cases/)
 
-See `LICENSE`.
+---
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
