@@ -182,7 +182,7 @@ Can the derivation be proved?
 This is a conceptual contrast, not an official Axiom slogan.
 
 Formal systems such as Lean can verify whether a proof satisfies a formal statement.
-Yoda is exploring a complementary problem: preserving the lineage around results and artifacts that move through real software and scientific workflows.
+Yoda explores a complementary problem: preserving the lineage around results and artifacts that move through real software and scientific workflows.
 
 ```text
 formal world                    empirical / software world
@@ -198,9 +198,21 @@ formal verification             result
                                 lineage
 ```
 
-Current research direction: test whether those two properties can compose.
+That composition has now been tested directly with Axiom's public AXLE infrastructure.
 
-See [RESEARCH.md](RESEARCH.md).
+In `AXIOM-YODA-PROOF-LINEAGE-001`, AXLE remained the formal authority while Yoda preserved the formal statement, proof artifacts, environment, verification evidence and lineage. Yoda recovered the proof artifacts byte-for-byte and AXLE reproduced both the original acceptance and the original rejection outcome.
+
+The separation held:
+
+```text
+AXLE
+→ formal validity
+
+Yoda
+→ derivation integrity
+```
+
+See [RESEARCH.md](RESEARCH.md) and [`cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation/`](cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation/).
 
 ---
 
@@ -256,7 +268,8 @@ The project has been tested against independent real-world workloads including:
 - LANL authentication events;
 - NCBI / ENA genomic data;
 - BWA alignment workflows;
-- bcftools variant calling.
+- bcftools variant calling;
+- AXLE formal proof verification.
 
 The genomics ladder progressively changed the object under test:
 
@@ -280,21 +293,39 @@ GENOME-LINEAGE-001
 verifiable scientific lineage
 ```
 
-The strongest current controlled result is not "we stored VCF".
-
-It is that Yoda recovered a scientific lineage connecting:
+Then the architecture was moved into a different authority model:
 
 ```text
-Reference
-   +
-ReadSet
-   ↓
-Alignment
-   ↓
-Variant State
+AXIOM-YODA-PROOF-LINEAGE-001
+
+formal statement
+      +
+proof artifact
+      ↓
+AXLE verification
+      ↓
+Yoda derivation lineage
+      ↓
+byte-exact recovery
+      ↓
+AXLE verification again
+      ↓
+same accept / reject outcome
 ```
 
-with explicit relationships to tools, evidence and cryptographic identities.
+The result:
+
+```text
+AXIOM_YODA_PROOF_LINEAGE_001=VALIDATED
+YODA_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
+AXLE_POSITIVE_DECISION_REPRODUCED=PASS
+AXLE_NEGATIVE_DECISION_REPRODUCED=PASS
+PROOF_DERIVATION_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+This is stronger than another storage demo because the verification authority remained external to Yoda.
 
 See [EVIDENCE.md](EVIDENCE.md) and [`cases/`](cases/).
 
@@ -348,23 +379,37 @@ It does not establish biological truth, clinical validity, biotech-scale operati
 
 ---
 
+## What the AXLE work demonstrated
+
+The positive proof was accepted by AXLE before Yoda and accepted again after byte-exact recovery from Yoda.
+
+The negative candidate was deliberately valid Lean proving a different theorem. AXLE rejected it before Yoda, and rejected it again after byte-exact recovery from Yoda for the same signature mismatch.
+
+This supports a second narrow claim:
+
+> **Yoda can preserve and reconstruct the lineage of a formally verified result such that an independent formal authority can reproduce the verification outcome from Yoda-recovered artifacts.**
+
+It does not make Yoda a theorem prover or an independent logical authority.
+
+---
+
 ## Current research program
 
-The next phase deliberately leaves the comfort of our own datasets.
+### Track A — formal reasoning
 
-### AXIOM-YODA-PROOF-LINEAGE-001
-
-Use public AXLE proof-verification infrastructure to test whether Yoda can preserve and reconstruct the lineage of a formally verified proof such that recovered artifacts can be verified again.
-
-Goal:
+`AXIOM-YODA-PROOF-LINEAGE-001` — **VALIDATED**
 
 ```text
-Proof of Derivation
-        +
-Proof Verification
+formal authority = AXLE
+
+derivation authority = Yoda
+
+proof derivation replay = PASS
 ```
 
-### BIO-DESIGN-LINEAGE-001
+### Track B — empirical biology
+
+`BIO-DESIGN-LINEAGE-001` — **NEXT**
 
 Work with a real biological R&D workflow to test whether a final candidate can be traced back through design, build, test, analysis and evidence without inventing biology-specific storage features.
 
@@ -376,7 +421,7 @@ Design → Build → Test → Learn → Candidate
                   verifiable lineage
 ```
 
-### Future direction: artifact provenance + workflow provenance
+### Future direction — artifact provenance + workflow provenance
 
 Systems such as SynthID Bio suggest that provenance can travel *inside* an AI-generated artifact.
 Yoda is exploring provenance *across* the workflow around that artifact.
