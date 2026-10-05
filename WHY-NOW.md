@@ -27,6 +27,7 @@ Can it be reproduced?
 What evidence supports it?
 What changed?
 Which part was actually verified?
+Can the right authority evaluate it again?
 ```
 
 Yoda is exploring infrastructure for that bottleneck.
@@ -35,15 +36,13 @@ Yoda is exploring infrastructure for that bottleneck.
 
 ## 1. Agent systems increase the rate of exploration
 
-Research on parallel and multi-agent reasoning suggests that many agents can explore candidate solutions, hypotheses and subproblems concurrently.
+Parallel and multi-agent systems can explore candidate solutions, hypotheses and subproblems concurrently.
 
-That matters even when parallelization is compute-expensive.
-
-The relevant product implication for Yoda is not agent orchestration.
+The product implication for Yoda is not agent orchestration.
 
 Yoda should not become a swarm runtime.
 
-The implication is that more autonomous work produces more intermediate artifacts, competing hypotheses and derived results whose important evidence must survive after the swarm is gone.
+The implication is that more autonomous work produces more intermediate artifacts, competing hypotheses and derived results whose important evidence must survive after the generation process is gone.
 
 ```text
 many agents
@@ -54,30 +53,16 @@ many artifacts
     ↓
 selected evidence
     ↓
-durable lineage
+durable derivation
 ```
-
-Reference:
-
-- Import AI #475: https://jack-clark.net/2026/10/05/import-ai-475-swarm-scaling-google-deepmind-watermarks-biology-and-the-ai-science-economy/
 
 ---
 
-## 2. Provenance is moving closer to the artifact
+## 2. Provenance is moving into the artifact — and around it
 
-Google DeepMind introduced SynthID Bio as a proof of concept for watermarking AI-generated biological artifacts while preserving biological function.
+Google DeepMind's SynthID Bio demonstrates a model in which a provenance signal can travel inside an AI-generated biological artifact.
 
-The important signal for Yoda is not the watermarking technique itself.
-
-It is the broader infrastructure pattern:
-
-```text
-artifact
-   +
-origin signal
-```
-
-Yoda is exploring the complementary external layer:
+Yoda explores the complementary external layer:
 
 ```text
 artifact
@@ -89,13 +74,32 @@ evidence
 history
 ```
 
-A future system could combine both:
+That complementarity is no longer only a future idea in this project.
+
+`SYNTHID-BIO-YODA-PROVENANCE-001` validated one controlled composition:
 
 ```text
-intrinsic artifact provenance
-            +
-external workflow provenance
+inside the artifact
+→ intrinsic provenance signal
+→ SynthID Bio
+
+outside the artifact
+→ workflow provenance / derivation
+→ Yoda
 ```
+
+After byte-exact recovery from Yoda, the frozen SynthID Bio detector reproduced all four original control and watermarked g-value measurements exactly.
+
+```text
+CONTROL      0.5037 → 0.5037
+CONTROL      0.5130 → 0.5130
+WATERMARKED  0.7961 → 0.7961
+WATERMARKED  0.7184 → 0.7184
+```
+
+This is evidence for **composed provenance** in one controlled workflow.
+
+It is not proof of authorship, biological origin or general watermark support.
 
 Reference:
 
@@ -103,36 +107,43 @@ Reference:
 
 ---
 
-## 3. Verification infrastructure is becoming a product category
+## 3. Independent authorities can remain independent
 
-Axiom is building a verified discovery engine for mathematics and released AXLE, infrastructure for mathematical proof verification and manipulation at scale.
-
-The relevance to Yoda is conceptual, not competitive.
-
-Axiom's formal world asks whether candidate mathematical reasoning satisfies a formal specification.
-
-Yoda asks whether the derivation around a result can be reconstructed from durable evidence.
+Axiom's AXLE and Google DeepMind's SynthID Bio exposed the same architectural pattern in different domains:
 
 ```text
-Axiom / Lean
-formal validity
-
-Yoda
-derivation integrity
+independent authority
+        ↓
+measurement / decision
+        ↓
+       Yoda
+        ↓
+recovery + lineage
+        ↓
+same independent authority
+        ↓
+same measurement / decision
 ```
 
-These properties can complement each other.
+With AXLE, the replayed property was a formal accept/reject decision.
 
-References:
+With SynthID Bio, the replayed property was an intrinsic provenance measurement.
 
-- Axiom mission: https://axiommath.ai/mission/
-- AXLE: https://axiommath.ai/research/releasing-axle/
+The important point is what Yoda did **not** do.
+
+It did not become the theorem prover.
+It did not become the watermark detector.
+It did not replace either authority.
+
+This leads to the central thesis:
+
+> **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
 
 ---
 
 ## 4. AI science shifts the bottleneck
 
-As AI systems become capable of generating larger numbers of hypotheses and candidate scientific results, the limiting resource may increasingly become validation rather than ideation.
+As AI systems generate larger numbers of hypotheses, designs and candidate scientific results, the limiting resource may increasingly become validation rather than ideation.
 
 Yoda does not solve scientific validation by itself.
 
@@ -140,24 +151,26 @@ It targets a prerequisite:
 
 > **Preserve enough identity, history, evidence and lineage that validation can be performed against a reconstructible chain rather than an undocumented result.**
 
-This distinction matters.
-
 ```text
 Yoda != scientific truth oracle
 
-Yoda = evidence and derivation infrastructure
+Yoda = verifiable derivation infrastructure
 ```
+
+A useful market-facing description is:
+
+> **Trust infrastructure for AI-native science.**
 
 ---
 
-## The emerging stack
+## The emerging trust stack
 
 The world may need several independent trust layers:
 
 | Layer | Question |
 |---|---|
 | State integrity | Did the state survive exactly? |
-| Artifact provenance | Who or what generated the artifact? |
+| Intrinsic artifact provenance | Does the artifact carry a detectable provenance signal? |
 | Derivation integrity | Which chain produced the result? |
 | Formal validity | Does the conclusion follow from formal premises? |
 | Empirical validity | Does the evidence represent reality well enough? |
@@ -182,19 +195,19 @@ That is a feature, not a limitation.
 
 If AI makes generation abundant, infrastructure for trust may become disproportionately valuable.
 
-Possible high-value environments share a common pattern:
+High-value environments share a pattern:
 
 ```text
 many transformations
 high-value result
-multiple tools or agents
+multiple tools / models / agents
 important provenance
 future audit or reproduction need
 ```
 
 Examples include:
 
-- AI-assisted science;
+- AI-native science;
 - biotechnology R&D;
 - formal reasoning systems;
 - autonomous software decisions;
@@ -203,7 +216,23 @@ Examples include:
 
 This is a hypothesis, not product-market fit.
 
-The next phase of Yoda is designed to test it externally.
+The emerging category thesis is:
+
+> **Verifiable Derivation Infrastructure**
+
+---
+
+## The next falsification
+
+The next strong test should not be another internally designed format demo.
+
+It should be a real empirical workflow selected by an external scientific team.
+
+`BIO-DESIGN-LINEAGE-001` asks:
+
+> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate without adding a Biology Mode?
+
+That experiment should be defined by the external problem before Yoda code or schema is added.
 
 ---
 
