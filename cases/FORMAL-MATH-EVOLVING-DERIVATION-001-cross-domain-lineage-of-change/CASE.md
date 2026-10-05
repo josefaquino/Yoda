@@ -300,7 +300,15 @@ If either target is `unsupported`, A1-R1 is `NOT_EVALUATED`. No opportunistic se
 
 ## Stage A2 — Yoda versioned derivation
 
-A2 remains blocked until A1-R1 passes.
+A1-R1 passed on its single pre-registered execution.
+
+A2 is now READY.
+
+Research question:
+
+> **Can Yoda preserve a versioned derivation between two independently verified formal proof states without changing Yoda or Kyber?**
+
+A2 introduces no new theorem, corpus, formal authority, or workload. Every formal input comes from the frozen A1-R1 evidence authority.
 
 Yoda must preserve at minimum:
 
@@ -313,8 +321,10 @@ Lean evaluation A
 Lean evaluation B
 OxiLean evaluation A
 OxiLean evaluation B
-Lean authority identity
-OxiLean authority identity
+Lean evaluation evidence A
+Lean evaluation evidence B
+OxiLean evaluation evidence A
+OxiLean evaluation evidence B
 A1-R1 evidence authority
 ```
 
@@ -332,6 +342,14 @@ B --rechecked-by--> OxiLean
 ```
 
 No domain-specific Yoda or Kyber behavior is allowed.
+
+A2 success requires byte-exact recovery of the statement, both proofs, the transformation and formal-evaluation evidence, plus recovery of the version relation:
+
+```text
+Proof B --derived-from--> Proof A
+```
+
+A2 does not re-run Lean or OxiLean. That independent replay remains the responsibility of Stage B.
 
 ---
 

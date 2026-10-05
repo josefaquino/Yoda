@@ -170,13 +170,67 @@ Do not choose another theorem inside this revision.
 
 ---
 
-## Stage A2
+## Stage A2 — current next gate
 
-A2 remains blocked until A1-R1 passes.
+A1-R1 is complete and homologated as PASS.
 
-The existing A2 design remains conceptually valid, but its implementation must consume the A1-R1 artifacts and A1-R1 evidence authority rather than the historical A1.0 artifacts.
+Research question:
 
-Do not execute A2 before that adaptation is explicitly reviewed.
+```text
+Can Yoda preserve a versioned derivation
+between two independently verified
+formal proof states without changing
+Yoda or Kyber?
+```
+
+A2 revision:
+
+```text
+A2-R1
+```
+
+Script:
+
+```text
+scripts/02-r1-yoda-versioned-derivation.sh
+```
+
+Input authority:
+
+```text
+A1_R1_EVIDENCE_MANIFEST_SHA256=
+fad7416a7528d9d6ec885836668668d20c3cb942bc04b4f509949f92227c8bca
+```
+
+Inputs are only existing A1-R1 artifacts:
+
+```text
+Statement
+Proof A
+Proof B
+Transformation A -> B
+Lean Evidence A
+Lean Evidence B
+OxiLean Evidence A
+OxiLean Evidence B
+A1-R1 Evidence Authority
+```
+
+No new formal artifact is introduced.
+
+```text
+NEW_WORKLOAD=NO
+NEW_CORPUS=NO
+NEW_AUTHORITY=NO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+A2 validates Yoda preservation, byte-exact recovery, relation recovery, bounded context reconstruction and durable-store integrity.
+
+A2 does **not** rerun Lean or OxiLean. Stage B remains the independent replay gate.
+
+A2 uses a one-execution lock immediately before the first Yoda write. A consumed lock is checked at startup before any A2 evidence can be overwritten.
 
 ---
 

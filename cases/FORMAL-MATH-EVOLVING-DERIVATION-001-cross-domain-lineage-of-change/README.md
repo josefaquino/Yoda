@@ -27,11 +27,12 @@ SECONDARY_AUTHORITY_CAPABILITY_BOUNDARY
   v
 A1-R1
 mathd_numbertheory_188
-PRE-REGISTERED / NOT YET EXECUTED
+PASS
   |
   v
 A2
-BLOCKED UNTIL A1-R1 PASS
+YODA VERSIONED DERIVATION
+READY / PRE-REGISTERED
   |
   v
 B
@@ -105,8 +106,8 @@ reason=secondary authority capability boundary
 ```text
 theorem=mathd_numbertheory_188
 target=Nat.gcd 180 168 = 12
-status=PRE-REGISTERED
-execution_count_planned=1
+status=PASS
+execution_count=1
 ```
 
 The hypothesis, domain, corpus, frozen commit, authorities, Yoda, and Kyber remain unchanged. Only the mathematical workload changes so that the two frozen formal authorities can actually evaluate the intended property.
@@ -175,7 +176,9 @@ recover from Yoda
 re-run formal authorities
 ```
 
-A2 is not allowed to begin until A1-R1 passes.
+A1-R1 passed on its single pre-registered execution. A2 is now the only active gate.
+
+A2 introduces no new theorem, corpus, authority, or formal evidence. It consumes only the frozen A1-R1 artifacts and tests whether Yoda can preserve their versioned derivation.
 
 ---
 
