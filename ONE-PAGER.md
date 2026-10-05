@@ -4,47 +4,45 @@
 
 **Information behaves less like inventory and more like lineage.**
 
-Yoda Systems is building open-source infrastructure for preserving the evidence, identity, relationships and history behind important results produced by humans, software and AI systems.
+Yoda Systems is building open-source **Verifiable Derivation Infrastructure** for important results produced by humans, software and AI systems.
 
 The core question is simple:
 
 > **Where did this result come from?**
 
-As AI makes generation cheaper and faster, the bottleneck shifts. More hypotheses, proofs, code, biological designs and autonomous decisions create more results that must later be inspected, reproduced and trusted.
+The central principle is equally simple:
 
-Yoda is exploring the infrastructure needed for that world.
+> **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
+
+As AI makes generation cheaper and faster, more hypotheses, proofs, code, biological designs and autonomous decisions are produced. The trust problem shifts from generating results to preserving enough evidence to inspect, reproduce and re-evaluate how those results came to exist.
 
 ---
 
-## The thesis
+## The pattern
 
-Most systems are optimized to produce or store the final artifact.
-
-Yoda preserves the chain behind it:
+Yoda preserves the chain around a result while domain authorities remain responsible for evaluating it.
 
 ```text
-source
-  ↓
-artifact
-  ↓
-transformation
-  ↓
-result
-  ↓
-evidence + lineage + verification
+independent authority
+        ↓
+measurement / decision
+        ↓
+       Yoda
+        ↓
+recovery + lineage
+        ↓
+same independent authority
+        ↓
+same measurement / decision
 ```
 
-We call this **verifiable derivation**.
+We call the infrastructure problem **verifiable derivation**.
 
-Yoda does not claim that a mathematical proof, scientific result or autonomous decision is intrinsically true.
-
-Instead, it asks whether the derivation behind that result can be reconstructed, inspected and checked by the appropriate external authority.
+Yoda does not claim that a mathematical proof, scientific result or autonomous decision is intrinsically true. It preserves the artifacts, identities, evidence, tools, versions, measurements, relationships and history required to reconstruct the derivation and submit it back to the appropriate authority.
 
 ---
 
 ## Architecture
-
-The architecture emerged from a longer research path:
 
 ```text
 Sputnik
@@ -56,8 +54,8 @@ STATE
 Yoda
 DERIVATION
     ↓
-Agents / Humans
-DECISION
+Independent Authorities / Humans / Agents
+EVALUATION + DECISION
 ```
 
 **Sputnik** observes changing data.
@@ -65,8 +63,6 @@ DECISION
 **Kyber** preserves exact local state.
 
 **Yoda** reconstructs lineage, evidence and derivation.
-
-The product boundary is deliberate:
 
 > **Kyber makes state durable. Yoda makes derivation inspectable.**
 
@@ -78,67 +74,72 @@ Yoda is developed through narrow, falsifiable CASEs rather than broad product cl
 
 ### 1. Genomics — scientific lineage
 
-A controlled public-data workflow was built across:
+A controlled public-data workflow progressed through:
 
 ```text
-Reference
-   +
-ReadSet
-   ↓
-Alignment
-   ↓
-Variant State
+Reference + ReadSet
+       ↓
+   Alignment
+       ↓
+ Variant State
+       ↓
+   Lineage
 ```
 
 Yoda recovered the lineage behind the final result, including prior scientific states, tools, evidence and cryptographic identities.
 
 **GENOME-LINEAGE-001: VALIDATED**
 
-### 2. Formal verification — derivation replay
+### 2. Formal verification — independent authority replay
 
-Using the public AXLE infrastructure from Axiom Math, Yoda preserved:
+Using Axiom Math's public AXLE infrastructure, Yoda preserved a formal statement, proof artifacts, environment, external verification evidence and derivation lineage.
 
-- a formal statement;
-- a valid Lean proof;
-- the verification environment;
-- AXLE evidence;
-- explicit derivation lineage.
-
-Yoda recovered the proof artifacts byte-for-byte and submitted them back to AXLE.
-
-AXLE reproduced the original positive verification decision.
-
-A controlled mutation remained valid Lean but proved a different theorem. AXLE rejected it before and after Yoda recovery for the same semantic reason.
+Yoda recovered the proof artifacts byte-for-byte. AXLE then reproduced both the original acceptance of the valid proof and the original rejection of a controlled mutation.
 
 **AXIOM-YODA-PROOF-LINEAGE-001: VALIDATED**
 
-The narrow result:
-
 > **AXLE verifies the proof. Yoda preserves the derivation required to verify it again.**
 
-No Yoda or Kyber engine change was required for either experiment.
+### 3. SynthID Bio — composed provenance
+
+Using Google DeepMind's public SynthID Bio implementation, we reproduced the official external detector behavior before Yoda entered the experiment.
+
+Yoda then preserved both a control biological artifact and a watermarked artifact, their measurements, detector identity, parameters and evidence. After byte-exact recovery from Yoda, the frozen SynthID Bio detector recomputed the same four g-values exactly.
+
+```text
+CONTROL      0.5037 → 0.5037
+CONTROL      0.5130 → 0.5130
+WATERMARKED  0.7961 → 0.7961
+WATERMARKED  0.7184 → 0.7184
+```
+
+**SYNTHID-BIO-YODA-PROVENANCE-001: VALIDATED**
+
+This demonstrated **composed provenance** in one controlled workflow:
+
+```text
+inside the artifact
+→ intrinsic provenance signal
+→ SynthID Bio
+
+outside the artifact
+→ workflow provenance / derivation
+→ Yoda
+```
+
+No Yoda or Kyber engine change was required for the AXLE or SynthID Bio CASEs.
 
 ---
 
 ## Why now
 
-AI systems are increasing the rate at which artifacts and candidate answers are generated.
+The working hypothesis is:
 
-That creates a second-order infrastructure problem:
+> **Generation is becoming abundant. Verification, provenance and reproducibility are not.**
 
-```text
-more generation
-      ↓
-more artifacts
-      ↓
-more transformations
-      ↓
-more decisions
-      ↓
-more need for provenance, lineage and verification
-```
+More generation creates more artifacts, transformations and decisions that must later be trusted.
 
-The hypothesis behind Yoda Systems is that **generation is becoming abundant while verification, provenance and reproducibility remain scarce**.
+Yoda is exploring the trust layer between a result and its origin.
 
 ---
 
@@ -161,23 +162,21 @@ No server is required.
 No account is required.
 The authoritative state remains local and inspectable.
 
-The design principle is composition over expansion: Yoda should preserve derivation around domain tools rather than absorb them.
+The design principle is **composition over expansion**: Yoda should preserve derivation around domain tools rather than absorb them.
 
 ---
 
-## Current proving ground
-
-The next external test is biological R&D.
+## Next external falsification
 
 ### BIO-DESIGN-LINEAGE-001
 
+The next target is a real biological R&D workflow defined by an external scientific team.
+
 Question:
 
-> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate?
+> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate without adding a Biology Mode?
 
-The goal is to have the problem defined by an external scientific team rather than by Yoda itself.
-
-That makes the experiment more valuable: the architecture must survive a real question without introducing a special Biology Mode.
+A partner-defined problem is more valuable than another internally designed demo.
 
 ---
 
@@ -185,18 +184,20 @@ That makes the experiment more valuable: the architecture must survive a real qu
 
 Yoda is not currently claiming to be:
 
-- a theorem prover;
 - a scientific truth oracle;
+- a theorem prover;
+- a watermark detector;
+- a proof-of-origin system;
 - a bioinformatics suite;
 - an agent orchestrator;
 - a workflow engine;
 - a vector database;
 - a distributed cloud database;
-- a replacement for domain systems.
+- a replacement for domain authorities.
 
 The goal is narrower and more fundamental:
 
-> **Make the derivation behind an important result inspectable, durable and reproducible.**
+> **Preserve the derivation behind an important result so the right authority can inspect and evaluate it again.**
 
 ---
 
@@ -204,9 +205,9 @@ The goal is narrower and more fundamental:
 
 We are looking for:
 
-- research teams with workflows where result origin matters;
-- deeptech and biotechnology teams working across iterative experimental pipelines;
-- builders of formal verification and AI-science infrastructure;
+- research teams whose results need inspectable origin and lineage;
+- biotechnology and deeptech teams operating iterative experimental workflows;
+- builders of formal verification, AI-science and agent infrastructure;
 - investors who believe provenance, verification and reproducibility become infrastructure as AI generation scales.
 
 The project is early.
@@ -221,10 +222,13 @@ The ambition is not.
 Project:
 https://github.com/josefaquino/Yoda
 
-Validated proof-lineage CASE:
+SynthID Bio composed-provenance CASE:
+https://github.com/josefaquino/Yoda/tree/main/cases/SYNTHID-BIO-YODA-PROVENANCE-001-composed-provenance
+
+AXLE proof-lineage CASE:
 https://github.com/josefaquino/Yoda/tree/main/cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation
 
-Validated genomic-lineage CASE:
+Genomic-lineage CASE:
 https://github.com/josefaquino/Yoda/tree/main/cases/GENOME-LINEAGE-001-verifiable-scientific-lineage
 
 ---
