@@ -111,13 +111,33 @@ THEOREM=mathd_numbertheory_188
 TARGET=Nat.gcd 180 168 = 12
 ```
 
-The exact A1-R1 script and proof-state pair must be committed and hash-audited before the first execution.
+The exact A1-R1 script and proof-state pair are committed before the first execution.
 
-Planned script path:
+Frozen proof-state pair:
+
+```text
+Proof A
+rfl
+-> direct kernel computation
+
+Proof B
+Nat.gcd_rec + rfl reduction steps + Nat.gcd_zero_left
+-> explicit Euclidean GCD derivation
+```
+
+Transformation:
+
+```text
+kernel_computation_to_explicit_euclidean_derivation
+```
+
+Script path:
 
 ```text
 scripts/01-r1-authority-compatible-evolution.sh
 ```
+
+The harness also enforces a local one-execution lock before formal validation so the revision cannot be silently rerun after its result is known.
 
 Execution policy:
 

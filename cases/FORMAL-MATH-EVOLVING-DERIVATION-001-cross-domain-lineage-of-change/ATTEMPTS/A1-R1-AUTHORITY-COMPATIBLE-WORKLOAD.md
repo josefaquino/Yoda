@@ -73,16 +73,71 @@ This is not a search over multiple theorems until one passes.
 
 ## Controlled proof evolution
 
-The proposition must remain byte-identical between state A and state B.
+The proposition remains identical between state A and state B.
 
-The exact proof-state pair must be frozen in the A1-R1 harness before first execution.
+The proof-state pair is frozen before execution.
+
+### State A — kernel computation
+
+```lean
+theorem proof : FormalEvolutionR1.Target := by
+  rfl
+```
+
+Method:
+
+```text
+kernel_computation_rfl
+```
+
+### State B — explicit Euclidean derivation
+
+```lean
+theorem proof : FormalEvolutionR1.Target := by
+  unfold FormalEvolutionR1.Target
+  calc
+    Nat.gcd 180 168 = Nat.gcd (168 % 180) 180 := Nat.gcd_rec 180 168
+    _ = Nat.gcd 168 180 := by rfl
+    _ = Nat.gcd (180 % 168) 168 := Nat.gcd_rec 168 180
+    _ = Nat.gcd 12 168 := by rfl
+    _ = Nat.gcd (168 % 12) 12 := Nat.gcd_rec 12 168
+    _ = Nat.gcd 0 12 := by rfl
+    _ = 12 := Nat.gcd_zero_left 12
+```
+
+Method:
+
+```text
+explicit_euclidean_gcd_derivation
+```
+
+Transformation:
+
+```text
+kernel_computation_to_explicit_euclidean_derivation
+```
+
+This is intentionally not a cosmetic source rewrite. Proof A asks the kernel to compute the concrete GCD directly. Proof B makes the Euclidean reduction chain explicit while proving the same target.
 
 Required invariant:
 
 ```text
 statement(A) = statement(B)
 identity(A) != identity(B)
+SEMANTICS_EQUIVALENT_BY_COMMON_TARGET=PASS
 ```
+
+The frozen OxiLean implementation contains explicit literal reduction support for `Nat.gcd`, reducing the risk that the revised target repeats the Complex-dependent capability boundary.
+
+### One-execution policy
+
+The committed harness creates a persistent local execution lock immediately before formal validation:
+
+```text
+$HOME/cmu/FORMAL-MATH-EVOLVING-DERIVATION-001/.stage-a1-r1-execution-started
+```
+
+Once that gate is consumed, the same revision must not be silently rerun.
 
 ---
 

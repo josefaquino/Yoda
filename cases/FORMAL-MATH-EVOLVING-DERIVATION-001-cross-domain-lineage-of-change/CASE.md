@@ -250,7 +250,30 @@ single pre-registered revision
 no candidate search after execution
 ```
 
-The proof-state pair and exact A1-R1 harness must be frozen before the first execution.
+The proof-state pair and exact A1-R1 harness are frozen before the first execution:
+
+```text
+Proof A
+method=kernel_computation_rfl
+
+Proof B
+method=explicit_euclidean_gcd_derivation
+
+Transformation
+kernel_computation_to_explicit_euclidean_derivation
+```
+
+Proof B exposes the Euclidean chain:
+
+```text
+gcd(180,168)
+-> gcd(168,180)
+-> gcd(12,168)
+-> gcd(0,12)
+-> 12
+```
+
+The transformation is not cosmetic: state A relies on direct kernel computation, while state B records explicit GCD recursion steps against the same proposition.
 
 PASS requires:
 
