@@ -3,9 +3,11 @@
 ## Status
 
 ```text
-STATUS=PRE-REGISTERED
-READY_FOR_EXECUTION=YES
-EXECUTED=NO
+STATUS=NOT_EVALUATED
+EXECUTED=YES
+EXECUTION_COUNT=1
+FAILURE_CLASS=HARNESS_QUERY_TOKENIZATION_MISMATCH
+RERUN=NO
 ```
 
 ---
@@ -192,10 +194,52 @@ CAPABILITY_BOUNDARY_DISCOVERED
 A1-R1
 PASS
 
-A2
-READY_FOR_EXECUTION
+A2-R1 one-shot
+NOT_EVALUATED
+
+A2 research question
+PASS_BY_READ_ONLY_ADJUDICATION
 ```
 
 The next question is no longer whether Lean accepts the proof, whether OxiLean can evaluate the declaration, or whether MiniF2F is an adequate workload.
 
 The question is now Yoda's derivation-preservation behavior.
+
+
+---
+
+## One-shot observed result
+
+The one-shot passed all persistence and byte-recovery gates before the harness stopped on the first OxiLean context query.
+
+```text
+OBJECT_COUNT=9
+LINK_COUNT=15
+YODA_VERIFY=PASS
+
+STATEMENT_BYTE_EXACT_RECOVERY=PASS
+PROOF_A_BYTE_EXACT_RECOVERY=PASS
+PROOF_B_BYTE_EXACT_RECOVERY=PASS
+TRANSFORMATION_BYTE_EXACT_RECOVERY=PASS
+LEAN_EVIDENCE_BYTE_EXACT_RECOVERY=PASS
+OXILEAN_EVIDENCE_BYTE_EXACT_RECOVERY=PASS
+A1_R1_AUTHORITY_BYTE_EXACT_RECOVERY=PASS
+```
+
+Frozen one-shot identities:
+
+```text
+SCRIPT_SHA256=
+1568c92514e12be7ecb7bc57dd9e31a51fcb32240b75b21c3cfc003dfd191fbe
+
+CONSOLE_SHA256=
+a8f3f499cdc89a58e613deb5c2f07f68eaea9278b05a75c0280dd6ebd088a6d7
+
+EXECUTION_LOCK_SHA256=
+c8ec9022ffd989fcc9dff818fbcc1268a03154c2a3267cbde40585f328f18241
+
+DATA_YODA_SHA256=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+```
+
+The one-shot itself remains NOT_EVALUATED. It is not rewritten as PASS.
