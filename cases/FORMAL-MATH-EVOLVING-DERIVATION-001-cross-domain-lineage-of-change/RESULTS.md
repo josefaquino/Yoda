@@ -7,7 +7,7 @@
 | A0 | PASS | External authorities frozen and evidence integrity established |
 | A1.0 | NOT_EVALUATED | Secondary authority capability boundary discovered |
 | A1-R1 | PASS | Both pre-registered proof states verified by Lean and OxiLean on the single execution |
-| A2 | READY / PRE-REGISTERED | Yoda versioned-derivation gate; no new workload or authority |
+| A2-R1 | NOT_EVALUATED | One-shot execution reached a harness query-tokenization mismatch after all persistence/recovery gates passed; read-only adjudication pending |
 | B | BLOCKED | Requires A2 PASS |
 
 ---
@@ -268,3 +268,83 @@ KYBER_CHANGE=NO
 A2 does not rerun Lean or OxiLean. Independent authority replay remains Stage B. A2 tests Yoda's preservation and recovery behavior only.
 
 See `ATTEMPTS/A2-R1-YODA-VERSIONED-DERIVATION.md`.
+
+
+---
+
+## A2-R1 one-shot execution — measurement interruption
+
+The single pre-registered A2-R1 execution consumed its one-execution lock and must not be rerun.
+
+Observed before the interruption:
+
+```text
+A1_R1_EVIDENCE_AUTHORITY=PASS
+A1_R1_SOURCE_IDENTITIES=PASS
+
+NO_NEW_WORKLOAD=PASS
+NO_NEW_AUTHORITY=PASS
+
+YODA_INIT=PASS
+OBJECT_COUNT=9
+LINK_COUNT=15
+YODA_VERIFY=PASS
+
+STATEMENT_BYTE_EXACT_RECOVERY=PASS
+PROOF_A_BYTE_EXACT_RECOVERY=PASS
+PROOF_B_BYTE_EXACT_RECOVERY=PASS
+TRANSFORMATION_BYTE_EXACT_RECOVERY=PASS
+LEAN_EVIDENCE_BYTE_EXACT_RECOVERY=PASS
+OXILEAN_EVIDENCE_BYTE_EXACT_RECOVERY=PASS
+A1_R1_AUTHORITY_BYTE_EXACT_RECOVERY=PASS
+```
+
+The harness then stopped at:
+
+```text
+REASON=OxiLean A context failed
+```
+
+This is not currently classified as a Yoda preservation failure.
+
+Source audit of the frozen Yoda search implementation shows that indexing splits punctuation-delimited text into separate terms while query parsing splits only on whitespace before normalization. The query:
+
+```text
+FormalEvolutionR1.ProofA.proof
+```
+
+therefore normalized to one term, while the indexed value contains separate terms:
+
+```text
+formalevolutionr1
+proofa
+proof
+```
+
+The one-shot execution is therefore classified pending adjudication as:
+
+```text
+A2_R1_EXECUTION=NOT_EVALUATED
+FAILURE_CLASS=HARNESS_QUERY_TOKENIZATION_MISMATCH
+YODA_PRESERVATION_FAILURE=NOT_ESTABLISHED
+```
+
+Authoritative observed identities:
+
+```text
+A2_R1_SCRIPT_SHA256=
+1568c92514e12be7ecb7bc57dd9e31a51fcb32240b75b21c3cfc003dfd191fbe
+
+A2_R1_CONSOLE_SHA256=
+a8f3f499cdc89a58e613deb5c2f07f68eaea9278b05a75c0280dd6ebd088a6d7
+
+A2_R1_EXECUTION_LOCK_SHA256=
+c8ec9022ffd989fcc9dff818fbcc1268a03154c2a3267cbde40585f328f18241
+
+DATA_YODA_SHA256_AT_INTERRUPTION=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+
+DATA_YODA_BYTES=80761
+```
+
+The only permitted continuation is a read-only adjudication against that exact durable state. No A2-R1 rerun is allowed.
