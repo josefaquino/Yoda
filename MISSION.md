@@ -4,7 +4,7 @@
 
 Yoda exists to make the origin of important results inspectable.
 
-The project began from a simple observation: modern results rarely come from a single source. They emerge from chains of data, software, models, tools, transformations, human judgment and machine decisions.
+Modern results rarely come from a single source. They emerge from chains of data, software, models, tools, transformations, human judgment and machine decisions.
 
 The final artifact is often easy to store.
 The chain that produced it is not.
@@ -29,9 +29,18 @@ It is superseded.
 It is transformed by tools.
 It becomes evidence for later decisions.
 
-A system that preserves only the latest value loses much of what makes the result explainable.
+A system that preserves only the latest value loses much of what makes a result explainable.
 
 Yoda therefore treats identity, provenance, relationships, history and evidence as first-class product concerns.
+
+The recent research program adds a second principle:
+
+> **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
+
+That separation is intentional.
+
+Yoda should preserve the chain.
+The appropriate external authority should evaluate the result.
 
 ---
 
@@ -49,11 +58,12 @@ What evidence supported it?
 What changed after it was produced?
 Which later decisions depended on it?
 Can the derivation be reconstructed independently?
+Can the appropriate authority evaluate it again?
 ```
 
-The purpose is not to replace reasoning or scientific judgment.
+The purpose is not to replace reasoning, scientific judgment or domain validation.
 
-The purpose is to give reasoning and judgment something trustworthy to stand on.
+The purpose is to make the derivation behind those judgments reconstructible.
 
 ---
 
@@ -71,8 +81,8 @@ state integrity
 Yoda
 derivation integrity
      ↓
-Agents / Humans
-decision
+Independent Authorities / Agents / Humans
+evaluation + decision
 ```
 
 ### Sputnik
@@ -87,17 +97,47 @@ Preserve exact state durably and verify that it survived.
 
 Preserve meaning around state: identity, provenance, relationships, history, evidence and recoverable context.
 
-### Agents and humans
+### Independent authorities, agents and humans
 
-Make decisions from the evidence that survives.
+Evaluate results and make decisions from evidence that survives.
 
 Yoda should not absorb the responsibilities of the other layers.
 
 ---
 
+## Independent Authority Replay
+
+Recent CASEs with AXLE and SynthID Bio exposed the same architectural pattern:
+
+```text
+independent authority
+        ↓
+measurement / decision
+        ↓
+       Yoda
+        ↓
+recovery + lineage
+        ↓
+same independent authority
+        ↓
+same measurement / decision
+```
+
+We use **independent authority replay** as an internal research name for this pattern.
+
+With AXLE, the replayed property was a formal accept/reject decision.
+
+With SynthID Bio, the replayed property was an intrinsic provenance measurement.
+
+Yoda did not become the prover or the detector.
+
+That is the point.
+
+---
+
 ## What success would look like
 
-Yoda succeeds if important results become easier to explain without forcing every domain to adopt a giant platform.
+Yoda succeeds if important results become easier to explain and re-evaluate without forcing every domain to adopt a giant platform.
 
 The ideal integration remains small:
 
@@ -108,12 +148,15 @@ evidence + relations
       ↓
 Yoda
       ↓
-verifiable context
+verifiable derivation
+      ↓
+appropriate authority
 ```
 
 A scientist should be able to keep using scientific tools.
 An agent should be able to keep using its preferred runtime.
-A developer should not need to move an entire system into Yoda.
+A formal verifier should remain the formal verifier.
+A provenance detector should remain the provenance detector.
 
 Yoda should compose.
 
@@ -127,10 +170,10 @@ The harder questions become:
 
 ```text
 Can we trace it?
-Can we verify its origin?
 Can we reproduce the chain?
 Can we distinguish current evidence from stale evidence?
 Can we see what changed?
+Can an independent authority evaluate it again?
 ```
 
 Yoda is an attempt to build infrastructure for those questions.
@@ -147,7 +190,11 @@ Yoda instead targets a narrower property:
 
 > **Derivation integrity: the ability to reconstruct the verifiable chain that produced a result.**
 
-That property can complement formal proof systems, empirical validation, domain tools and human review.
+That property can complement formal proof systems, empirical validation, artifact provenance mechanisms, domain tools and human review.
+
+The emerging category thesis is:
+
+> **Verifiable Derivation Infrastructure**
 
 ---
 
@@ -162,6 +209,7 @@ one question
 one controlled experiment
 explicit PASS / FAIL gates
 frozen evidence
+independent authority where possible
 no speculative engine change
 ```
 
@@ -174,9 +222,9 @@ The architecture should change only when repeated evidence forces it to.
 
 ## Long-term direction
 
-The project is exploring whether verifiable derivation is a cross-domain property.
+The project is exploring whether verifiable derivation is a cross-domain infrastructure property.
 
-Current and planned proving grounds include:
+Validated proving grounds now include:
 
 ```text
 network state
@@ -184,18 +232,19 @@ security events
 scientific observations
 genomics
 formal proof workflows
-biological R&D workflows
-agent decision evidence
+biological artifact provenance
 ```
 
-If the same small architecture survives those domains without special modes, the result may be more important than any one vertical.
+The next strong falsification target is an externally defined biological R&D workflow.
+
+If the same small architecture continues to survive qualitatively different domains without special modes, the result may be more important than any one vertical.
 
 ---
 
 ## Mission statement
 
-> **Make important results traceable to the evidence and transformations that produced them.**
+> **Make important results traceable to the evidence and transformations that produced them — so the right authority can evaluate them again.**
 
 Or, more simply:
 
-> **Prove the derivation.**
+> **Preserve the derivation.**
