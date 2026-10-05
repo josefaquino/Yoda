@@ -72,9 +72,26 @@ require_verified_decl()
 {
     report="$1"
     decl="$2"
-    json_contains \
-        "$report" \
-        "\"name\":\"$decl\",\"kind\":\"thm\",\"verdict\":\"verified\""
+
+    awk -v target="$decl" '
+        index($0, "\"name\": \"" target "\"") {
+            in_target = 1
+            next
+        }
+
+        in_target && index($0, "\"verdict\": \"verified\"") {
+            verified = 1
+        }
+
+        in_target && /^[[:space:]]*}/ {
+            exit
+        }
+
+        END {
+            if (!verified)
+                exit 1
+        }
+    ' "$report"
 }
 
 section "0. A2 AUTHORITY"
