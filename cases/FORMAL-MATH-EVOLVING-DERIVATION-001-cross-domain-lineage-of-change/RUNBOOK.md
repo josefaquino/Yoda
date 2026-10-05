@@ -137,7 +137,7 @@ Script path:
 scripts/01-r1-authority-compatible-evolution.sh
 ```
 
-The harness also enforces a local one-execution lock before formal validation so the revision cannot be silently rerun after its result is known.
+The harness enforces a local one-execution lock before formal validation so the revision cannot be silently rerun after its result is known. A consumed lock is checked at startup before `stage-a1-r1` can be removed or rebuilt, preserving the first execution evidence.
 
 Execution policy:
 

@@ -139,6 +139,9 @@ decl_detail()
     ' "$report"
 }
 
+test ! -e "$EXECUTION_LOCK" ||
+    not_evaluated "A1-R1 one-execution policy already consumed; existing evidence preserved"
+
 section "0. A0 AUTHORITY + A1.0 PREDECESSOR"
 
 test -f "$A0/evidence/SHA256SUMS" ||
