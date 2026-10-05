@@ -1,16 +1,16 @@
 # Research Program
 
-Yoda's next phase is designed to test whether verifiable derivation survives outside workflows we designed ourselves.
+Yoda's current research program asks whether **verifiable derivation** survives across qualitatively different authority models without domain-specific expansion.
 
 The goal is not to accumulate features.
 
-The goal is to expose the same small architecture to qualitatively different forms of pressure.
+The goal is to expose the same small architecture to different forms of pressure.
 
 ---
 
 ## Research question
 
-> **Is verifiable derivation a cross-domain property, or only an artifact of the workflows we have already tested?**
+> **Is verifiable derivation a cross-domain property, or only an artifact of the workflows we designed ourselves?**
 
 Current architecture:
 
@@ -28,21 +28,33 @@ verification
 bounded context
 ```
 
-The next experiments should fail if those primitives are insufficient.
-
 ---
 
 # Track A — Formal reasoning
 
-## AXIOM-YODA-PROOF-LINEAGE-001
+## AXIOM-YODA-PROOF-LINEAGE-001 — VALIDATED
 
-Axiom's AXLE provides public infrastructure for checking and manipulating Lean proof artifacts.
-
-This makes it a useful external authority for a controlled experiment.
+AXLE was used as the external formal-verification authority.
 
 ### Question
 
-> Can Yoda preserve and reconstruct the complete derivation lineage of a formally verified proof such that recovered artifacts can be submitted again to AXLE and reproduce the original verification outcome?
+> Can Yoda preserve and reconstruct the complete derivation lineage of a formally verified proof such that recovered artifacts can be submitted again to AXLE and reproduce the original formal verification outcome?
+
+### Result
+
+```text
+AXIOM_YODA_PROOF_LINEAGE_001=VALIDATED
+STAGE_A0=PASS
+STAGE_A1=PASS
+YODA_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
+AXLE_POSITIVE_DECISION_REPRODUCED=PASS
+AXLE_NEGATIVE_DECISION_REPRODUCED=PASS
+POSITIVE_DERIVATION_LINEAGE_RECOVERY=PASS
+NEGATIVE_DERIVATION_LINEAGE_RECOVERY=PASS
+PROOF_DERIVATION_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
 
 ### Positive arm
 
@@ -51,32 +63,36 @@ formal statement
       +
 candidate proof
       ↓
-AXLE verification
+AXLE accepts
       ↓
-valid result
+Yoda preserves derivation
       ↓
-Yoda lineage
+byte-exact artifact recovery
       ↓
-recover artifacts
-      ↓
-AXLE verification again
-      ↓
-same valid result
+AXLE accepts again
 ```
 
 ### Negative arm
 
+The controlled mutation was valid Lean but proved a different theorem.
+
 ```text
-valid proof
-    ↓
 controlled mutation
-    ↓
-AXLE rejection
-    ↓
-Yoda preserves both derivations and outcomes
+      ↓
+Lean check succeeds
+      ↓
+AXLE rejects against frozen statement
+      ↓
+Yoda preserves derivation
+      ↓
+byte-exact artifact recovery
+      ↓
+Lean check still succeeds
+      ↓
+AXLE rejects again
 ```
 
-### Separation of authority
+### Authority separation
 
 ```text
 AXLE
@@ -86,23 +102,27 @@ Yoda
 → derivation integrity
 ```
 
-Yoda must not pretend to verify mathematics.
+This separation held.
 
-AXLE remains the formal authority.
+Yoda did not become a theorem prover and no `Math Mode` was added.
 
-### External references
+See:
 
-- Axiom mission: https://axiommath.ai/mission/
-- AXLE release: https://axiommath.ai/research/releasing-axle/
+`cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation/`
+
+External references:
+
+- Axiom: https://axiommath.ai/
+- AXLE: https://axiommath.ai/research/releasing-axle/
 - AXLE docs: https://axle.axiommath.ai/v1/docs/
 
 ---
 
 # Track B — Empirical biology
 
-## BIO-DESIGN-LINEAGE-001
+## BIO-DESIGN-LINEAGE-001 — NEXT
 
-The second track should use a biological R&D workflow selected by an external scientific team.
+The next track should use a biological R&D workflow selected by an external scientific team.
 
 ### Question
 
@@ -138,7 +158,7 @@ The first experiment does not require confidential sequence contents.
 
 Artifact IDs, hashes, versions, relationships and redacted evidence may be sufficient to test the lineage hypothesis.
 
-### Separation of authority
+### Authority separation
 
 ```text
 domain scientists
@@ -180,22 +200,42 @@ AI-generated biological artifact
 
 Reference:
 
-- Google DeepMind SynthID Bio: https://deepmind.google/blog/introducing-synthid-bio/
+- https://deepmind.google/blog/introducing-synthid-bio/
 
 This is future work, not a current capability claim.
 
 ---
 
-# What would count as strong evidence
+# What changed after Track A
 
-The next phase becomes interesting only if the system survives external pressure without domain-specific expansion.
+Before the AXLE experiment, cross-domain derivation was only a hypothesis.
 
-Strong evidence would look like:
+Now we have two distinct demonstrations:
+
+```text
+GENOME-LINEAGE-001
+empirical scientific lineage
+        PASS
+
+AXIOM-YODA-PROOF-LINEAGE-001
+formal proof derivation replay
+        PASS
+```
+
+This is evidence that the abstraction may travel across domains.
+
+It is not enough to call the hypothesis proven.
+
+The strongest next falsification attempt is an externally chosen empirical workflow that was not designed around Yoda.
+
+---
+
+# What would count as stronger evidence
 
 ```text
 formal workflow PASS
 +
-empirical workflow PASS
+external empirical workflow PASS
 +
 no Math Mode
 +
@@ -204,7 +244,7 @@ no Biology Mode
 no engine rewrite
 ```
 
-That would support — but not prove — the hypothesis:
+That would strengthen the hypothesis:
 
 ```text
 VERIFIABLE_DERIVATION
@@ -218,11 +258,11 @@ may be a cross-domain property
 Useful negative results include:
 
 - lineage cannot be recovered without embedding domain semantics into the core;
-- bounded context becomes unusable outside toy workloads;
+- bounded context becomes unusable outside controlled workloads;
 - external workflows require arbitrary graph planning to remain understandable;
 - provenance data overwhelms the value of the underlying result;
-- developers do not find reconstructed derivation useful;
-- existing systems already solve the problem more simply;
+- developers or scientists do not find reconstructed derivation useful;
+- existing systems solve the problem more simply;
 - external teams will not integrate the evidence contract into real workflows.
 
 Any of these should change the roadmap.
@@ -230,8 +270,6 @@ Any of these should change the roadmap.
 ---
 
 # Commercial hypothesis
-
-The commercial hypothesis is intentionally downstream from the technical one.
 
 If generation becomes abundant, organizations may pay for infrastructure that makes high-value results traceable, inspectable and reproducible across tools and agents.
 
@@ -246,8 +284,20 @@ regulated decision workflows
 multi-agent research
 ```
 
-But product-market fit remains open.
+Product-market fit remains open.
 
-The next milestone is not a fundraising narrative.
+The current sequence is therefore:
 
-It is external evidence strong enough that a fundraising narrative can be honest.
+```text
+formal external validation
+        PASS
+        ↓
+empirical external validation
+        NEXT
+        ↓
+partner feedback
+        ↓
+product hypothesis
+        ↓
+commercial validation
+```
