@@ -65,7 +65,7 @@ require_verified_decl()
     decl="$2"
     json_contains \
         "$report" \
-        "\"name\":\"$decl\",\"kind\":\"theorem\",\"verdict\":\"verified\""
+        "\"name\":\"$decl\",\"kind\":\"thm\",\"verdict\":\"verified\""
 }
 
 section "0. A0 AUTHORITY"
