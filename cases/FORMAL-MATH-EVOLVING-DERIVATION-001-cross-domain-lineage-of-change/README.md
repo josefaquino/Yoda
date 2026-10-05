@@ -30,13 +30,17 @@ mathd_numbertheory_188
 PASS
   |
   v
-A2
-YODA VERSIONED DERIVATION
-READY / PRE-REGISTERED
+A2-R1 one-shot
+NOT_EVALUATED
+HARNESS_QUERY_TOKENIZATION_MISMATCH
+  |
+  v
+A2 research question
+PASS_BY_READ_ONLY_ADJUDICATION
   |
   v
 B
-BLOCKED UNTIL A2 PASS
+READY / NOT EXECUTED
 ```
 
 A1.0 is preserved as a **negative result with positive methodological value**.
@@ -176,9 +180,21 @@ recover from Yoda
 re-run formal authorities
 ```
 
-A1-R1 passed on its single pre-registered execution. A2 is now the only active gate.
+A1-R1 passed on its single pre-registered execution.
 
-A2 introduces no new theorem, corpus, authority, or formal evidence. It consumes only the frozen A1-R1 artifacts and tests whether Yoda can preserve their versioned derivation.
+The A2-R1 one-shot is preserved as NOT_EVALUATED after a harness query-tokenization mismatch. No rerun was performed. The exact durable Yoda state produced by that execution was then adjudicated read-only.
+
+The A2 research question passed by read-only adjudication:
+
+```text
+A2_RESEARCH_QUESTION=PASS_BY_READ_ONLY_ADJUDICATION
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The durable state remained byte-identical throughout adjudication.
+
+Stage B is the next gate, but it has not been executed. The complete CASE is therefore not yet homologated.
 
 ---
 
