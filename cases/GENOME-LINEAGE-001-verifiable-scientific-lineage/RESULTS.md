@@ -1,0 +1,128 @@
+# Results — GENOME-LINEAGE-001
+
+## Status
+
+```text
+GENOME_LINEAGE_001_STAGE_A=PASS
+```
+
+## Product authority
+
+```text
+YODA_PRODUCT_AUTHORITY=PASS
+YODA_BINARY_IDENTITY=PASS
+YODA_SHA256=1a38316b4f370225ae52431074365eb921976e79db2f4688fb8154ce9218d9eb
+```
+
+## Objects and relations
+
+```text
+OBJECT_COUNT=8
+RELATION_COUNT=8
+EXACT_EVIDENCE_RECOVERY=PASS
+```
+
+## Variant neighborhood
+
+Recovered:
+
+```text
+Variant root
+Alignment
+Reference
+bcftools
+Variant Evidence
+```
+
+Gate:
+
+```text
+VARIANT_CONTEXT_1HOP=PASS
+```
+
+## Alignment neighborhood
+
+Recovered:
+
+```text
+Alignment root
+ReadSet
+Reference
+BWA
+Alignment Evidence
+```
+
+Gate:
+
+```text
+ALIGNMENT_CONTEXT_1HOP=PASS
+```
+
+## Full lineage composition
+
+```text
+BUNDLE_REFERENCE_IDENTITY=PASS
+BUNDLE_READSET_IDENTITY=PASS
+BUNDLE_ALIGNMENT_IDENTITY=PASS
+BUNDLE_VARIANT_IDENTITY=PASS
+BUNDLE_BWA_IDENTITY=PASS
+BUNDLE_BCFTOOLS_IDENTITY=PASS
+BUNDLE_ALIGNMENT_EVIDENCE=PASS
+BUNDLE_VARIANT_EVIDENCE=PASS
+EXTERNAL_TWO_NEIGHBORHOOD_COMPOSITION=PASS
+FULL_GENOMIC_LINEAGE_RECOVERY=PASS
+```
+
+Frozen lineage bundle:
+
+```text
+LINEAGE_BUNDLE_SHA256=99a4b9380e48ae703410c2bc54554c151b02475bc2f1d1e5ce64743802ed747b
+```
+
+## Scientific identities
+
+```text
+REFERENCE_SHA256=dca25fd7c31140ad67bbc1fd72396c9a1c228f03cd80bcb43371f19918f16af6
+READSET_SHA256=2c900493cc32a0c847fb7b78421c0afeab8e21a006fa6b9415951913f9eb9ae7
+ALIGNMENT_SHA256=ae653e9d981567447e8c16922dff2b4253add2ec89e9dc3b7e83f302f456fec0
+VARIANT_SHA256=7bb54f1c2786ec562e68e8f77c546e6f4da8f6d3a9abd21916cdc8c105b85ff1
+```
+
+## Authoritative store
+
+```text
+YODA_VERIFY=PASS
+DATA_YODA_SHA256=46022db31867eed2c2c688ea735d9c325faf0ead2abe5b9e1deca2eb93edbdb1
+DATA_YODA_BYTES=4793
+```
+
+## Evidence integrity
+
+```text
+EVIDENCE_INTEGRITY=PASS
+EVIDENCE_MANIFEST_SHA256=80240e8b87852e2c3f4f6711bfea8a57edcf85edd0d85782ec8622f4d391046e
+```
+
+## Execution identity
+
+```text
+GENOME_LINEAGE_001_STAGE_A_RUN_RC=0
+SCRIPT_SHA256=9bee36b5a55b1aa73cfb8a0e7f9fc719aa76cbd61d851ec7e4443edc1774654e
+CONSOLE_SHA256=bef1fffc97e7bc5cbf9c046f28ee7712acf0ce205f59c49feecc849277258bae
+```
+
+## Changes
+
+```text
+PRODUCT_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+## Homologation
+
+```text
+GENOME_LINEAGE_001=VALIDATED
+VERIFIABLE_SCIENTIFIC_LINEAGE=DEMONSTRATED_FOR_CONTROLLED_WORKFLOW
+```
+
+This is a narrow capability claim, not a general scientific-lineage platform claim.
