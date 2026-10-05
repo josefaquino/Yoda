@@ -170,7 +170,7 @@ Do not choose another theorem inside this revision.
 
 ---
 
-## Stage A2 — current next gate
+## Stage A2 — completed by read-only adjudication
 
 A1-R1 is complete and homologated as PASS.
 
@@ -230,15 +230,43 @@ A2 validates Yoda preservation, byte-exact recovery, relation recovery, bounded 
 
 A2 does **not** rerun Lean or OxiLean. Stage B remains the independent replay gate.
 
-A2 uses a one-execution lock immediately before the first Yoda write. A consumed lock is checked at startup before any A2 evidence can be overwritten.
+A2 used a one-execution lock immediately before the first Yoda write.
+
+The one-shot execution is permanently classified:
+
+```text
+A2_R1_ONE_SHOT=NOT_EVALUATED
+FAILURE_CLASS=HARNESS_QUERY_TOKENIZATION_MISMATCH
+A2_R1_RERUN=NO
+```
+
+The same immutable Yoda state was then adjudicated read-only.
+
+Final adjudication:
+
+```text
+A2_RESEARCH_QUESTION=PASS_BY_READ_ONLY_ADJUDICATION
+DATA_YODA_SHA256=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+
+FINAL_ADJUDICATION_EVIDENCE_MANIFEST_SHA256=
+e603b0ac3fe1b477a2dd6b3db71c46c7a07e3a098843067fc68c23711775accb
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Do not rerun A2-R1 and do not delete its execution lock.
 
 ---
 
-## Stage B
+## Stage B — next gate, intentionally not executed yet
 
-B remains blocked until A2 passes.
+Stage B is now authorized by the A2 research-question result but is intentionally deferred.
 
 The replay stage must use only artifacts recovered from Yoda and must rerun the same frozen Lean and OxiLean authorities against the recovered A1-R1 proof states.
+
+No Stage B execution is part of the current work session.
 
 ---
 
