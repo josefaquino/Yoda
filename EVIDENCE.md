@@ -22,6 +22,18 @@ no speculative engine change
 
 > **Big vision. Small steps. Evidence always.**
 
+Public claims should be traceable through:
+
+```text
+EVIDENCE
+   ↓
+FORMAL PROPERTY
+   ↓
+PROJECT THESIS
+   ↓
+PUBLIC LANGUAGE
+```
+
 ---
 
 # Cross-domain evidence map
@@ -40,12 +52,13 @@ no speculative engine change
 | GENOME-LINEAGE-001 | Genomics | verifiable scientific lineage | PASS |
 | AXIOM-YODA-PROOF-LINEAGE-001 | Formal verification | independent formal decision replay | PASS |
 | SYNTHID-BIO-YODA-PROVENANCE-001 | Biological artifact provenance | composed provenance + independent measurement replay | PASS |
+| SYNTHID-BIO-EVOLVING-PROVENANCE-001 | Controlled evolving artifact | Lineage of Change + state-specific authority replay | PASS |
 
 Negative experiments and invalid harness attempts remain evidence when they are classified honestly.
 
 ---
 
-# Genomics — scientific lineage
+# Genomics — Lineage of State
 
 The genomics ladder moved from exact state to derivation:
 
@@ -82,6 +95,10 @@ Frozen lineage bundle:
 ```text
 99a4b9380e48ae703410c2bc54554c151b02475bc2f1d1e5ce64743802ed747b
 ```
+
+Question answered inside the CASE scope:
+
+> **Where did this result come from?**
 
 See:
 
@@ -138,11 +155,9 @@ See:
 
 ---
 
-# SynthID Bio — composed provenance
+# SynthID Bio — Composed Provenance
 
-`SYNTHID-BIO-YODA-PROVENANCE-001` tested a new question:
-
-> Can an intrinsic provenance signal inside a biological artifact coexist with external workflow provenance around that artifact, survive Yoda persistence and recovery, and remain independently measurable afterward?
+`SYNTHID-BIO-YODA-PROVENANCE-001` tested whether intrinsic provenance inside an artifact and external workflow provenance around it could coexist and remain independently measurable after Yoda persistence and recovery.
 
 Authority separation:
 
@@ -154,45 +169,17 @@ Yoda
 → external derivation integrity
 ```
 
-## Stage A0 — external oracle
-
-The official public repository was frozen at:
+The public implementation was frozen at:
 
 ```text
 DEEPMIND_COMMIT=acd75747b14c7f4c3c65ad1e6af1483aeba47614
 ```
 
-The official control, watermarked and standalone detector tests were reproduced before Yoda entered the experiment.
+The official external detector behavior was reproduced before Yoda entered the experiment.
 
-```text
-OFFICIAL_NON_WATERMARKED_TEST=PASS
-OFFICIAL_WATERMARKED_TEST=PASS
-OFFICIAL_G_VALUE_TEST=PASS
-OFFICIAL_STANDALONE_DETECTOR=PASS
-EXPECTED_G_VALUES=PASS
-YODA_WRITES=ZERO
-```
+Yoda then stored the control and watermarked artifacts, measurements, authority identity, parameters and evidence.
 
-## Stage A1 — Yoda composition
-
-Yoda stored eight objects and eleven relations covering the control and watermarked artifacts, measurements, external authority, parameters and evidence.
-
-```text
-YODA_OBJECT_INGEST=PASS
-COMPOSED_PROVENANCE_RELATIONS=PASS
-CONTROL_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
-WATERMARKED_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
-MEASUREMENT_BYTE_EXACT_RECOVERY=PASS
-ORACLE_PARAMETERS_BYTE_EXACT_RECOVERY=PASS
-COMPOSED_PROVENANCE_CONTEXT=PASS
-FINAL_YODA_VERIFY=PASS
-```
-
-The detector was not rerun in A1.
-
-## Stage B — detector replay
-
-Only the artifacts recovered from Yoda were submitted to the frozen SynthID Bio detector.
+Only Yoda-recovered artifacts were submitted to the frozen detector in the replay stage.
 
 ```text
 ARM          SAMPLE   BEFORE   AFTER
@@ -206,8 +193,6 @@ WATERMARKED  2        0.7184   0.7184
 CONTROL_DETECTOR_EQUIVALENCE=PASS
 WATERMARKED_DETECTOR_EQUIVALENCE=PASS
 G_VALUE_MATRIX_EQUIVALENCE=PASS
-CONTROL_SIGNAL_NOT_FABRICATED=PASS
-WATERMARKED_SIGNAL_MEASUREMENT_PRESERVED=PASS
 INTRINSIC_PROVENANCE_MEASUREMENT_EQUIVALENCE=PASS
 EXTERNAL_WORKFLOW_PROVENANCE_RECOVERY=PASS
 COMPOSED_PROVENANCE=PASS
@@ -230,9 +215,168 @@ See:
 
 ---
 
+# Evolving provenance — Lineage of Change
+
+`SYNTHID-BIO-EVOLVING-PROVENANCE-001` asked a different question:
+
+> **Can a legitimate change create a new identity without destroying the verifiable lineage of what came before?**
+
+The biological domain and SynthID Bio were the experimental environment, not the property definition.
+
+The controlled transition was:
+
+```text
+Artifact A
+SHA256=da6b1b6b239fc3c870f9750f7b29c816f4d700462a160fc8ced7922dbecbfad0
+measurement=0.7961
+
+        │
+        │ random-residue substitution
+        │ 6 changed residues
+        │ 5.660377% actual change
+        ▼
+
+Artifact B
+SHA256=defc97981f115f1c1792e53946dcf81f5cce28fafdcccf917c80470fa3cfaa00
+measurement=0.6990
+```
+
+The two states had distinct identities and distinct independent measurements.
+
+## Yoda preservation
+
+Yoda stored nine objects and eleven explicit relations covering:
+
+```text
+Artifact A
+Artifact B
+Measurement A
+Measurement B
+Transformation
+Mutation table
+Detector authority
+Supplementary authority
+Experimental evidence
+```
+
+The relation set included:
+
+```text
+B --derived-from--> A
+B --transformed-by--> Transformation
+A --has-measurement--> Measurement A
+B --has-measurement--> Measurement B
+Measurement A --measured-by--> Detector
+Measurement B --measured-by--> Detector
+```
+
+Recovery gates:
+
+```text
+ARTIFACT_A_BYTE_EXACT_RECOVERY=PASS
+ARTIFACT_B_BYTE_EXACT_RECOVERY=PASS
+TRANSFORMATION_BYTE_EXACT_RECOVERY=PASS
+MUTATION_TABLE_BYTE_EXACT_RECOVERY=PASS
+MEASUREMENT_BYTE_EXACT_RECOVERY=PASS
+LINEAGE_OF_CHANGE_CONTEXT=PASS
+VERSIONED_DERIVATION_RECOVERY=PASS
+FINAL_YODA_VERIFY=PASS
+```
+
+The validating Yoda state was:
+
+```text
+DATA_YODA_SHA256=0aac02391eec12c2caa2a0bca725af6ddcdab4530c2153002b6673a7e7729954
+DATA_YODA_BYTES=9971
+```
+
+## Independent state-specific replay
+
+Only the Yoda-recovered A and B states were sent back to the frozen SynthID Bio detector.
+
+```text
+G_A_BEFORE=0.7961
+G_A_AFTER_RECOVERY=0.7961
+
+G_B_BEFORE=0.6990
+G_B_AFTER_RECOVERY=0.6990
+```
+
+```text
+STATE_A_MEASUREMENT_EQUIVALENCE=PASS
+STATE_B_MEASUREMENT_EQUIVALENCE=PASS
+STATE_SPECIFIC_MEASUREMENT_REPLAY=PASS
+INDEPENDENT_STATE_REPLAY=PASS
+LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+```
+
+Final homologation:
+
+```text
+SYNTHID_BIO_EVOLVING_PROVENANCE_001=VALIDATED
+STAGE_A0=PASS
+STAGE_A0_1=PASS
+STAGE_A1=PASS
+STAGE_A2=PASS
+STAGE_B=PASS
+LINEAGE_OF_CHANGE=DEMONSTRATED
+INDEPENDENT_AUTHORITY_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+FINAL_EVIDENCE_INTEGRITY=PASS
+```
+
+Frozen authorities:
+
+```text
+A2_EVIDENCE_MANIFEST_SHA256=ab4e996f28d5d70995620f5d14d2e50886eec1d493955b31b419624fab735728
+STAGE_B_EVIDENCE_MANIFEST_SHA256=6eba74b9b659db8950c3fd7d0e5b39b0c7fcae49fa2682023c3a528c7f87b8a7
+REPLAY_CONTRACT_SHA256=ccdd19b43094b883f682e235a50fd21e06d1c4cfa08531560c9549768548d2c9
+FINAL_EVIDENCE_MANIFEST_SHA256=e46bcb223be3264f97390abac792a889b5a79033d9ff55eb8f400c818ebcc17a
+```
+
+Formal property:
+
+```text
+Lineage of Change
+=
+derivation integrity across state transitions
+```
+
+See:
+
+- `cases/SYNTHID-BIO-EVOLVING-PROVENANCE-001-lineage-of-change/`
+- `properties/LINEAGE-OF-CHANGE.md`
+
+---
+
+# Evidence ladder
+
+The demonstrated sequence is now:
+
+```text
+LINEAGE OF STATE
+Where did this result come from?
+        ↓
+INDEPENDENT AUTHORITY REPLAY
+Can the right authority evaluate it again?
+        ↓
+COMPOSED PROVENANCE
+Can independent provenance layers coexist?
+        ↓
+LINEAGE OF CHANGE
+How did this become what it is now?
+```
+
+These are not separate engine modes.
+
+They are increasingly strong observations of the same small derivation architecture.
+
+---
+
 # Emerging architectural pattern
 
-Across AXLE and SynthID Bio, the same pattern appeared:
+Across AXLE and the two SynthID Bio CASEs, the authority remained external.
 
 ```text
 independent authority
@@ -248,44 +392,15 @@ same independent authority
 same measurement / decision
 ```
 
-We refer to this as an **independent authority replay** pattern.
-
 The evidence supports a narrow architectural thesis:
 
 > **Yoda does not need to be the authority that decides whether something is true. Yoda can preserve the derivation required for independent authorities to decide again.**
 
-This pattern has now been demonstrated in two qualitatively different authority models:
+The evolving-provenance CASE adds another demonstrated observation:
 
-```text
-AXLE
-→ semantic formal decision replay
+> **A valid change can create a new identity without destroying the verifiable lineage of what came before.**
 
-SynthID Bio
-→ intrinsic provenance measurement replay
-```
-
-Genomics provides a third, empirical lineage context.
-
-This is evidence that verifiable derivation may travel across domains.
-It is not proof that the property is universal.
-
----
-
-# Composed provenance
-
-The SynthID Bio CASE introduced another useful distinction:
-
-```text
-inside the artifact
-→ intrinsic provenance signal
-
-outside the artifact
-→ workflow provenance / derivation
-```
-
-The controlled CASE demonstrated that these layers can coexist while preserving the independent detector measurement.
-
-`COMPOSED_PROVENANCE=PASS` is therefore a demonstrated CASE property, not a claim that Yoda generally solves provenance for all artifact types.
+That sentence is scoped to the validating CASE and is not a universal guarantee.
 
 ---
 
@@ -300,8 +415,10 @@ proof of authorship or ownership
 biological truth or clinical validity
 arbitrary theorem-proving workflow support
 arbitrary watermark support
+arbitrary state-transition support
+native arbitrary multi-hop graph reasoning
+production-scale long change histories
 biotech-scale operation
-production readiness for all workloads
 product-market fit
 Google DeepMind or Axiom endorsement
 ```
@@ -312,12 +429,10 @@ Domain authorities remain responsible for domain validity.
 
 # Next external falsification
 
-## BIO-DESIGN-LINEAGE-001
+The strongest next test should be externally defined rather than another internal format or biology demonstration.
 
-The strongest next test is a real biological R&D question selected by an external scientific team.
+A useful target remains a real Design-Build-Test-Learn or other iterative workflow selected by an external team.
 
-> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate without adding biology-specific storage features?
+The stronger question is now not merely whether Yoda can recover a final candidate's ancestry, but whether it can preserve a longer sequence of meaningful state transitions without domain-specific engine changes.
 
-That test should be partner-defined.
-
-The goal is not another format demo. The goal is to expose the same small architecture to a workflow that was not designed around Yoda.
+That experiment should be defined by the external problem before Yoda code or schema is added.
