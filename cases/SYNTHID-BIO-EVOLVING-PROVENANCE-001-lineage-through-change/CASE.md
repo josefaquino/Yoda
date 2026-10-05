@@ -4,8 +4,9 @@
 
 ```text
 CASE_STATUS=PLANNED
-TRANSFORMATION_CONTRACT=FROZEN
-CODE_WRITING=NO
+TRANSFORMATION_CONTRACT_002=FROZEN
+INSTANCE_CONTRACT=FROZEN_BEFORE_G_B
+NEXT_GATE=A0_INSTANCE_AUTHORITY_AND_PRE_YODA_MEASUREMENT
 YODA_WRITES=ZERO
 ```
 
@@ -22,8 +23,6 @@ It asks whether two legitimately different states can retain distinct identities
 
 ## Why this is a new question
 
-Previous CASEs tested different properties:
-
 ```text
 GENOME-LINEAGE-001
 Where did this result come from?
@@ -33,11 +32,8 @@ Can an independent authority reproduce its decision after Yoda recovery?
 
 SYNTHID-BIO-YODA-PROVENANCE-001
 Can intrinsic artifact provenance coexist with external workflow provenance?
-```
 
-This CASE asks:
-
-```text
+SYNTHID-BIO-EVOLVING-PROVENANCE-001
 How did this artifact become what it is now?
 ```
 
@@ -48,61 +44,91 @@ It is **change itself**.
 
 ## Transformation authority
 
-The transformation model is taken from the Google DeepMind SynthID Bio paper:
+The Google DeepMind SynthID Bio paper explicitly discusses legitimate manual post-design modification, including addition of a C-terminal expression tag, and publishes the C-terminal tags used in its SC2RBD and VEGF-A experimental constructs.
 
-**Stutz et al., “Function-preserving watermarking of AI-generated proteins,” Nature (2026).**
-
-The paper describes a SynthIDBio-sequence robustness experiment in which a watermarked binder is **resequenced with non-watermarked ProteinMPNN at the default sampling temperature of 0.1**.
-
-The transformation is therefore frozen as:
+Frozen transformation:
 
 ```text
-TRANSFORMATION_CLASS=RESEQUENCING
-TRANSFORMATION_TOOL=ProteinMPNN
-TRANSFORMATION_MODE=NON_WATERMARKED
-SAMPLING_TEMPERATURE=0.1
-SOURCE_STATE=WATERMARKED_BINDER
-TARGET_STATE=RESEQUENCED_BINDER
+TRANSFORMATION_CLASS=C_TERMINAL_TAG_ADDITION
+SOURCE_STATE=PDW_0903
+TARGET=VEGFA
+SOURCE_SETTING=watermark_0.1
+
+GFP11=RDHMVLHEYVNAAGIT
+TWIN_STREP=WSHPQFEKGGGSGGGSGGSAWSHPQFEK
+
+B = A || GFP11 || TWIN_STREP
 ```
 
-The paper reports that this attack substantially reduces or removes the watermark signal. That behavior is not the property under test here.
+The earlier resequencing contract is retained as research history. It was not selected for execution because the exact AlphaProteo binder-target complex structures used in the paper’s resequencing attack are not exposed as a directly replayable public A→B instance in the frozen repository.
+
+See:
+
+- `TRANSFORMATION-CONTRACT.md` — initial resequencing investigation;
+- `TRANSFORMATION-CONTRACT-002.md` — executable direct-change contract;
+- `INSTANCE-CONTRACT.md` — concrete A→B selection frozen before g(B).
+
+---
+
+## Anti-cherry-picking rule
+
+Artifact A was selected before transformed-state measurement using only public metadata and deterministic file order:
+
+```text
+Plate Target ID = VEGFA
+Subset_Name = watermark_0.1
+binding = TRUE
+first unique design in source-file order
+```
+
+Result:
+
+```text
+ARTIFACT_A_ID=PDW_0903
+BACKBONE_ID=Backbone 0
+```
+
+The value of `g(B)` is deliberately absent from the instance contract.
+If it is surprising, the instance is not replaced.
 
 ---
 
 ## Authority separation
 
 ```text
-Google DeepMind paper
-→ transformation-method authority
+Google DeepMind / Nature paper
+→ external scientific authority for the recognized post-design modification
+→ authority for published tag sequences
 
-ProteinMPNN
-→ transformation execution
+Google DeepMind public dataset
+→ authority for Artifact A sequence and metadata
 
 SynthID Bio detector
-→ intrinsic provenance measurement
+→ independent intrinsic provenance measurement of each state
 
 Yoda
 → derivation integrity
 ```
 
-Yoda must not become the biological authority, the watermark detector or the transformation tool.
+Yoda is not the biological authority, watermark detector or transformation authority.
 
 ---
 
-## Planned state model
+## State model
 
 ```text
 Artifact A
-watermarked source state
+PDW_0903
+watermarked public source state
       │
       ├── measured-by ─────► SynthID Bio detector
       ├── has-measurement ─► g(A)
       │
-      └── transformed-by ──► non-watermarked ProteinMPNN
+      └── transformed-by ──► append GFP11 + Twin-Strep
                                 │
                                 ▼
                            Artifact B
-                           resequenced state
+                           tagged derivative
                                 │
                                 ├── derived-from ─────► Artifact A
                                 ├── measured-by ──────► SynthID Bio detector
@@ -119,9 +145,9 @@ The CASE does **not** require:
 g(A) = g(B)
 ```
 
-A legitimate transformation may change the measurement.
+Legitimate change may alter the external measurement.
 
-The required property is state-specific reproducibility:
+Required property:
 
 ```text
 SHA(A') = SHA(A)
@@ -134,40 +160,26 @@ B derived-from A = recoverable
 transformation evidence = recoverable
 ```
 
-where `A'` and `B'` are artifacts recovered from Yoda.
+where `A'` and `B'` are Yoda-recovered artifacts.
 
 ---
 
 ## Planned stages
 
-### Stage A0 — Transformation authority
+### Stage A0 — Instance authority + pre-Yoda measurement
 
-Freeze the scientific and software authority for the transformation before any Yoda write.
-
-Required gates:
-
-```text
-DEEPMIND_PAPER_AUTHORITY=PASS
-RESEQUENCING_ATTACK_DOCUMENTED=PASS
-TRANSFORMATION_TOOL_AUTHORITY=PASS
-TRANSFORMATION_PARAMETERS_FROZEN=PASS
-TRANSFORMATION_CONTRACT=PASS
-YODA_WRITES=ZERO
-YODA_CHANGE=NO
-KYBER_CHANGE=NO
-```
-
-### Stage A1 — Produce state A and state B
-
-Generate or select one watermarked source state A, measure it with the official detector, apply the frozen resequencing transformation, then independently measure state B.
-
-No Yoda write is required until both states and their measurements are independently frozen.
+- reverify frozen DeepMind commit and detector;
+- rederive PDW_0903 from the public dataset using the frozen selection rule;
+- construct B deterministically from A and the published tags;
+- freeze A and B identities;
+- independently measure g(A) and g(B) with the official detector;
+- perform zero Yoda writes.
 
 ### Stage B — Versioned derivation in Yoda
 
-Store A, B, measurements, tool identities, parameters, transformation evidence and explicit relations.
+Store A, B, measurements, source authority, transformation evidence and explicit relations.
 
-Required relationship:
+Required relation:
 
 ```text
 B derived-from A
@@ -196,12 +208,13 @@ The CASE must not:
 
 - redefine watermark robustness as a Yoda responsibility;
 - require the transformed artifact to preserve the original g-value;
+- choose another artifact after observing g(B);
 - infer biological function from provenance metadata;
 - call Yoda a SynthID detector;
 - modify Yoda or Kyber pre-emptively;
 - replace the official detector with a Yoda-native implementation;
 - claim Google DeepMind participation or endorsement;
-- treat a transformed artifact as corruption merely because its bytes differ from the source state.
+- treat a legitimately transformed artifact as corruption merely because its bytes differ from A.
 
 ---
 
@@ -209,9 +222,9 @@ The CASE must not:
 
 If all planned gates pass, the permitted narrow claim will be:
 
-> **For one controlled biological transformation, Yoda preserved the distinct identities, measurements, evidence and derivation relationship of the pre- and post-transformation states such that an independent detector could reproduce each state’s original measurement after byte-exact recovery.**
+> **For one controlled biological artifact transformation, Yoda preserved the distinct identities, measurements, evidence and derivation relationship of the pre- and post-transformation states such that an independent detector reproduced each state’s original measurement after byte-exact recovery.**
 
-A shorter research formulation is:
+Or more compactly:
 
 > **Yoda preserved lineage through change.**
 
@@ -219,17 +232,7 @@ A shorter research formulation is:
 
 ## Non-claims
 
-This CASE will not establish:
-
-- watermark robustness;
-- watermark resistance to attack;
-- preservation of biological function;
-- protein safety;
-- biological truth;
-- general-purpose biological versioning;
-- arbitrary transformation support;
-- production readiness;
-- product-market fit.
+This CASE will not establish watermark robustness, preservation of biological function, protein safety, biological truth, general-purpose biological versioning, arbitrary transformation support, production readiness or product-market fit.
 
 ---
 
