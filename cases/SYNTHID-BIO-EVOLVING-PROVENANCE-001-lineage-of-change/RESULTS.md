@@ -1,0 +1,342 @@
+# Results — SYNTHID-BIO-EVOLVING-PROVENANCE-001
+
+## Final classification
+
+```text
+SYNTHID_BIO_EVOLVING_PROVENANCE_001=VALIDATED
+STAGE_A0=PASS
+STAGE_A0_1=PASS
+STAGE_A1=PASS
+STAGE_A2=PASS
+STAGE_B=PASS
+LINEAGE_OF_CHANGE=DEMONSTRATED
+INDEPENDENT_AUTHORITY_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+FINAL_EVIDENCE_INTEGRITY=PASS
+```
+
+Final evidence authority:
+
+```text
+FINAL_EVIDENCE_MANIFEST_SHA256=e46bcb223be3264f97390abac792a889b5a79033d9ff55eb8f400c818ebcc17a
+```
+
+---
+
+## Stage A0 — transformation authority
+
+Frozen authorities:
+
+```text
+DEEPMIND_COMMIT=acd75747b14c7f4c3c65ad1e6af1483aeba47614
+DETECTOR_SHA256=dfabbf49f555152808272639a6ce1acf09bdc11920f71559481955df7f857727
+SUPPLEMENTARY_SHA256=6b9cadfdbc70e54eb711fc670139a1f7f61c4a79cafd965b6e0c2ba651887b04
+```
+
+Authority gates passed:
+
+```text
+DEEPMIND_CODE_AUTHORITY=PASS
+PROTEINMPNN_DEFAULT_TEMPERATURE_AUTHORITY=PASS
+WATERMARK_DEFAULT_OFF_AUTHORITY=PASS
+SEED_INTERFACE_AUTHORITY=PASS
+TRANSFORMATION_AUTHORITY=PASS
+YODA_WRITES=ZERO
+```
+
+Evidence:
+
+```text
+A0_EVIDENCE_MANIFEST_SHA256=ed41b4238e92ea174d8a8cc6a0b285ca4a7fa3a781dfd545478d5d07eab9c610
+A0_SCRIPT_SHA256=8aedc66101ae63810be63454c5ed0a8c3d63d70cd5759f7c3fb87777cd8d107d
+A0_CONSOLE_SHA256=781b4641c702740c0ee96be13857ea3a6dd1e215196066438ca376bbbabd67a1
+```
+
+---
+
+## Stage A0.1 — transformation topology authority
+
+The selected transformation was changed from resequencing to direct random residue substitution because the latter provided cleaner direct A → B sequence causality for the Lineage of Change property.
+
+```text
+RANDOM_SUBSTITUTION_MECHANISM=PASS
+TARGET_PERCENTAGE_MECHANISM=PASS
+WHOLE_SEQUENCE_ELIGIBILITY=PASS
+FIVE_PERCENT_EVALUATED=PASS
+DIRECT_SEQUENCE_TRANSFORMATION_AUTHORITY=PASS
+```
+
+Frozen case contract:
+
+```text
+TRANSFORMATION_TOPOLOGY=DIRECT_A_TO_B
+TARGET_PERCENT=5
+CASE_SEED=SYNTHID-BIO-EVOLVING-PROVENANCE-001-A1-RANDOM-SUBSTITUTION-V1
+```
+
+Evidence:
+
+```text
+TOPOLOGY_DECISION_SHA256=38a72bd8c5ca5d29d0d4a592875dd03fea74ebc222a81fc0daa82495bfdd92ae
+CASE_RANDOMIZATION_CONTRACT_SHA256=2f2023dae894c22911b86d1538c03d39eef7f2e5ef744ddcc9f8d4f6139ffc85
+TRANSFORMATION_TOPOLOGY_CONTRACT_SHA256=6c4e0d9e9455b9437768f020aaa13262ce4ef3bf709d9da7a37dee2bba0c9488
+A0_1_EVIDENCE_MANIFEST_SHA256=30b1a85695f28f6ccc60b26f252b517a1633fec862ac725fdb04909da07585c2
+A0_1_SCRIPT_SHA256=0f320e5e70dc84d50741d93d5249fea0221080d2795cbfb4ccc472957a18c074
+A0_1_CONSOLE_SHA256=1ec809061f4a28ed268e653b7ec977d25e4dcff3f20d6ead6dcc47b42267d29d
+```
+
+---
+
+## Stage A1 — controlled transformation
+
+Source artifact authority:
+
+```text
+SOURCE_WATERMARKED_SHA256=16ce25bd9f444efcf3dd4adfd7b1732b5adc3f35289f6e498aa3ceabf0d0a1f4
+```
+
+Artifact A:
+
+```text
+ARTIFACT_A_SEQUENCE_LENGTH=106
+ARTIFACT_A_SEQUENCE_SHA256=378bcf5cef4bb87d832b5517e3fbcd51c71be179118454868ef2371cc6c7d748
+ARTIFACT_A_SHA256=da6b1b6b239fc3c870f9750f7b29c816f4d700462a160fc8ced7922dbecbfad0
+G_A=0.7961
+```
+
+Transformation:
+
+```text
+TRANSFORMATION=RANDOM_RESIDUE_SUBSTITUTION
+TARGET_PERCENT=5
+MUTATION_COUNT=6
+ACTUAL_CHANGED_PERCENT=5.660377
+POSITION_SELECTION=SHA256_DETERMINISTIC
+REPLACEMENT_SELECTION=SHA256_MOD_19_EXCLUDING_ORIGINAL
+CONTROLLED_TRANSFORMATION=PASS
+```
+
+Artifact B:
+
+```text
+ARTIFACT_B_SEQUENCE_LENGTH=106
+ARTIFACT_B_SEQUENCE_SHA256=30d037b25f72aa0f7464c8db4bcca226820c455029e098c5afc77d12e7b18d3d
+ARTIFACT_B_SHA256=defc97981f115f1c1792e53946dcf81f5cce28fafdcccf917c80470fa3cfaa00
+G_B=0.6990
+NEW_IDENTITY_CREATED=PASS
+```
+
+State distinction:
+
+```text
+ARTIFACT_A_SHA256 != ARTIFACT_B_SHA256
+G_A_EQUALS_G_B=NO
+G_A_EQUALS_G_B_REQUIRED=NO
+```
+
+Transformation evidence:
+
+```text
+TRANSFORMATION_RECORD_SHA256=293b22a4c0d6db799850dc8d73e1c043353f44224960b08a7fda7374d5c31b47
+A1_EVIDENCE_MANIFEST_SHA256=2dd1298ec9e91ef03c332f1cac00c08bb1fe79d3478fbd45f89801efe1ef449f
+A1_SCRIPT_SHA256=25c1486a3925b534be59bb3f9ebe51172a06e318ce5747ee48c36fc162624834
+A1_CONSOLE_SHA256=d6704decf34ff593083b1d09235671694eb3947c547fbc27c949a6badc71b3ad
+```
+
+The successful A1 run followed two invalid harness attempts caused by malformed Bash parameter expansions. Neither invalid attempt established a scientific, Yoda or Kyber failure.
+
+No Yoda write occurred in A1.
+
+---
+
+## Stage A2 — versioned derivation
+
+Frozen Yoda authority:
+
+```text
+YODA_SHA256=1a38316b4f370225ae52431074365eb921976e79db2f4688fb8154ce9218d9eb
+```
+
+Stored graph:
+
+```text
+OBJECT_COUNT=9
+LINK_COUNT=11
+YODA_OBJECT_INGEST=PASS
+VERSIONED_DERIVATION_RELATIONS=PASS
+```
+
+Core derivation relation:
+
+```text
+B --derived-from--> A
+```
+
+Byte-exact recovery:
+
+```text
+ARTIFACT_A_BYTE_EXACT_RECOVERY=PASS
+ARTIFACT_B_BYTE_EXACT_RECOVERY=PASS
+TRANSFORMATION_BYTE_EXACT_RECOVERY=PASS
+MUTATION_TABLE_BYTE_EXACT_RECOVERY=PASS
+MEASUREMENT_BYTE_EXACT_RECOVERY=PASS
+```
+
+Recovered artifact identities:
+
+```text
+RECOVERED_A_SHA256=da6b1b6b239fc3c870f9750f7b29c816f4d700462a160fc8ced7922dbecbfad0
+RECOVERED_B_SHA256=defc97981f115f1c1792e53946dcf81f5cce28fafdcccf917c80470fa3cfaa00
+```
+
+Context recovery respected the frozen product boundary of lexical retrieval plus direct 1-hop relational expansion.
+
+Five bounded neighborhoods were externally composed:
+
+```text
+ARTIFACT_A_CONTEXT=PASS
+ARTIFACT_B_CONTEXT=PASS
+TRANSFORMATION_CONTEXT=PASS
+MEASUREMENT_A_CONTEXT=PASS
+MEASUREMENT_B_CONTEXT=PASS
+FIVE_NEIGHBORHOOD_COMPOSITION=PASS
+LINEAGE_OF_CHANGE_CONTEXT=PASS
+VERSIONED_DERIVATION_RECOVERY=PASS
+```
+
+Final store verification:
+
+```text
+FINAL_YODA_VERIFY=PASS
+DATA_YODA_SHA256=0aac02391eec12c2caa2a0bca725af6ddcdab4530c2153002b6673a7e7729954
+DATA_YODA_BYTES=9971
+```
+
+Evidence:
+
+```text
+A2_EVIDENCE_MANIFEST_SHA256=ab4e996f28d5d70995620f5d14d2e50886eec1d493955b31b419624fab735728
+A2_SCRIPT_SHA256=332c60cc882dd6c5f094aa1a948e1debc61a72df15522a433ae374f2daee9f94
+A2_CONSOLE_SHA256=15303471e7b1f5569afebfcac16e39bd67d47b39834598fb09ed284adfe6d99e
+```
+
+A2 had two invalid harness attempts before the successful run:
+
+- exact keys were incorrectly supplied to a lexical `context` interface;
+- the harness initially expected complete multi-hop closure from too few 1-hop neighborhoods.
+
+Both were harness/interface-model errors. The Yoda and Kyber engines remained unchanged.
+
+---
+
+## Stage B — independent state replay
+
+Stage B consumed only the artifacts recovered from Yoda.
+
+Frozen external authority:
+
+```text
+DEEPMIND_COMMIT=acd75747b14c7f4c3c65ad1e6af1483aeba47614
+DETECTOR_SHA256=dfabbf49f555152808272639a6ce1acf09bdc11920f71559481955df7f857727
+PYTHON=3.9.25
+```
+
+Replay matrix:
+
+```text
+STATE        BEFORE    AFTER YODA RECOVERY    RESULT
+Artifact A   0.7961    0.7961                 PASS
+Artifact B   0.6990    0.6990                 PASS
+```
+
+Gates:
+
+```text
+ARTIFACT_A_MEASUREMENT_REPLAY=PASS
+ARTIFACT_B_MEASUREMENT_REPLAY=PASS
+STATE_A_MEASUREMENT_EQUIVALENCE=PASS
+STATE_B_MEASUREMENT_EQUIVALENCE=PASS
+STATE_SPECIFIC_MEASUREMENT_REPLAY=PASS
+INDEPENDENT_STATE_REPLAY=PASS
+LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+```
+
+Replay authority:
+
+```text
+REPLAY_CONTRACT_SHA256=ccdd19b43094b883f682e235a50fd21e06d1c4cfa08531560c9549768548d2c9
+STAGE_B_EVIDENCE_MANIFEST_SHA256=6eba74b9b659db8950c3fd7d0e5b39b0c7fcae49fa2682023c3a528c7f87b8a7
+STAGE_B_SCRIPT_SHA256=18d60388df36e3fcfcfbe9d12b670804126b6667a28be42e03b56bb98a1ade63
+STAGE_B_CONSOLE_SHA256=1f2f43dc145ca685549d1e63f2438b1cb7913114b3326a7bb0c8304e47b69c2f
+```
+
+Stage B performed zero Yoda writes.
+
+---
+
+## Final homologation
+
+All frozen stage manifests were revalidated before final homologation.
+
+```text
+A0_AUTHORITY=PASS
+A0_1_AUTHORITY=PASS
+A1_AUTHORITY=PASS
+A2_AUTHORITY=PASS
+B_AUTHORITY=PASS
+YODA_STATE_AUTHORITY=PASS
+DISTINCT_STATE_IDENTITIES=PASS
+INDEPENDENT_STATE_REPLAY=PASS
+```
+
+Final classification:
+
+```text
+SYNTHID_BIO_EVOLVING_PROVENANCE_001=VALIDATED
+LINEAGE_OF_CHANGE=DEMONSTRATED
+INDEPENDENT_AUTHORITY_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+FINAL_EVIDENCE_INTEGRITY=PASS
+FINAL_EVIDENCE_MANIFEST_SHA256=e46bcb223be3264f97390abac792a889b5a79033d9ff55eb8f400c818ebcc17a
+```
+
+---
+
+## Validated property
+
+Within this controlled experiment:
+
+```text
+State A
+  ↓
+controlled legitimate transformation
+  ↓
+State B
+```
+
+with:
+
+```text
+identity(A) != identity(B)
+```
+
+while:
+
+```text
+A remained recoverable
+B remained recoverable
+A → B derivation remained recoverable
+transformation evidence remained recoverable
+state-specific measurements remained recoverable
+independent state-specific evaluation remained reproducible
+```
+
+This is the evidence basis for:
+
+```text
+LINEAGE_OF_CHANGE=DEMONSTRATED
+```
+
+It is not evidence that the property holds universally across arbitrary domains, transformations or authorities.
