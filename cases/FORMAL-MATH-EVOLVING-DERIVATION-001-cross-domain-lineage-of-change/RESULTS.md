@@ -7,8 +7,9 @@
 | A0 | PASS | External authorities frozen and evidence integrity established |
 | A1.0 | NOT_EVALUATED | Secondary authority capability boundary discovered |
 | A1-R1 | PASS | Both pre-registered proof states verified by Lean and OxiLean on the single execution |
-| A2-R1 | NOT_EVALUATED | One-shot execution reached a harness query-tokenization mismatch after all persistence/recovery gates passed; read-only adjudication pending |
-| B | BLOCKED | Requires A2 PASS |
+| A2-R1 one-shot | NOT_EVALUATED | Harness query-tokenization mismatch after persistence/recovery gates passed |
+| A2 research question | PASS_BY_READ_ONLY_ADJUDICATION | Frozen Yoda state preserved bytes, relations, bounded context and durable identity without rerun |
+| B | READY / NOT EXECUTED | Independent formal replay is the next gate; intentionally deferred |
 
 ---
 
@@ -232,9 +233,13 @@ A1_R1_EXECUTION_LOCK_SHA256=
 ## Stage A2
 
 ```text
-STATUS=READY
-REVISION=A2-R1
-EXECUTED=NO
+A2_R1_ONE_SHOT=NOT_EVALUATED
+A2_R1_FAILURE_CLASS=HARNESS_QUERY_TOKENIZATION_MISMATCH
+A2_R1_RERUN=NO
+
+A2_RESEARCH_QUESTION=PASS_BY_READ_ONLY_ADJUDICATION
+FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A2=
+PASS_BY_READ_ONLY_ADJUDICATION
 ```
 
 Research question:
@@ -347,4 +352,90 @@ DATA_YODA_SHA256_AT_INTERRUPTION=
 DATA_YODA_BYTES=80761
 ```
 
-The only permitted continuation is a read-only adjudication against that exact durable state. No A2-R1 rerun is allowed.
+The only permitted continuation was read-only adjudication against that exact durable state. No A2-R1 rerun was performed.
+
+### First read-only adjudication
+
+The first adjudicator confirmed:
+
+```text
+A2_R1_FROZEN_STATE_AUTHORITY=PASS
+YODA_VERIFY=PASS
+BYTE_EXACT_RECOVERY=PASS
+DERIVED_FROM_RELATION_RECOVERY=PASS
+TRANSFORMED_BY_RELATION_RECOVERY=PASS
+```
+
+It then stopped on an assertion requiring a specific `@link` presentation inside a composed context:
+
+```text
+REASON=derived-from relation missing from corrected context
+```
+
+That assertion was not equivalent to relation loss. Yoda had already recovered both relations through the authoritative per-key log.
+
+First adjudication identities:
+
+```text
+SCRIPT_SHA256=
+899201cab8d1f66140a7a428a34e6d62d87ae1f99294505f82f7bc9ac9a3d2a4
+
+CONSOLE_SHA256=
+9ee10d81d554c93275878f8669b37f4147a9337352966c16c37fb1e5ab568c08
+```
+
+### Final read-only adjudication
+
+A final, pre-registered read-only adjudication used a single bounded-context query aligned with Yoda's key-search semantics.
+
+Observed:
+
+```text
+FROZEN_EVIDENCE_CHAIN=PASS
+YODA_VERIFY=PASS
+DERIVED_FROM_RELATION_LOG=PASS
+TRANSFORMED_BY_RELATION_LOG=PASS
+BOUNDED_CONTEXT_PROOF_B=PASS
+BOUNDED_CONTEXT_DERIVED_FROM=PASS
+BOUNDED_CONTEXT_TRANSFORMED_BY=PASS
+FORMAL_LINEAGE_OF_CHANGE_CONTEXT=PASS
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+FINAL_ADJUDICATION_EVIDENCE_INTEGRITY=PASS
+A2_FINAL_READ_ONLY_ADJUDICATION=PASS
+```
+
+Final identities:
+
+```text
+FINAL_ADJUDICATION_SCRIPT_SHA256=
+104357a8793c97117e64183682a37e9b943d900360687e496c50f79627e89850
+
+FINAL_ADJUDICATION_CONSOLE_SHA256=
+574b4b0becb909376169769cd3fb0d0513cf98a23dfff51132a904bae54e6a13
+
+FINAL_ADJUDICATION_EVIDENCE_MANIFEST_SHA256=
+e603b0ac3fe1b477a2dd6b3db71c46c7a07e3a098843067fc68c23711775accb
+
+DATA_YODA_SHA256=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+
+DATA_YODA_BYTES=80761
+```
+
+Stage-level adjudication:
+
+```text
+A2_R1_ONE_SHOT=NOT_EVALUATED
+A2_R1_FAILURE_CLASS=HARNESS_QUERY_TOKENIZATION_MISMATCH
+A2_R1_RERUN=NO
+
+A2_RESEARCH_QUESTION=PASS_BY_READ_ONLY_ADJUDICATION
+FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A2=
+PASS_BY_READ_ONLY_ADJUDICATION
+
+YODA_APPLICATION_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+This does not yet validate the complete CASE. Stage B independent formal replay remains pending.
