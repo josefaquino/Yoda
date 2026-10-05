@@ -19,15 +19,11 @@ frozen evidence
 no speculative engine change
 ```
 
-The engineering rule remains:
-
 > **Big vision. Small steps. Evidence always.**
 
 ---
 
-## Cross-domain proving grounds
-
-The project has exercised the same evidence-first discipline against multiple domains:
+# Cross-domain evidence map
 
 | Case | Domain | Property tested | Status |
 |---|---|---|---|
@@ -41,195 +37,36 @@ The project has exercised the same evidence-first discipline against multiple do
 | GENOME-ALIGNMENT-001 | Genomics | workflow-derived alignment state | PASS |
 | GENOME-VARIANT-001 | Genomics | downstream workflow continuity | PASS |
 | GENOME-LINEAGE-001 | Genomics | verifiable scientific lineage | PASS |
+| AXIOM-YODA-PROOF-LINEAGE-001 | Formal verification | proof-derivation replay through AXLE | PASS |
 
-Negative experiments are evidence too. See the individual CASE directories for exact scope and limitations.
+Negative experiments are evidence too.
 
 ---
 
 # Genomics research ladder
 
-Genomics became the first domain where the questions progressed from storage to derivation.
+Genomics was the first domain where the questions progressed from state to derivation.
 
 ```text
-GENOME-KMER-001
-      ↓
-identity and exact reconstruction
-
-GENOME-REFERENCE-001
-      ↓
-reference state and coordinate equivalence
-
-GENOME-READ-001
-      ↓
-real paired-read preservation
-
-GENOME-ALIGNMENT-001
-      ↓
-workflow-native derived state
-
-GENOME-VARIANT-001
-      ↓
-downstream workflow continuity
-
-GENOME-LINEAGE-001
-      ↓
-verifiable scientific lineage
+identity
+   ↓
+state
+   ↓
+workflow
+   ↓
+derived state
+   ↓
+workflow continuity
+   ↓
+verifiable lineage
 ```
 
-The point of the ladder was not to accumulate bioinformatics formats.
-
-Each CASE changed the property under test.
-
----
-
-## GENOME-REFERENCE-001
-
-Question:
-
-> Can KyberDB functionally replace a small part of `FASTA + faidx` for one controlled reference, preserving exact coordinate access after persistence and reopen?
-
-Result:
-
-```text
-GENOME_REFERENCE_001=VALIDATED
-PUBLIC_ABI_ONLY=YES
-ENGINE_CHANGE=NO
-MISSING=0
-MISMATCH=0
-```
-
-The post-reopen result reproduced the independent `samtools faidx` oracle byte-for-byte for the tested 256 deterministic coordinate queries.
-
-See:
-
-`cases/GENOME-REFERENCE-001-faidx-region-equivalence/`
-
----
-
-## GENOME-READ-001
-
-Question:
-
-> Can a real paired sequencing read set, including sequence, quality and pair identity, be reconstructed exactly after persistence and reopen?
-
-Result:
-
-```text
-GENOME_READ_001=VALIDATED
-POST_REOPEN_READSET_EQUIVALENCE=PASS
-MISSING=0
-MISMATCH=0
-ENGINE_CHANGE=NO
-```
-
-The experiment used 10,000 deterministic paired reads from ENA run `SRR10058842`.
-
-See:
-
-`cases/GENOME-READ-001-verifiable-readset-state/`
-
----
-
-## GENOME-ALIGNMENT-001
-
-Question:
-
-> Can Kyber preserve workflow-native alignment state produced by BWA from a real ReadSet and its matched reference?
-
-Result:
-
-```text
-GENOME_ALIGNMENT_001=VALIDATED
-ALIGNMENT_RECORD_COUNT=20074
-POST_REOPEN_ALIGNMENT_COUNT=20074
-MISSING=0
-MISMATCH=0
-POST_REOPEN_ALIGNMENT_EQUIVALENCE=PASS
-ENGINE_CHANGE=NO
-```
-
-See:
-
-`cases/GENOME-ALIGNMENT-001-verifiable-workflow-alignment-state/`
-
----
-
-## GENOME-VARIANT-001
-
-Question:
-
-> Can alignment state reconstructed from Kyber feed a real downstream scientific tool and produce a new state that is itself preserved exactly?
-
-The workflow was:
-
-```text
-Kyber post-reopen Alignment State
-        ↓
-SAM / BAM rehydration
-        ↓
-bcftools mpileup / call
-        ↓
-Variant State
-        ↓
-Kyber persist / verify / reopen
-```
-
-Result:
-
-```text
-GENOME_VARIANT_001=VALIDATED
-VARIANT_RECORD_COUNT=327
-POST_REOPEN_VARIANT_COUNT=327
-MISSING=0
-MISMATCH=0
-POST_REOPEN_VARIANT_EQUIVALENCE=PASS
-ENGINE_CHANGE=NO
-```
-
-Frozen variant identity:
-
-```text
-7bb54f1c2786ec562e68e8f77c546e6f4da8f6d3a9abd21916cdc8c105b85ff1
-```
-
-The important property was workflow continuity, not VCF storage.
-
-See:
-
-`cases/GENOME-VARIANT-001-verifiable-variant-state/`
-
----
-
-## GENOME-LINEAGE-001
-
-Question:
-
-> Given the final Variant State, can Yoda recover the verifiable chain of scientific state, tools and evidence that produced it?
-
-The represented lineage was:
-
-```text
-Variant
-  ├── produced-by ─────► bcftools
-  ├── called-against ──► Reference
-  ├── has-evidence ────► Variant Evidence
-  └── derived-from ────► Alignment
-                            ├── produced-by ─────► BWA
-                            ├── aligned-against ─► Reference
-                            ├── has-evidence ────► Alignment Evidence
-                            └── derived-from ────► ReadSet
-```
-
-Yoda v0.1 currently provides lexical retrieval plus direct one-hop relational expansion.
-
-The experiment therefore composed two bounded neighborhoods externally rather than pretending Yoda has arbitrary multi-hop graph planning.
+The key endpoint was `GENOME-LINEAGE-001`.
 
 Result:
 
 ```text
 GENOME_LINEAGE_001_STAGE_A=PASS
-OBJECT_COUNT=8
-RELATION_COUNT=8
 EXACT_EVIDENCE_RECOVERY=PASS
 VARIANT_CONTEXT_1HOP=PASS
 ALIGNMENT_CONTEXT_1HOP=PASS
@@ -240,25 +77,140 @@ PRODUCT_CHANGE=NO
 KYBER_CHANGE=NO
 ```
 
-Frozen full-lineage bundle:
+Frozen lineage bundle:
 
 ```text
 99a4b9380e48ae703410c2bc54554c151b02475bc2f1d1e5ce64743802ed747b
 ```
 
-Frozen authoritative `data.yoda` state:
-
-```text
-46022db31867eed2c2c688ea735d9c325faf0ead2abe5b9e1deca2eb93edbdb1
-```
-
-This supports a narrow claim:
-
-> **Verifiable scientific lineage has been demonstrated for one controlled genomic workflow.**
-
 See:
 
 `cases/GENOME-LINEAGE-001-verifiable-scientific-lineage/`
+
+---
+
+# Formal verification — AXIOM-YODA-PROOF-LINEAGE-001
+
+This CASE deliberately moved Yoda into a qualitatively different authority model.
+
+AXLE remained the external formal-verification authority.
+
+Yoda was responsible only for preserving derivation state and evidence.
+
+## Stage A0 — AXLE authority
+
+A valid proof was accepted:
+
+```text
+AXLE_POSITIVE_VERIFICATION=PASS
+```
+
+A controlled mutation that was itself valid Lean was rejected because it proved a different theorem:
+
+```text
+CONTROLLED_MUTATION_VALID_LEAN=PASS
+AXLE_CONTROLLED_REJECTION=PASS
+```
+
+Frozen environment:
+
+```text
+SELECTED_ENVIRONMENT=lean-4.34.0
+SELECTED_LEAN_TOOLCHAIN=leanprover/lean4:v4.34.0
+```
+
+## Stage A1 — Yoda replay
+
+Yoda stored the formal statement, proof artifacts, environment, verification evidence and explicit relations.
+
+It then recovered the relevant artifacts byte-for-byte:
+
+```text
+YODA_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
+```
+
+Those recovered artifacts were submitted again to AXLE.
+
+Positive path:
+
+```text
+A0_POSITIVE_OKAY=true
+A1_POSITIVE_OKAY=true
+AXLE_POSITIVE_DECISION_REPRODUCED=PASS
+```
+
+Negative path:
+
+```text
+A0_NEGATIVE_OKAY=false
+A1_NEGATIVE_OKAY=false
+AXLE_NEGATIVE_DECISION_REPRODUCED=PASS
+```
+
+The controlled mutation remained valid Lean after Yoda recovery and was rejected again for the expected signature mismatch:
+
+```text
+CONTROLLED_MUTATION_VALID_LEAN_AFTER_YODA=PASS
+AXLE_NEGATIVE_REPLAY_FROM_YODA=PASS
+```
+
+Lineage was recovered for both paths:
+
+```text
+POSITIVE_DERIVATION_LINEAGE_RECOVERY=PASS
+NEGATIVE_DERIVATION_LINEAGE_RECOVERY=PASS
+PROOF_DERIVATION_REPLAY=PASS
+```
+
+Frozen identities:
+
+```text
+FORMAL_STATEMENT_SHA256=24bea18925bf1a4b9e1dddc4ea6b34bd0cba323d57de42bfdcfd79c1756d2ee9
+VALID_PROOF_SHA256=0082af12ce4e8b8c249f90706c3c9b0264e1e0ebcf05e3d3ece25fdf76f79a29
+CONTROLLED_MUTATION_SHA256=a74af4eb7a514a97163f7d86dd8216298e478763eade920f91e08b52e12fd392
+A0_EVIDENCE_MANIFEST_SHA256=f6c1b0a71c4d4b706628ee42008ac2f1dd495f2861fa39899217d0f0e0c567b3
+A1_EVIDENCE_MANIFEST_SHA256=94a0801e2a554a80c32228c1eb6edf4334d4ce59c27b75cb876e2171c0196c90
+DATA_YODA_SHA256=b3cd12a421fe84b2728a65ddf474db0aa3ec0f9da7bc292c4f7608d9ff36ff8c
+```
+
+Important nuance:
+
+AXLE response JSON is request-specific and therefore not expected to be byte-identical across requests. The validated property is **semantic verification-outcome replay using byte-exact recovered proof artifacts**.
+
+Final classification:
+
+```text
+AXIOM_YODA_PROOF_LINEAGE_001=VALIDATED
+FORMAL_AUTHORITY=AXLE
+DERIVATION_AUTHORITY=YODA
+PROOF_DERIVATION_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+See:
+
+`cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation/`
+
+---
+
+# What the combined evidence now suggests
+
+The same small Yoda architecture has now demonstrated derivation recovery in two qualitatively different settings:
+
+```text
+empirical scientific workflow
+→ genomics lineage
+
+formal verification workflow
+→ AXLE proof lineage
+```
+
+This supports — but does not prove — the hypothesis that verifiable derivation may be a cross-domain property.
+
+No `Genome Mode` was added.
+No `Math Mode` was added.
+No Yoda or Kyber engine change was required for the AXLE CASE.
 
 ---
 
@@ -269,8 +221,9 @@ The evidence does not establish:
 ```text
 general-purpose lineage engine
 biotech-scale operation
-multi-project scientific knowledge graph
-biological truth of the variant calls
+arbitrary theorem-proving workflow support
+logical validity independent of AXLE
+biological truth
 clinical validity
 product-market fit
 production readiness for all workloads
@@ -280,20 +233,18 @@ Those remain open questions.
 
 ---
 
-# Next external tests
-
-The next research program deliberately moves into workflows not designed by us.
-
-## AXIOM-YODA-PROOF-LINEAGE-001
-
-Test whether Yoda can preserve and reconstruct the lineage of a formally verified proof such that the recovered proof artifacts can be submitted again to AXLE and reproduce the verification outcome.
+# Next external test
 
 ## BIO-DESIGN-LINEAGE-001
 
-Test whether Yoda can reconstruct the chain behind a real Design-Build-Test-Learn decision in biological R&D without adding biology-specific storage features.
+The next adversary should be an externally chosen empirical R&D workflow.
 
-If the same small architecture survives both formal and empirical workflows, that will be evidence for a broader cross-domain property.
+Question:
 
-It will still not be proof of a market.
+> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate without adding biology-specific storage features?
 
-That comes later.
+If that passes, Yoda will have survived both formal and empirical external workflows.
+
+That would be stronger evidence for the broader thesis.
+
+It would still not be proof of a market.
