@@ -1,6 +1,6 @@
 # Research Program
 
-Yoda's current research program asks whether **verifiable derivation** survives across qualitatively different authority models without domain-specific expansion.
+Yoda's research program asks whether **verifiable derivation** survives across qualitatively different authority models without domain-specific expansion.
 
 The goal is not to accumulate features.
 
@@ -8,9 +8,9 @@ The goal is to expose the same small architecture to different forms of pressure
 
 ---
 
-## Research question
+## Central research question
 
-> **Is verifiable derivation a cross-domain property, or only an artifact of the workflows we designed ourselves?**
+> **Can the same derivation layer preserve enough evidence, identity and lineage for different independent authorities to evaluate a result again later?**
 
 Current architecture:
 
@@ -28,6 +28,36 @@ verification
 bounded context
 ```
 
+The current thesis is not that Yoda should become the authority of truth.
+
+It is the opposite:
+
+> **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
+
+---
+
+# Research pattern — Independent Authority Replay
+
+Two recent CASEs exposed the same pattern:
+
+```text
+independent authority
+        ↓
+measurement / decision
+        ↓
+       Yoda
+        ↓
+recovery + lineage
+        ↓
+same independent authority
+        ↓
+same measurement / decision
+```
+
+We use **independent authority replay** as an internal name for this pattern.
+
+It is a research pattern, not yet a claim of universal product capability.
+
 ---
 
 # Track A — Formal reasoning
@@ -38,7 +68,7 @@ AXLE was used as the external formal-verification authority.
 
 ### Question
 
-> Can Yoda preserve and reconstruct the complete derivation lineage of a formally verified proof such that recovered artifacts can be submitted again to AXLE and reproduce the original formal verification outcome?
+> Can Yoda preserve and reconstruct the derivation lineage of a formally verified result such that recovered artifacts can be submitted again to AXLE and reproduce the original formal verification outcome?
 
 ### Result
 
@@ -56,42 +86,6 @@ YODA_CHANGE=NO
 KYBER_CHANGE=NO
 ```
 
-### Positive arm
-
-```text
-formal statement
-      +
-candidate proof
-      ↓
-AXLE accepts
-      ↓
-Yoda preserves derivation
-      ↓
-byte-exact artifact recovery
-      ↓
-AXLE accepts again
-```
-
-### Negative arm
-
-The controlled mutation was valid Lean but proved a different theorem.
-
-```text
-controlled mutation
-      ↓
-Lean check succeeds
-      ↓
-AXLE rejects against frozen statement
-      ↓
-Yoda preserves derivation
-      ↓
-byte-exact artifact recovery
-      ↓
-Lean check still succeeds
-      ↓
-AXLE rejects again
-```
-
 ### Authority separation
 
 ```text
@@ -102,33 +96,126 @@ Yoda
 → derivation integrity
 ```
 
-This separation held.
-
-Yoda did not become a theorem prover and no `Math Mode` was added.
+Yoda did not become a theorem prover and no Math Mode was added.
 
 See:
 
 `cases/AXIOM-YODA-PROOF-LINEAGE-001-verifiable-proof-derivation/`
 
-External references:
-
-- Axiom: https://axiommath.ai/
-- AXLE: https://axiommath.ai/research/releasing-axle/
-- AXLE docs: https://axle.axiommath.ai/v1/docs/
-
 ---
 
-# Track B — Empirical biology
+# Track B — Artifact provenance
 
-## BIO-DESIGN-LINEAGE-001 — NEXT
+## SYNTHID-BIO-YODA-PROVENANCE-001 — VALIDATED
 
-The next track should use a biological R&D workflow selected by an external scientific team.
+Google DeepMind's public SynthID Bio implementation provided a different authority model: an intrinsic provenance signal measured from the biological artifact itself.
 
 ### Question
 
-> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate?
+> Can intrinsic artifact provenance and external workflow provenance coexist, survive Yoda persistence and recovery, and remain independently measurable afterward?
 
-A minimal workflow might look like:
+### Experimental structure
+
+```text
+SynthID Bio artifact
+        ↓
+official detector
+        ↓
+g-value measurement
+        ↓
+       Yoda
+        ↓
+byte-exact recovery
+        ↓
+official detector again
+        ↓
+same g-value measurement
+```
+
+The experiment included both a non-watermarked control and a watermarked positive arm.
+
+### Result
+
+```text
+SYNTHID_BIO_YODA_PROVENANCE_001=VALIDATED
+STAGE_A0=PASS
+STAGE_A1=PASS
+STAGE_B=PASS
+DEEPMIND_ORACLE_REPRODUCED=PASS
+CONTROL_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
+WATERMARKED_ARTIFACT_BYTE_EXACT_RECOVERY=PASS
+CONTROL_DETECTOR_EQUIVALENCE=PASS
+WATERMARKED_DETECTOR_EQUIVALENCE=PASS
+G_VALUE_MATRIX_EQUIVALENCE=PASS
+INTRINSIC_PROVENANCE_MEASUREMENT_EQUIVALENCE=PASS
+EXTERNAL_WORKFLOW_PROVENANCE_RECOVERY=PASS
+COMPOSED_PROVENANCE=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Exact replay matrix:
+
+```text
+CONTROL      0.5037 → 0.5037
+CONTROL      0.5130 → 0.5130
+WATERMARKED  0.7961 → 0.7961
+WATERMARKED  0.7184 → 0.7184
+```
+
+### Authority separation
+
+```text
+SynthID Bio
+→ intrinsic provenance measurement
+
+Yoda
+→ external derivation integrity
+```
+
+Yoda did not become a watermark detector.
+
+No SynthID Mode was added.
+
+See:
+
+`cases/SYNTHID-BIO-YODA-PROVENANCE-001-composed-provenance/`
+
+---
+
+# Composed provenance
+
+The SynthID Bio CASE introduced a useful distinction:
+
+```text
+inside the artifact
+→ intrinsic provenance signal
+
+outside the artifact
+→ workflow provenance / derivation
+```
+
+This CASE demonstrated that both layers can coexist while the independent measurement remains unchanged after Yoda recovery.
+
+That makes **composed provenance** a demonstrated property of one controlled workflow.
+
+It does not imply general support for arbitrary provenance systems.
+
+---
+
+# Track C — External empirical biology
+
+## BIO-DESIGN-LINEAGE-001 — NEXT
+
+The strongest next falsification attempt is no longer another internally defined biology demo.
+
+It should be a real Design-Build-Test-Learn workflow or question selected by an external scientific team.
+
+### Question
+
+> Given a final candidate from a Design-Build-Test-Learn workflow, can Yoda reconstruct which designs, builds, tests, analyses and evidence led to that candidate without adding biology-specific storage features?
+
+Conceptually:
 
 ```text
 hypothesis
@@ -149,19 +236,15 @@ The reverse query is the important one:
 ```text
 selected candidate
        ↓
-show the lineage
+show the derivation
        ↓
 design + build + test + analysis + evidence
 ```
 
-The first experiment does not require confidential sequence contents.
-
-Artifact IDs, hashes, versions, relationships and redacted evidence may be sufficient to test the lineage hypothesis.
-
 ### Authority separation
 
 ```text
-domain scientists
+domain scientists / domain systems
 → biological and experimental validity
 
 Yoda
@@ -170,47 +253,13 @@ Yoda
 
 Yoda must not pretend to validate biology.
 
----
-
-# Track C — Artifact provenance
-
-## Future: SYNTHID-BIO-YODA-PROVENANCE-001
-
-Google DeepMind's SynthID Bio suggests a complementary provenance model in which an origin signal can travel inside an AI-generated biological artifact.
-
-Yoda is exploring provenance around the artifact across an external workflow.
-
-A future question is:
-
-> Can intrinsic artifact provenance and external workflow provenance compose into a stronger verification chain?
-
-Conceptually:
-
-```text
-AI-generated biological artifact
-       │
-       ├── intrinsic provenance → watermark / origin signal
-       │
-       └── external provenance  → Yoda lineage
-                                    ↓
-                                 experiment
-                                    ↓
-                                  result
-```
-
-Reference:
-
-- https://deepmind.google/blog/introducing-synthid-bio/
-
-This is future work, not a current capability claim.
+The external team should define the problem before Yoda code or schema is added.
 
 ---
 
-# What changed after Track A
+# What changed across the three major evidence blocks
 
-Before the AXLE experiment, cross-domain derivation was only a hypothesis.
-
-Now we have two distinct demonstrations:
+The research sequence is now:
 
 ```text
 GENOME-LINEAGE-001
@@ -218,49 +267,59 @@ empirical scientific lineage
         PASS
 
 AXIOM-YODA-PROOF-LINEAGE-001
-formal proof derivation replay
+independent formal decision replay
+        PASS
+
+SYNTHID-BIO-YODA-PROVENANCE-001
+independent provenance measurement replay
++
+composed provenance
         PASS
 ```
 
-This is evidence that the abstraction may travel across domains.
+The same small Yoda surface survived all three without a domain-specific engine mode.
 
-It is not enough to call the hypothesis proven.
+This strengthens the hypothesis that **verifiable derivation may be a cross-domain infrastructure property**.
 
-The strongest next falsification attempt is an externally chosen empirical workflow that was not designed around Yoda.
+It does not prove that hypothesis.
 
 ---
 
 # What would count as stronger evidence
 
 ```text
-formal workflow PASS
+formal authority replay PASS
++
+artifact-provenance replay PASS
 +
 external empirical workflow PASS
 +
 no Math Mode
++
+no SynthID Mode
 +
 no Biology Mode
 +
 no engine rewrite
 ```
 
-That would strengthen the hypothesis:
+That would strengthen the category thesis:
 
 ```text
-VERIFIABLE_DERIVATION
-may be a cross-domain property
+VERIFIABLE DERIVATION INFRASTRUCTURE
 ```
 
 ---
 
-# What would falsify the thesis
+# What would falsify or narrow the thesis
 
 Useful negative results include:
 
 - lineage cannot be recovered without embedding domain semantics into the core;
+- independent replay requires special-case integrations for every authority;
 - bounded context becomes unusable outside controlled workloads;
-- external workflows require arbitrary graph planning to remain understandable;
 - provenance data overwhelms the value of the underlying result;
+- byte-exact preservation is insufficient for real scientific workflows;
 - developers or scientists do not find reconstructed derivation useful;
 - existing systems solve the problem more simply;
 - external teams will not integrate the evidence contract into real workflows.
@@ -271,12 +330,12 @@ Any of these should change the roadmap.
 
 # Commercial hypothesis
 
-If generation becomes abundant, organizations may pay for infrastructure that makes high-value results traceable, inspectable and reproducible across tools and agents.
+As AI makes generation abundant, organizations may pay for infrastructure that makes high-value results traceable, inspectable and reproducible across tools, models and independent authorities.
 
 Potential environments include:
 
 ```text
-AI science
+AI-native science
 biotechnology R&D
 formal reasoning
 autonomous software
@@ -284,15 +343,26 @@ regulated decision workflows
 multi-agent research
 ```
 
+The category hypothesis is:
+
+> **Verifiable Derivation Infrastructure**
+
+A possible market-facing description is:
+
+> **Trust infrastructure for AI-native science.**
+
 Product-market fit remains open.
 
 The current sequence is therefore:
 
 ```text
-formal external validation
+formal authority replay
         PASS
         ↓
-empirical external validation
+artifact provenance replay
+        PASS
+        ↓
+external empirical workflow
         NEXT
         ↓
 partner feedback
