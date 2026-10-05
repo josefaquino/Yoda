@@ -56,20 +56,25 @@ compact_json()
     tr -d '\n\r\t ' < "$1"
 }
 
+json_contains()
+{
+    report="$1"
+    needle="$2"
+    compact="$(compact_json "$report")"
+
+    case "$compact" in
+        *"$needle"*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 require_verified_decl()
 {
     report="$1"
     decl="$2"
-    compact="$(compact_json "$report")"
-
-    case "$compact" in
-        *\"name\":\"$decl\",\"kind\":\"theorem\",\"verdict\":\"verified\"*)
-            return 0
-            ;;
-        *)
-            return 1
-            ;;
-    esac
+    json_contains \
+        "$report" \
+        "\"name\":\"$decl\",\"kind\":\"theorem\",\"verdict\":\"verified\""
 }
 
 section "0. A2 AUTHORITY"
@@ -251,18 +256,20 @@ test "$OXI_A_RC" -eq 0 ||
 test "$OXI_B_RC" -eq 0 ||
     fail "OxiLean replay B did not complete cleanly"
 
-grep -F '"file_lean_githash":"b4812ae53eea93439ad5dce5a5c26591c31cb697"' \
-    "$EVIDENCE/oxilean-replay-A.json" >/dev/null ||
+json_contains \
+    "$EVIDENCE/oxilean-replay-A.json" \
+    '"file_lean_githash":"b4812ae53eea93439ad5dce5a5c26591c31cb697"' ||
     fail "OxiLean replay A Lean githash mismatch"
 
-grep -F '"file_lean_githash":"b4812ae53eea93439ad5dce5a5c26591c31cb697"' \
-    "$EVIDENCE/oxilean-replay-B.json" >/dev/null ||
+json_contains \
+    "$EVIDENCE/oxilean-replay-B.json" \
+    '"file_lean_githash":"b4812ae53eea93439ad5dce5a5c26591c31cb697"' ||
     fail "OxiLean replay B Lean githash mismatch"
 
-grep -F '"rejected":0' "$EVIDENCE/oxilean-replay-A.json" >/dev/null ||
+json_contains "$EVIDENCE/oxilean-replay-A.json" '"rejected":0' ||
     fail "OxiLean replay A rejected declaration"
 
-grep -F '"rejected":0' "$EVIDENCE/oxilean-replay-B.json" >/dev/null ||
+json_contains "$EVIDENCE/oxilean-replay-B.json" '"rejected":0' ||
     fail "OxiLean replay B rejected declaration"
 
 require_verified_decl \
