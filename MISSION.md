@@ -2,18 +2,20 @@
 
 ## Build the verifiable derivation layer
 
-Yoda exists to make the origin of important results inspectable.
+Yoda exists to make the origin and evolution of important results inspectable.
 
 Modern results rarely come from a single source. They emerge from chains of data, software, models, tools, transformations, human judgment and machine decisions.
 
 The final artifact is often easy to store.
-The chain that produced it is not.
+The chain that produced and changed it is not.
 
-Yoda is built around one question:
+Yoda is built around two connected questions:
 
 > **Where did this result come from?**
+>
+> **How did it become what it is now?**
 
-The long-term mission is to make it possible to reconstruct the answer from durable evidence rather than memory, screenshots, transient prompts or undocumented pipeline state.
+The long-term mission is to make those answers reconstructible from durable evidence rather than memory, screenshots, transient prompts or undocumented pipeline state.
 
 ---
 
@@ -31,13 +33,15 @@ It becomes evidence for later decisions.
 
 A system that preserves only the latest value loses much of what makes a result explainable.
 
-Yoda therefore treats identity, provenance, relationships, history and evidence as first-class product concerns.
+Yoda therefore treats identity, provenance, relationships, history, transformations and evidence as first-class concerns.
 
-The recent research program adds a second principle:
+The project thesis is:
+
+> **Yoda preserves not only where a result came from, but how it became what it is now.**
+
+A second principle remains equally important:
 
 > **Yoda does not need to be the authority that decides whether something is true. Yoda preserves the derivation required for independent authorities to decide again.**
-
-That separation is intentional.
 
 Yoda should preserve the chain.
 The appropriate external authority should evaluate the result.
@@ -51,14 +55,16 @@ Given an important result, a developer, scientist or agent should eventually be 
 ```text
 What is this?
 Where did it come from?
+What existed before it?
+What changed?
+Which transformation created the current state?
 Which source data contributed to it?
-Which tools transformed it?
-Which versions were used?
-What evidence supported it?
-What changed after it was produced?
+Which tools and versions were used?
+What evidence belongs to each state?
+What became obsolete or superseded?
 Which later decisions depended on it?
 Can the derivation be reconstructed independently?
-Can the appropriate authority evaluate it again?
+Can the appropriate authority evaluate each recovered state again?
 ```
 
 The purpose is not to replace reasoning, scientific judgment or domain validation.
@@ -67,9 +73,7 @@ The purpose is to make the derivation behind those judgments reconstructible.
 
 ---
 
-## The architecture
-
-The project has evolved into four conceptual layers:
+## Architecture
 
 ```text
 Sputnik
@@ -95,7 +99,7 @@ Preserve exact state durably and verify that it survived.
 
 ### Yoda
 
-Preserve meaning around state: identity, provenance, relationships, history, evidence and recoverable context.
+Preserve meaning around state: identity, provenance, relationships, history, transformation evidence and recoverable context.
 
 ### Independent authorities, agents and humans
 
@@ -105,9 +109,47 @@ Yoda should not absorb the responsibilities of the other layers.
 
 ---
 
+## Lineage of Change
+
+A validated CASE exposed a property that extends lineage across a state transition.
+
+```text
+State A
+  ↓
+Transformation T
+  ↓
+State B
+```
+
+The demonstrated property is:
+
+```text
+Lineage of Change
+=
+derivation integrity across state transitions
+```
+
+In the validating experiment:
+
+- A remained recoverable;
+- B remained recoverable;
+- A and B retained distinct identities;
+- `B --derived-from--> A` remained recoverable;
+- transformation evidence remained recoverable;
+- state-specific measurements remained attached to the correct state;
+- an independent authority reproduced the original evaluation of each recovered state.
+
+This does not create a new engine mode.
+
+It emerges from the same primitives already used for identity, evidence, relations, history, verification and bounded context.
+
+See [`properties/LINEAGE-OF-CHANGE.md`](properties/LINEAGE-OF-CHANGE.md).
+
+---
+
 ## Independent Authority Replay
 
-Recent CASEs with AXLE and SynthID Bio exposed the same architectural pattern:
+AXLE and SynthID Bio exposed the same architectural pattern in different domains:
 
 ```text
 independent authority
@@ -123,15 +165,33 @@ same independent authority
 same measurement / decision
 ```
 
-We use **independent authority replay** as an internal research name for this pattern.
+The evolving-provenance CASE extended this pattern across two distinct states of the same artifact.
 
-With AXLE, the replayed property was a formal accept/reject decision.
-
-With SynthID Bio, the replayed property was an intrinsic provenance measurement.
-
-Yoda did not become the prover or the detector.
+Yoda did not become the prover, detector or scientific authority.
 
 That is the point.
+
+---
+
+## Evidence ladder
+
+The current evidence sequence can be read as a progression:
+
+```text
+LINEAGE OF STATE
+Where did this result come from?
+        ↓
+INDEPENDENT AUTHORITY REPLAY
+Can the right authority evaluate it again?
+        ↓
+COMPOSED PROVENANCE
+Can independent forms of provenance coexist?
+        ↓
+LINEAGE OF CHANGE
+How did this become what it is now?
+```
+
+These are related observations of one derivation architecture, not separate product modes.
 
 ---
 
@@ -144,7 +204,7 @@ The ideal integration remains small:
 ```text
 existing workflow
       ↓
-evidence + relations
+evidence + relations + transformations
       ↓
 Yoda
       ↓
@@ -153,8 +213,8 @@ verifiable derivation
 appropriate authority
 ```
 
-A scientist should be able to keep using scientific tools.
-An agent should be able to keep using its preferred runtime.
+A scientist should keep using scientific tools.
+An agent should keep using its preferred runtime.
 A formal verifier should remain the formal verifier.
 A provenance detector should remain the provenance detector.
 
@@ -171,26 +231,27 @@ The harder questions become:
 ```text
 Can we trace it?
 Can we reproduce the chain?
-Can we distinguish current evidence from stale evidence?
-Can we see what changed?
-Can an independent authority evaluate it again?
+Can we recover what existed before?
+Can we see exactly what changed?
+Can we keep evidence attached to the correct state?
+Can an independent authority evaluate the recovered states again?
 ```
 
 Yoda is an attempt to build infrastructure for those questions.
 
 ---
 
-## The boundary
+## Boundary
 
 Yoda does not claim to prove scientific truth.
 
 A correct derivation can still begin from bad assumptions, biased data or an inadequate experiment.
 
-Yoda instead targets a narrower property:
+Yoda targets a narrower property:
 
 > **Derivation integrity: the ability to reconstruct the verifiable chain that produced a result.**
 
-That property can complement formal proof systems, empirical validation, artifact provenance mechanisms, domain tools and human review.
+`Lineage of Change` extends that property across a demonstrated state transition; it does not prove that every transition is legitimate.
 
 The emerging category thesis is:
 
@@ -201,8 +262,6 @@ The emerging category thesis is:
 ## Research discipline
 
 Yoda is developed through falsifiable CASEs.
-
-The rules are simple:
 
 ```text
 one question
@@ -218,32 +277,35 @@ A failed CASE does not automatically earn a feature.
 
 The architecture should change only when repeated evidence forces it to.
 
+Public claims should flow through:
+
+```text
+EVIDENCE
+   ↓
+FORMAL PROPERTY
+   ↓
+PROJECT THESIS
+   ↓
+PUBLIC LANGUAGE
+```
+
 ---
 
 ## Long-term direction
 
 The project is exploring whether verifiable derivation is a cross-domain infrastructure property.
 
-Validated proving grounds now include:
+Validated proving grounds now include network state, security events, scientific observations, genomics, formal proof workflows, biological artifact provenance and one controlled evolving-artifact transition.
 
-```text
-network state
-security events
-scientific observations
-genomics
-formal proof workflows
-biological artifact provenance
-```
+The next strong falsification should be externally defined rather than another experiment designed around Yoda.
 
-The next strong falsification target is an externally defined biological R&D workflow.
-
-If the same small architecture continues to survive qualitatively different domains without special modes, the result may be more important than any one vertical.
+If the same small architecture continues to survive qualitatively different domains and longer change histories without special modes, the result may be more important than any one vertical.
 
 ---
 
 ## Mission statement
 
-> **Make important results traceable to the evidence and transformations that produced them — so the right authority can evaluate them again.**
+> **Make important results traceable to the evidence and transformations that produced and changed them — so the right authority can evaluate them again.**
 
 Or, more simply:
 
