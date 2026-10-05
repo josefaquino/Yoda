@@ -6,13 +6,24 @@ The CASE is intentionally gated.
 
 ```text
 A0 external authority freeze
-        ↓ only if PASS
-A1 controlled proof evolution
-        ↓ only if PASS
+PASS
+        |
+        v
+A1.0 original Complex-dependent workload
+NOT_EVALUATED
+CAPABILITY BOUNDARY DISCOVERED
+        |
+        v
+A1-R1 authority-compatible workload
+one pre-registered execution
+        |
+        v only if PASS
 A2 Yoda versioned derivation
-        ↓ only if PASS
+        |
+        v only if PASS
 B independent formal replay
-        ↓ only if PASS
+        |
+        v only if PASS
 final homologation
 ```
 
@@ -39,103 +50,87 @@ SHA256=1a38316b4f370225ae52431074365eb921976e79db2f4688fb8154ce9218d9eb
 
 ---
 
-## Fetch scripts
+## Stage A0
 
-From a local clone of the Yoda repository:
+A0 is complete and homologated as PASS.
 
-```bash
-CASE_DIR="cases/FORMAL-MATH-EVOLVING-DERIVATION-001-cross-domain-lineage-of-change"
+Required preserved authority:
 
-chmod +x "$CASE_DIR"/scripts/*.sh
+```text
+A0_EVIDENCE_MANIFEST_SHA256=
+80cb8e086c70015dd6f5e259a354a75c24e3b69809e71cb0c04666634771a408
 ```
 
-Or copy the scripts to `$HOME/cmu/` while preserving their contents exactly.
-
-Before each execution:
-
-```bash
-bash -n script.sh
-sha256sum script.sh
-```
+Do not rerun A0 unless the experiment is explicitly restarted under a new authority freeze.
 
 ---
 
-## Stage A0
+## Stage A1.0 — historical attempt
 
-Purpose:
-
-```text
-freeze MiniF2F
-freeze Lean
-freeze Mathlib
-freeze lean4export
-freeze OxiLean
-verify frozen Yoda identity
-Yoda writes = zero
-```
-
-Run:
-
-```bash
-set +e
-set -o pipefail
-
-./scripts/00-authority-freeze.sh 2>&1 |
-tee "$HOME/cmu/formal-math-evolving-derivation-001-stage-a0-console.log"
-
-RUN_RC="${PIPESTATUS[0]}"
-echo "RUN_RC=$RUN_RC"
-```
-
-Required end state:
+Script:
 
 ```text
-FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A0=PASS
-MINIF2F_SOURCE_AUTHORITY=PASS
-LEAN_AUTHORITY=PASS
-MATHLIB_AUTHORITY=PASS
-LEAN4EXPORT_AUTHORITY=PASS
-OXILEAN_AUTHORITY=PASS
-YODA_AUTHORITY=PASS
+scripts/01-controlled-proof-evolution.sh
+```
+
+A1.0 is preserved for evidence and should not be rerun in an attempt to obtain PASS.
+
+Official result:
+
+```text
+STAGE_A1.0=NOT_EVALUATED
+INTERPRETATION=CAPABILITY_BOUNDARY_DISCOVERED
+FAILURE_CLASS=SECONDARY_AUTHORITY_CAPABILITY_BOUNDARY
+
+PROOF_A_LEAN=PASS
+PROOF_B_LEAN=PASS
+
+PROOF_A_OXILEAN=UNSUPPORTED
+PROOF_B_OXILEAN=UNSUPPORTED
+
+MATHEMATICAL_REJECTION=NO
 YODA_WRITES=ZERO
 YODA_CHANGE=NO
 KYBER_CHANGE=NO
 ```
 
-If A0 is `NOT_EVALUATED`, stop.
+See `ATTEMPTS/A1.0-CAPABILITY-BOUNDARY.md`.
 
 ---
 
-## Stage A1
+## Stage A1-R1 — current next gate
 
-Purpose:
+A1-R1 is the only permitted continuation of Stage A1.
+
+Pre-registered workload:
 
 ```text
-create Proof A
-create controlled Proof B
-validate both with Lean
-export both with lean4export
-require target theorem VERIFIED by OxiLean
-Yoda writes = zero
+CORPUS=openai/miniF2F
+COMMIT=4e433ff5cadff23f9911a2bb5bbab2d351ce5554
+THEOREM=mathd_numbertheory_188
+TARGET=Nat.gcd 180 168 = 12
 ```
 
-Run:
+The exact A1-R1 script and proof-state pair must be committed and hash-audited before the first execution.
 
-```bash
-set +e
-set -o pipefail
+Planned script path:
 
-./scripts/01-controlled-proof-evolution.sh 2>&1 |
-tee "$HOME/cmu/formal-math-evolving-derivation-001-stage-a1-console.log"
+```text
+scripts/01-r1-authority-compatible-evolution.sh
+```
 
-RUN_RC="${PIPESTATUS[0]}"
-echo "RUN_RC=$RUN_RC"
+Execution policy:
+
+```text
+ONE_EXECUTION
+NO_CANDIDATE_SEARCH_AFTER_EXECUTION
+YODA_WRITES=ZERO
 ```
 
 Required end state:
 
 ```text
-FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A1=PASS
+FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A1_R1=PASS
 STATEMENT_PORT=PASS
 PROOF_IDENTITIES_DISTINCT=PASS
 MATHEMATICAL_TARGET_IDENTICAL=PASS
@@ -145,118 +140,43 @@ PROOF_A_OXILEAN=VERIFIED
 PROOF_B_OXILEAN=VERIFIED
 TRANSFORMATION_RECORD=PASS
 YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
 ```
 
-`unsupported` for the target theorem is not PASS.
+If either target is `unsupported`, classify A1-R1 as `NOT_EVALUATED` and stop.
 
-If A1 is `NOT_EVALUATED`, stop before Yoda.
+Do not choose another theorem inside this revision.
 
 ---
 
 ## Stage A2
 
-Purpose:
+A2 remains blocked until A1-R1 passes.
 
-```text
-preserve statement
-preserve Proof A
-preserve Proof B
-preserve transformation
-preserve Lean evaluations
-preserve OxiLean evaluations
-preserve authority identities
-create explicit derivation relations
-recover byte-exact artifacts
-recover bounded Lineage-of-Change context
-```
+The existing A2 design remains conceptually valid, but its implementation must consume the A1-R1 artifacts and A1-R1 evidence authority rather than the historical A1.0 artifacts.
 
-Run:
-
-```bash
-set +e
-set -o pipefail
-
-./scripts/02-yoda-versioned-derivation.sh 2>&1 |
-tee "$HOME/cmu/formal-math-evolving-derivation-001-stage-a2-console.log"
-
-RUN_RC="${PIPESTATUS[0]}"
-echo "RUN_RC=$RUN_RC"
-```
-
-Required end state:
-
-```text
-FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A2=PASS
-OBJECT_COUNT=11
-LINK_COUNT=15
-PROOF_A_BYTE_EXACT_RECOVERY=PASS
-PROOF_B_BYTE_EXACT_RECOVERY=PASS
-TRANSFORMATION_BYTE_EXACT_RECOVERY=PASS
-FORMAL_LINEAGE_OF_CHANGE_CONTEXT=PASS
-VERSIONED_DERIVATION_RECOVERY=PASS
-FINAL_YODA_VERIFY=PASS
-YODA_CHANGE=NO
-KYBER_CHANGE=NO
-```
+Do not execute A2 before that adaptation is explicitly reviewed.
 
 ---
 
 ## Stage B
 
-Purpose:
+B remains blocked until A2 passes.
 
-```text
-recover only from Yoda
-create fresh formal project
-rerun Lean
-rerun leanchecker
-re-export recovered proofs
-rerun OxiLean
-require target declarations VERIFIED again
-```
-
-Run:
-
-```bash
-set +e
-set -o pipefail
-
-./scripts/03-independent-formal-replay.sh 2>&1 |
-tee "$HOME/cmu/formal-math-evolving-derivation-001-stage-b-console.log"
-
-RUN_RC="${PIPESTATUS[0]}"
-echo "RUN_RC=$RUN_RC"
-```
-
-Required end state:
-
-```text
-FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_B=PASS
-PROOF_A_IDENTITY_SURVIVED=PASS
-PROOF_B_IDENTITY_SURVIVED=PASS
-TRANSFORMATION_IDENTITY_SURVIVED=PASS
-LEAN_AUTHORITY_REPLAY=PASS
-OXILEAN_AUTHORITY_REPLAY=PASS
-INDEPENDENT_FORMAL_REPLAY=PASS
-FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
-YODA_WRITES=ZERO
-YODA_CHANGE=NO
-KYBER_CHANGE=NO
-```
+The replay stage must use only artifacts recovered from Yoda and must rerun the same frozen Lean and OxiLean authorities against the recovered A1-R1 proof states.
 
 ---
 
 ## Final homologation
 
-Do not write the final homologation constants before the real evidence hashes exist.
+Do not write final homologation constants before real A1-R1, A2, and B evidence hashes exist.
 
-After Stage B passes, freeze the actual A0/A1/A2/B manifest identities and create the final homologation artifact.
-
-Only then evaluate whether the CASE supports:
+Only after Stage B passes may the CASE evaluate:
 
 ```text
 FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
 CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
 ```
 
-The second property must not be declared before both domain evidence chains are explicitly tied together in the final homologation.
+Negative and non-evaluable attempts remain part of the final research record.

@@ -8,15 +8,11 @@ This CASE is a cross-domain test of the property formalized in `properties/LINEA
 
 The new domain is **formal mathematics**.
 
-The goal is not to prove that Yoda understands mathematics.
-
-The goal is to test whether the same state / transformation / derivation / evidence model survives a radically different artifact type.
+The goal is not to prove that Yoda understands mathematics. The goal is to test whether the same state / transformation / derivation / evidence model survives a radically different artifact type.
 
 ---
 
 ## Hypothesis
-
-The primary hypothesis is:
 
 ```text
 LINEAGE_OF_CHANGE
@@ -24,44 +20,59 @@ BIOLOGICAL_ARTIFACT -> demonstrated
 FORMAL_PROOF        -> test now
 ```
 
-If the formal-math CASE passes without a Yoda or Kyber change, the evidence for a cross-domain architectural property becomes materially stronger.
+The hypothesis did **not** change after A1.0.
 
-The CASE still must not claim universality.
+A1.0 was not a mathematical rejection. It was a measurement that reached the current capability boundary of the secondary authority.
 
 ---
 
 ## Public source authority
 
-The source theorem is taken from the public OpenAI `miniF2F` benchmark.
+The statement authority is the public OpenAI `miniF2F` benchmark.
 
 Frozen repository:
 
 ```text
 REPOSITORY=openai/miniF2F
 COMMIT=4e433ff5cadff23f9911a2bb5bbab2d351ce5554
-THEOREM=mathd_algebra_182
 ```
-
-Original Lean 3 statement:
-
-```lean
-theorem mathd_algebra_182
-(y : ℂ) :
-7 * (3 * y + 2) = 21 * y + 14 :=
-begin
-ring_nf,
-end
-```
-
-The CASE ports the proposition to Lean 4 while preserving the mathematical statement.
 
 The dataset is statement authority, not proof authority.
+
+### A1.0 source workload — historical and frozen
+
+```text
+THEOREM=mathd_algebra_182
+TARGET=forall y : Complex, 7 * (3 * y + 2) = 21 * y + 14
+```
+
+A1.0 is preserved unchanged as a capability-boundary discovery.
+
+### A1-R1 source workload — pre-registered revision
+
+```text
+THEOREM=mathd_numbertheory_188
+TARGET=Nat.gcd 180 168 = 12
+```
+
+The revision is permitted because the experiment is not testing OxiLean's coverage of Complex or Mathlib. It is testing Lineage of Change in formal mathematics under two frozen authorities.
+
+The revision changes only the workload:
+
+```text
+HYPOTHESIS_CHANGED=NO
+DOMAIN_CHANGED=NO
+CORPUS_CHANGED=NO
+CORPUS_COMMIT_CHANGED=NO
+AUTHORITIES_CHANGED=NO
+YODA_CHANGED=NO
+KYBER_CHANGED=NO
+WORKLOAD_CHANGED=YES
+```
 
 ---
 
 ## Frozen formal environment
-
-To align with the independent checker export format, the formal environment is pinned to:
 
 ```text
 LEAN_TOOLCHAIN=leanprover/lean4:v4.32.0-rc1
@@ -87,8 +98,6 @@ Lean 4 kernel + frozen Mathlib
 -> formal validity
 ```
 
-A proof state passes Authority A only if the frozen Lean environment accepts it.
-
 ### Authority B — OxiLean verifier
 
 ```text
@@ -96,9 +105,7 @@ oxilean-verify
 -> independent Lean 4 proof re-checking
 ```
 
-OxiLean consumes the frozen `lean4export` NDJSON representation and checks declarations with its independent Rust kernel implementation.
-
-The CASE must preserve OxiLean's three-bucket semantics:
+OxiLean consumes frozen `lean4export` NDJSON and preserves three verdict buckets:
 
 ```text
 verified
@@ -106,7 +113,7 @@ unsupported
 rejected
 ```
 
-`unsupported` must never be silently treated as `verified`.
+`unsupported` is not PASS and is not mathematical rejection.
 
 The target proof declaration itself must land in `verified` for Authority B to count as PASS.
 
@@ -117,8 +124,6 @@ Yoda
 -> derivation integrity
 ```
 
-Yoda does not prove the theorem and does not replace either formal checker.
-
 ### Kyber
 
 ```text
@@ -128,121 +133,151 @@ Kyber
 
 ---
 
-## State-transition model
-
-The mathematical proposition remains constant.
-
-The proof artifact changes.
-
-```text
-Statement S
-
-Proof A
- tactic = ring_nf
-      |
-      | controlled semantics-preserving proof refactor
-      v
-Proof B
- tactic = ring
-```
-
-Required invariants:
-
-```text
-statement(A) = statement(B)
-identity(A) != identity(B)
-Lean(A) = PASS
-Lean(B) = PASS
-OxiLean(A) = VERIFIED
-OxiLean(B) = VERIFIED
-```
-
-The CASE is therefore about **proof evolution**, not theorem evolution.
-
----
-
 ## Stage A0 — authority freeze
 
-No Yoda write is allowed.
-
-A0 must:
-
-1. freeze the MiniF2F source theorem;
-2. freeze Lean v4.32.0-rc1;
-3. freeze Mathlib v4.32.0-rc1;
-4. freeze `lean4export`;
-5. freeze and build `oxilean-verify`;
-6. verify the frozen Yoda binary identity without writing to it;
-7. freeze an evidence manifest.
-
-PASS requires:
+A0 is homologated:
 
 ```text
+STATUS=PASS
+
 MINIF2F_SOURCE_AUTHORITY=PASS
 LEAN_AUTHORITY=PASS
 MATHLIB_AUTHORITY=PASS
 LEAN4EXPORT_AUTHORITY=PASS
 OXILEAN_AUTHORITY=PASS
 YODA_AUTHORITY=PASS
+
+A0_EVIDENCE_INTEGRITY=PASS
 YODA_WRITES=ZERO
 YODA_CHANGE=NO
 KYBER_CHANGE=NO
 ```
 
-If the external tools cannot be frozen or built, the CASE is `NOT_EVALUATED`.
+Frozen A0 evidence manifest:
+
+```text
+A0_EVIDENCE_MANIFEST_SHA256=
+80cb8e086c70015dd6f5e259a354a75c24e3b69809e71cb0c04666634771a408
+```
 
 ---
 
-## Stage A1 — controlled proof evolution
+## Stage A1.0 — controlled proof evolution / capability-boundary discovery
 
-A1 still contains no Yoda write.
+A1.0 used `mathd_algebra_182`.
 
-It creates one Lean 4 project with a common statement and two proof states:
+Proof A used `ring_nf`; Proof B used `ring`.
+
+Observed:
 
 ```text
-FormalEvolution.Statement
-FormalEvolution.ProofA
-FormalEvolution.ProofB
+STATEMENT_PORT=PASS
+PROOF_IDENTITIES_DISTINCT=PASS
+MATHEMATICAL_TARGET_IDENTICAL=PASS
+
+PROOF_A_LEAN=PASS
+PROOF_B_LEAN=PASS
+
+LEAN4EXPORT_A=PASS
+LEAN4EXPORT_B=PASS
+
+OXILEAN_A_RC=0
+OXILEAN_B_RC=0
+
+PROOF_A_OXILEAN=UNSUPPORTED
+PROOF_B_OXILEAN=UNSUPPORTED
+
+OXILEAN_REJECTED_A=0
+OXILEAN_REJECTED_B=0
 ```
 
-Proof A:
+Both target declarations were classified:
 
-```lean
-by
-  intro y
-  ring_nf
+```text
+verdict=unsupported
+detail=dependency on an unsupported declaration
 ```
 
-Proof B:
+Observed dependency pressure included the Complex / commutative-ring hierarchy and unsupported dependency closure.
 
-```lean
-by
-  intro y
-  ring
+Official classification:
+
+```text
+STAGE_A1.0=NOT_EVALUATED
+INTERPRETATION=CAPABILITY_BOUNDARY_DISCOVERED
+FAILURE_CLASS=SECONDARY_AUTHORITY_CAPABILITY_BOUNDARY
+
+MATHEMATICAL_REJECTION=NO
+HARNESS_FAILURE=NO
+YODA_FAILURE=NO
+KYBER_FAILURE=NO
+
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
 ```
+
+The hypothesis was not evaluated.
+
+See `ATTEMPTS/A1.0-CAPABILITY-BOUNDARY.md`.
+
+---
+
+## Stage A1-R1 — authority-compatible formal workload
+
+A1-R1 is pre-registered before execution.
+
+Workload:
+
+```text
+CORPUS=openai/miniF2F
+COMMIT=4e433ff5cadff23f9911a2bb5bbab2d351ce5554
+THEOREM=mathd_numbertheory_188
+TARGET=Nat.gcd 180 168 = 12
+```
+
+Selection rationale:
+
+```text
+same formal domain
+same public corpus
+same frozen commit
+same frozen authorities
+smaller dependency surface
+no Complex hierarchy
+concrete Nat computation
+single pre-registered revision
+no candidate search after execution
+```
+
+The proof-state pair and exact A1-R1 harness must be frozen before the first execution.
 
 PASS requires:
 
 ```text
-STATEMENT_SOURCE=MINIF2F
 STATEMENT_PORT=PASS
-PROOF_A_LEAN=PASS
-PROOF_B_LEAN=PASS
-PROOF_A_OXILEAN=VERIFIED
-PROOF_B_OXILEAN=VERIFIED
 PROOF_IDENTITIES_DISTINCT=PASS
 MATHEMATICAL_TARGET_IDENTICAL=PASS
+
+PROOF_A_LEAN=PASS
+PROOF_B_LEAN=PASS
+
+PROOF_A_OXILEAN=VERIFIED
+PROOF_B_OXILEAN=VERIFIED
+
 TRANSFORMATION_RECORD=PASS
 YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
 ```
 
-If OxiLean reports the target theorem as unsupported, A1 is `NOT_EVALUATED` for the multi-authority hypothesis. It is not permitted to downgrade that to PASS.
+If either target is `unsupported`, A1-R1 is `NOT_EVALUATED`. No opportunistic search through additional theorems is allowed.
 
 ---
 
 ## Stage A2 — Yoda versioned derivation
 
-A2 begins only after A0 and A1 pass.
+A2 remains blocked until A1-R1 passes.
 
 Yoda must preserve at minimum:
 
@@ -257,7 +292,7 @@ OxiLean evaluation A
 OxiLean evaluation B
 Lean authority identity
 OxiLean authority identity
-A1 evidence authority
+A1-R1 evidence authority
 ```
 
 Required relations include:
@@ -273,100 +308,69 @@ A --rechecked-by--> OxiLean
 B --rechecked-by--> OxiLean
 ```
 
-A2 must use the frozen Yoda product and existing bounded-context semantics.
-
-No Change Mode, Math Mode or domain-specific engine behavior is allowed.
+No domain-specific Yoda or Kyber behavior is allowed.
 
 ---
 
 ## Stage B — independent replay after recovery
 
-Stage B must consume only artifacts recovered from Yoda.
+Stage B remains unchanged in purpose.
 
-It must rerun:
+It must consume only artifacts recovered from Yoda and rerun the frozen formal authorities.
 
-```text
-Lean on recovered A
-Lean on recovered B
-OxiLean on exported recovered A
-OxiLean on exported recovered B
-```
-
-PASS requires:
-
-```text
-SHA(A_recovered) = SHA(A_original)
-SHA(B_recovered) = SHA(B_original)
-
-Lean(A_recovered) = Lean(A_original)
-Lean(B_recovered) = Lean(B_original)
-
-OxiLean(A_recovered) = OxiLean(A_original)
-OxiLean(B_recovered) = OxiLean(B_original)
-
-B --derived-from--> A remains recoverable
-transformation evidence remains recoverable
-```
+PASS requires byte-exact recovery, matching Lean evaluations, matching OxiLean evaluations, and recoverable derivation / transformation evidence.
 
 ---
 
 ## Primary success criterion
 
-The CASE passes only if all stages pass with:
+The CASE passes only if all evaluated stages pass with:
 
 ```text
 YODA_CHANGE=NO
 KYBER_CHANGE=NO
 ```
 
-The intended property under test is:
+The intended property remains:
 
 ```text
 CROSS_DOMAIN_LINEAGE_OF_CHANGE
 ```
 
-This property is not recorded as demonstrated until the complete CASE passes.
+It is not recorded as demonstrated until the complete CASE passes.
 
 ---
 
-## Permitted claim if validated
+## Negative results policy
 
-> **For one formally verified mathematical derivation, Yoda preserved two distinct proof states, the semantics-preserving transformation between them, and their formal-verification evidence such that the frozen formal authorities reproduced their original evaluations after byte-exact recovery.**
+Negative and non-evaluable measurements are first-class evidence.
 
-A stronger cross-domain interpretation may then be discussed because `Lineage of Change` would have survived both a biological artifact and a formal proof artifact.
+A1.0 must remain visible because it distinguishes:
 
-It would still not establish universal domain independence.
+```text
+Lean VALID
+OxiLean CANNOT CURRENTLY EVALUATE
+```
 
----
+from:
 
-## Non-claims
+```text
+Lean VALID
+OxiLean INVALID
+```
 
-This CASE does not establish that:
+The second event did not occur.
 
-- Yoda proves mathematics;
-- Yoda replaces Lean;
-- Yoda replaces OxiLean;
-- Yoda determines whether a proof refactor is mathematically insightful;
-- every Lean proof can be checked by OxiLean;
-- every transformation domain fits the current model;
-- arbitrary long proof histories have been validated;
-- cross-domain generality is universal;
-- Axiom, OpenAI, Lean, Mathlib or OxiLean authors participated in or endorsed the experiment;
-- product-market fit exists.
+A failed measurement is not necessarily a failed hypothesis.
 
 ---
 
 ## Stop conditions
 
-The CASE stops as `NOT_EVALUATED` before Yoda writes if any of the following occurs:
+Stop before Yoda writes if any external compatibility gate prevents both formal authorities from evaluating the pre-registered target.
 
-- source theorem cannot be frozen exactly;
-- pinned Lean / Mathlib environment cannot build;
-- pinned `lean4export` cannot produce the expected format;
-- OxiLean cannot consume the frozen export format;
-- either proof fails Lean;
-- the target declaration is unsupported by OxiLean;
-- Proof A and Proof B are not byte-distinct;
-- the mathematical statement differs between A and B.
+Do not modify Yoda or Kyber to rescue the CASE.
 
-A failure in an external compatibility gate is evidence about the harness, not a Yoda regression.
+Do not silently convert `unsupported` to `verified`.
+
+Do not search multiple replacement workloads after A1-R1 begins.

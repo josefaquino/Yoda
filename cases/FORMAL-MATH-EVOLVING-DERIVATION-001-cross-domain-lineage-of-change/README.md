@@ -8,15 +8,61 @@ The question is:
 
 > **Can the same Yoda derivation model preserve the evolution of a formal proof and allow frozen formal authorities to reproduce their original evaluations after recovery?**
 
-The experiment intentionally does not ask Yoda to prove mathematics.
+The experiment intentionally does not ask Yoda to prove mathematics. It asks whether Yoda can preserve the derivation around mathematical proof artifacts while formal authorities remain external.
 
-It asks whether Yoda can preserve the derivation around mathematical proof artifacts while formal authorities remain external.
+---
+
+## Current status
+
+```text
+A0
+PASS
+  |
+  v
+A1.0
+mathd_algebra_182
+NOT_EVALUATED
+SECONDARY_AUTHORITY_CAPABILITY_BOUNDARY
+  |
+  v
+A1-R1
+mathd_numbertheory_188
+PRE-REGISTERED / NOT YET EXECUTED
+  |
+  v
+A2
+BLOCKED UNTIL A1-R1 PASS
+  |
+  v
+B
+BLOCKED UNTIL A2 PASS
+```
+
+A1.0 is preserved as a **negative result with positive methodological value**.
+
+Lean accepted both proof states and `lean4export` exported them. OxiLean completed with zero rejected declarations but classified both target proof declarations as `unsupported` because they depended on an unsupported declaration closure in the Complex / commutative-ring dependency graph.
+
+Therefore:
+
+```text
+MATHEMATICAL_REJECTION=NO
+HARNESS_FAILURE=NO
+YODA_FAILURE=NO
+KYBER_FAILURE=NO
+
+A1.0=NOT_EVALUATED
+INTERPRETATION=CAPABILITY_BOUNDARY_DISCOVERED
+```
+
+The experiment discovered a capability boundary in the secondary authority rather than a mathematical disagreement between authorities.
+
+See [RESULTS.md](RESULTS.md) and [ATTEMPTS/A1.0-CAPABILITY-BOUNDARY.md](ATTEMPTS/A1.0-CAPABILITY-BOUNDARY.md).
 
 ---
 
 ## Why this CASE exists
 
-The current evidence ladder is:
+The evidence ladder is:
 
 ```text
 GENOME-LINEAGE-001
@@ -32,95 +78,40 @@ SYNTHID-BIO-EVOLVING-PROVENANCE-001
 -> Lineage of Change
 ```
 
-The next question is not whether Yoda can do more biology.
-
-It is whether `Lineage of Change` is beginning to look like a property of the derivation model rather than a property of the biological environment in which it was first demonstrated.
-
-```text
-Biological artifact
-Lineage of Change
-PASS
-
-Formal proof artifact
-Lineage of Change
-TEST NOW
-```
+The next question is not whether Yoda can do more biology. It is whether `Lineage of Change` is beginning to look like a property of the derivation model rather than a property of the biological environment in which it was first demonstrated.
 
 ---
 
 ## Public theorem source
 
-The source statement comes from OpenAI's public MiniF2F benchmark:
+The public statement authority remains the same frozen OpenAI MiniF2F repository:
 
 ```text
 repository=openai/miniF2F
 commit=4e433ff5cadff23f9911a2bb5bbab2d351ce5554
+```
+
+### A1.0 workload — preserved historical attempt
+
+```text
 theorem=mathd_algebra_182
+domain surface=Complex / commutative-ring hierarchy
+status=NOT_EVALUATED
+reason=secondary authority capability boundary
 ```
 
-MiniF2F is used only as the public statement authority.
-
-The proposition is ported from Lean 3 to Lean 4 without changing the mathematical target.
-
----
-
-## Proof evolution
-
-The proposition remains constant while the proof artifact changes.
+### A1-R1 workload — pre-registered revision
 
 ```text
-Statement S
-
-Proof A
-ring_nf
-   |
-   | controlled proof refactor
-   v
-Proof B
-ring
+theorem=mathd_numbertheory_188
+target=Nat.gcd 180 168 = 12
+status=PRE-REGISTERED
+execution_count_planned=1
 ```
 
-Required:
+The hypothesis, domain, corpus, frozen commit, authorities, Yoda, and Kyber remain unchanged. Only the mathematical workload changes so that the two frozen formal authorities can actually evaluate the intended property.
 
-```text
-identity(A) != identity(B)
-statement(A) = statement(B)
-```
-
-Both proofs must remain formally valid.
-
----
-
-## Two formal checking paths
-
-### Lean
-
-Frozen reference environment:
-
-```text
-Lean 4 v4.32.0-rc1
-Mathlib v4.32.0-rc1
-```
-
-Lean answers:
-
-```text
-Does this proof elaborate and pass the reference kernel?
-```
-
-### OxiLean
-
-Frozen OxiLean `oxilean-verify` provides an independent Rust checker over `lean4export` NDJSON.
-
-OxiLean answers:
-
-```text
-Does this exported declaration verify under the independent checker?
-```
-
-The target proof declaration must be explicitly `verified`.
-
-An `unsupported` result is not PASS.
+See [ATTEMPTS/A1-R1-AUTHORITY-COMPATIBLE-WORKLOAD.md](ATTEMPTS/A1-R1-AUTHORITY-COMPATIBLE-WORKLOAD.md).
 
 ---
 
@@ -143,7 +134,15 @@ Kyber
 -> durable state integrity
 ```
 
-No authority is asked to perform another layer's job.
+OxiLean's three buckets remain authoritative:
+
+```text
+verified
+unsupported
+rejected
+```
+
+`unsupported` is never silently treated as `verified`.
 
 ---
 
@@ -152,12 +151,18 @@ No authority is asked to perform another layer's job.
 ```text
 A0
 freeze external authorities
-Yoda writes = zero
+PASS
         |
         v
-A1
-create Proof A -> Proof B
-validate both with Lean + OxiLean
+A1.0
+Complex-dependent workload
+NOT_EVALUATED
+CAPABILITY BOUNDARY DISCOVERED
+        |
+        v
+A1-R1
+authority-compatible workload
+Lean + OxiLean
 Yoda writes = zero
         |
         v
@@ -170,32 +175,7 @@ recover from Yoda
 re-run formal authorities
 ```
 
-A2 is not allowed to begin until A0 and A1 pass.
-
----
-
-## What would matter if it passes
-
-A successful result would not mean that Yoda became a theorem prover.
-
-It would mean that the same small derivation architecture preserved a meaningful state transition in two fundamentally different domains:
-
-```text
-protein sequence
-!=
-formal proof
-
-SynthID measurement
-!=
-formal proof checking
-
-same Yoda derivation model
-same state-transition model
-same evidence discipline
-no engine changes
-```
-
-That would strengthen — but still not prove — the hypothesis that `Lineage of Change` is cross-domain.
+A2 is not allowed to begin until A1-R1 passes.
 
 ---
 
@@ -205,35 +185,27 @@ That would strengthen — but still not prove — the hypothesis that `Lineage o
 CROSS_DOMAIN_LINEAGE_OF_CHANGE
 ```
 
-This name is provisional until the complete CASE passes.
-
-The already demonstrated property remains:
-
-```text
-LINEAGE_OF_CHANGE
-=
-derivation integrity across state transitions
-```
-
-See [`../../properties/LINEAGE-OF-CHANGE.md`](../../properties/LINEAGE-OF-CHANGE.md).
+This name remains provisional until the complete CASE passes.
 
 ---
 
-## Discipline
+## Research discipline
 
 ```text
 one new domain
 one controlled transition
 one primary property
-external formal authorities
+two deterministic formal authorities
 zero preventive engine changes
+negative results preserved
 ```
 
-If an external checker or toolchain cannot support the experiment, classify the stage honestly.
+The A1.0 result is intentionally retained. A failed measurement is not necessarily a failed hypothesis.
 
-Do not modify Yoda to rescue the CASE.
+> **The hypothesis remains unchanged. The instrument changed.**
 
-> **Big vision. Small steps. Evidence always.**
+See [WHY-WE-BUILT-THIS.md](WHY-WE-BUILT-THIS.md).
 
-For the complete experiment contract, see [CASE.md](CASE.md).
-For execution, see [RUNBOOK.md](RUNBOOK.md).
+For the complete experiment contract, see [CASE.md](CASE.md).  
+For execution, see [RUNBOOK.md](RUNBOOK.md).  
+For observed results, see [RESULTS.md](RESULTS.md).
