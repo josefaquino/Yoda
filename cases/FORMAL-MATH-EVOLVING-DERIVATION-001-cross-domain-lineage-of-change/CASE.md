@@ -302,7 +302,19 @@ If either target is `unsupported`, A1-R1 is `NOT_EVALUATED`. No opportunistic se
 
 A1-R1 passed on its single pre-registered execution.
 
-A2 is now READY.
+A2 has now been evaluated.
+
+The pre-registered A2-R1 one-shot is preserved as `NOT_EVALUATED` because the harness stopped on a query-tokenization mismatch after the persistence and byte-recovery gates had already passed.
+
+No A2 rerun was performed.
+
+The exact durable Yoda state was then adjudicated read-only, and the A2 research question passed:
+
+```text
+A2_RESEARCH_QUESTION=PASS_BY_READ_ONLY_ADJUDICATION
+FORMAL_MATH_EVOLVING_DERIVATION_001_STAGE_A2=
+PASS_BY_READ_ONLY_ADJUDICATION
+```
 
 Research question:
 
@@ -350,6 +362,37 @@ Proof B --derived-from--> Proof A
 ```
 
 A2 does not re-run Lean or OxiLean. That independent replay remains the responsibility of Stage B.
+
+The final adjudication demonstrated on the unchanged durable state:
+
+```text
+YODA_VERIFY=PASS
+BYTE_EXACT_RECOVERY=PASS
+
+Proof B --derived-from--> Proof A
+recoverable
+
+Proof B --transformed-by--> Transformation
+recoverable
+
+FORMAL_LINEAGE_OF_CHANGE_CONTEXT=PASS
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The distinction is deliberate:
+
+```text
+A2-R1 one-shot
+-> NOT_EVALUATED
+
+A2 research question
+-> PASS_BY_READ_ONLY_ADJUDICATION
+```
+
+The complete CASE remains open until Stage B independently replays Lean and OxiLean against Yoda-recovered proof states.
 
 ---
 
