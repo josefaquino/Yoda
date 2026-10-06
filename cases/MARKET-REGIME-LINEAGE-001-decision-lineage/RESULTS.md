@@ -1,5 +1,15 @@
 # RESULTS — MARKET-REGIME-LINEAGE-001
 
+## Final verdict
+
+```text
+MARKET_REGIME_LINEAGE_001=VALIDATED
+DECISION_LINEAGE=DEMONSTRATED
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
 ## Status
 
 | Stage | Status | Meaning |
@@ -11,7 +21,7 @@
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
 | A1-R2 | PASS | C11 and POSIX awk produced byte-identical features/classifications for A/B/C |
 | A2-R1 | PASS | 18 objects + 31 relations preserved; byte-exact recovery, relation recovery and Decision Lineage semantics passed |
-| B-R1 | PRE-REGISTERED / NOT EXECUTED | Replay inputs restricted to Yoda get; recovered C11 + awk must reproduce original canonical bytes |
+| B-R1 | PASS | Yoda-only recovered C11 + awk replayed A/B/C and reproduced the original canonical bytes exactly |
 
 Historical classifications were first observed during the frozen A1-R2 execution; no thresholds, dates, snapshots or label mappings were changed after A0.
 
@@ -105,3 +115,58 @@ A -> B  STRESSED -> FRAGILE  classification_changed=YES
 B -> C  FRAGILE  -> FRAGILE  classification_changed=NO
                               underlying_evidence_changed=YES
 ```
+
+
+## B-R1 observed result
+
+```text
+STATUS=PASS
+EXECUTION_COUNT=1
+RUN_RC=0
+
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+
+REPLAY_AUTHORITY_1_RESULTS_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+
+REPLAY_AUTHORITY_2_RESULTS_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+
+REPLAY_VS_ORIGINAL_CANONICAL=PASS
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+B_R1_CONSOLE_SHA256=
+1edd4dff4b9b7e7a958d9405e17fcf88a1ad1286caf812c7fb4558835c5c42cd
+
+B_R1_EXECUTION_LOCK_SHA256=
+55c377d69cc7723d954b747daea8ef937756d060797bfcb9343fb48a5fefe002
+
+B_EVIDENCE_MANIFEST_SHA256=
+aaa6068ab848773fbf4d1d0d12feb1eba3f7c0afe7774d207c5b809a9a2a67c7
+```
+
+The Yoda store remained byte-identical before and after independent replay:
+
+```text
+DATA_YODA_SHA256_BEFORE=
+fbe0800522d44ec54a71cd26c0fe3cde0bb1cf8475ac859af0c045d054cfe84e
+
+DATA_YODA_SHA256_AFTER=
+fbe0800522d44ec54a71cd26c0fe3cde0bb1cf8475ac859af0c045d054cfe84e
+```
+
+## Final scoped claim
+
+> For one controlled deterministic public-data market-regime workflow, Yoda preserved successive evaluation states, their point-in-time public-data inputs, classification contract, transition history and evidence such that two independent implementations reproduced each original classification after recovery.
+
+This validates the CASE and demonstrates the scoped property:
+
+```text
+PROPERTY=DECISION_LINEAGE
+STATUS=DEMONSTRATED
+EVIDENCE=MARKET-REGIME-LINEAGE-001
+```
+
+This does not establish market prediction, alpha, investment advice, economic truth, or universal model correctness.
