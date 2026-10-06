@@ -8,7 +8,7 @@
 | PRE-A0-R1 | NOT_EVALUATED | Harness transport composition mismatch; no A0 gate consumed |
 | PRE-A0-R2 | PASS | FRED metadata/observations and point-in-time parameters reachable; zero Yoda writes |
 | A0-R1 | PASS | Three point-in-time snapshots frozen; evidence manifest valid; classification not executed |
-| A1-R1 | PRE-REGISTERED / NOT EXECUTED | Frozen C11 + POSIX awk authorities over immutable A0 snapshots |
+| A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
 | A2 | BLOCKED | Requires A1 PASS |
 | B | BLOCKED | Requires A2 PASS |
 
