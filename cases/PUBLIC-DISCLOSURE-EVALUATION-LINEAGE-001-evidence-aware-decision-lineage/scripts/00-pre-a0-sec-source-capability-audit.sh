@@ -1,0 +1,330 @@
+#!/usr/bin/env bash
+set -eu
+set -o pipefail
+
+CASE="PUBLIC-DISCLOSURE-EVALUATION-LINEAGE-001"
+REVISION="PRE-A0-R1"
+
+SEC_SUBMISSIONS_BASE="https://data.sec.gov/submissions"
+SEC_COMPANYFACTS_BASE="https://data.sec.gov/api/xbrl/companyfacts"
+SEC_ARCHIVE_BASE="https://www.sec.gov/Archives/edgar/data"
+
+PROBE_CIK="0001652044"
+PROBE_CIK_ARCHIVE="1652044"
+PROBE_HISTORY_FILE="CIK0001652044-submissions-001.json"
+
+PROBE_ORIGINAL_ACCESSION="0001652044-19-000004"
+PROBE_ORIGINAL_ACCESSION_COMPACT="000165204419000004"
+PROBE_ORIGINAL_FORM="10-K"
+
+PROBE_AMENDMENT_ACCESSION="0001193125-19-028757"
+PROBE_AMENDMENT_ACCESSION_COMPACT="000119312519028757"
+PROBE_AMENDMENT_FORM="10-K/A"
+
+PROBE_REPORT_PERIOD="2018-12-31"
+
+REQUEST_SPACING_SECONDS="0.40"
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT HUP INT TERM
+
+section()
+{
+    echo
+    echo "============================================================"
+    echo " $1"
+    echo "============================================================"
+}
+
+sha()
+{
+    sha256sum "$1" | awk '{print $1}'
+}
+
+fail()
+{
+    echo
+    echo "$CASE"_PRE_A0=NOT_EVALUATED
+    echo "PRE_A0_REVISION=$REVISION"
+    echo "FAILURE_CLASS=$1"
+    echo "CASE_ISSUER_SELECTED=NO"
+    echo "CASE_XBRL_CONCEPT_SELECTED=NO"
+    echo "CLASSIFICATION_EXECUTED=NO"
+    echo "YODA_WRITES=ZERO"
+    echo "YODA_CHANGE=NO"
+    echo "KYBER_CHANGE=NO"
+    echo "A0_GATE_CONSUMED=NO"
+    exit 1
+}
+
+require_cmd()
+{
+    cmd="$1"
+    label="$2"
+
+    if command -v "$cmd" >/dev/null 2>&1
+    then
+        echo "$label=PASS"
+    else
+        echo "$label=FAIL"
+        fail "LOCAL_TOOLCHAIN_MISSING"
+    fi
+}
+
+fetch()
+{
+    url="$1"
+    body="$2"
+    headers="$3"
+
+    sleep "$REQUEST_SPACING_SECONDS"
+
+    curl \
+        --fail \
+        --silent \
+        --show-error \
+        --location \
+        --compressed \
+        --user-agent "$SEC_USER_AGENT" \
+        --header "Accept: application/json,text/html;q=0.9,*/*;q=0.8" \
+        --dump-header "$headers" \
+        --output "$body" \
+        "$url"
+}
+
+section "0. LOCAL TOOLCHAIN"
+
+require_cmd curl CURL
+require_cmd awk AWK
+require_cmd grep GREP
+require_cmd sed SED
+require_cmd sha256sum SHA256SUM
+require_cmd wc WC
+require_cmd tr TR
+require_cmd mktemp MKTEMP
+require_cmd sleep SLEEP
+
+section "1. SEC USER-AGENT POLICY"
+
+if test -z "${SEC_USER_AGENT:-}"
+then
+    echo "SEC_USER_AGENT_PRESENT=NO"
+    fail "SEC_USER_AGENT_MISSING"
+fi
+
+echo "SEC_USER_AGENT_PRESENT=YES"
+
+case "$SEC_USER_AGENT" in
+    *" "*@*.*)
+        echo "USER_AGENT_POLICY=PASS"
+        ;;
+    *)
+        echo "USER_AGENT_POLICY=FAIL"
+        fail "SEC_USER_AGENT_FORMAT"
+        ;;
+esac
+
+echo "SEC_USER_AGENT_PRINTED=NO"
+echo "REQUEST_SPACING_SECONDS=$REQUEST_SPACING_SECONDS"
+echo "REQUEST_RATE_POLICY=PASS"
+
+section "2. SUBMISSIONS ENDPOINT"
+
+SUB_CURRENT_BODY="$TMP/submissions-current.json"
+SUB_CURRENT_HEADERS="$TMP/submissions-current.headers"
+
+fetch \
+    "$SEC_SUBMISSIONS_BASE/CIK$PROBE_CIK.json" \
+    "$SUB_CURRENT_BODY" \
+    "$SUB_CURRENT_HEADERS" ||
+    fail "SEC_SUBMISSIONS_UNAVAILABLE"
+
+grep -qi '^content-type:.*application/json' "$SUB_CURRENT_HEADERS" ||
+    fail "SEC_SUBMISSIONS_RESPONSE_SHAPE"
+
+grep -F '"cik"' "$SUB_CURRENT_BODY" >/dev/null ||
+    fail "SEC_SUBMISSIONS_RESPONSE_SHAPE"
+
+grep -F '"filings"' "$SUB_CURRENT_BODY" >/dev/null ||
+    fail "SEC_SUBMISSIONS_RESPONSE_SHAPE"
+
+grep -F "$PROBE_HISTORY_FILE" "$SUB_CURRENT_BODY" >/dev/null ||
+    fail "SEC_SUBMISSIONS_HISTORY_DISCOVERY"
+
+echo "SUBMISSIONS_ENDPOINT=PASS"
+echo "SUBMISSIONS_CURRENT_SHA256=$(sha "$SUB_CURRENT_BODY")"
+echo "SUBMISSIONS_CURRENT_BYTES=$(wc -c < "$SUB_CURRENT_BODY" | tr -d ' ')"
+echo "SUBMISSIONS_HISTORY_REFERENCE=PASS"
+
+section "3. SUBMISSIONS HISTORY ENDPOINT"
+
+SUB_HISTORY_BODY="$TMP/submissions-history.json"
+SUB_HISTORY_HEADERS="$TMP/submissions-history.headers"
+
+fetch \
+    "$SEC_SUBMISSIONS_BASE/$PROBE_HISTORY_FILE" \
+    "$SUB_HISTORY_BODY" \
+    "$SUB_HISTORY_HEADERS" ||
+    fail "SEC_SUBMISSIONS_HISTORY_UNAVAILABLE"
+
+grep -qi '^content-type:.*application/json' "$SUB_HISTORY_HEADERS" ||
+    fail "SEC_SUBMISSIONS_HISTORY_RESPONSE_SHAPE"
+
+grep -F "$PROBE_ORIGINAL_ACCESSION" "$SUB_HISTORY_BODY" >/dev/null ||
+    fail "ORIGINAL_AMENDMENT_PAIR_NOT_DISCOVERABLE"
+
+grep -F "$PROBE_AMENDMENT_ACCESSION" "$SUB_HISTORY_BODY" >/dev/null ||
+    fail "ORIGINAL_AMENDMENT_PAIR_NOT_DISCOVERABLE"
+
+grep -F "\"$PROBE_ORIGINAL_FORM\"" "$SUB_HISTORY_BODY" >/dev/null ||
+    fail "ORIGINAL_AMENDMENT_PAIR_NOT_DISCOVERABLE"
+
+grep -F "\"$PROBE_AMENDMENT_FORM\"" "$SUB_HISTORY_BODY" >/dev/null ||
+    fail "ORIGINAL_AMENDMENT_PAIR_NOT_DISCOVERABLE"
+
+grep -F "\"$PROBE_REPORT_PERIOD\"" "$SUB_HISTORY_BODY" >/dev/null ||
+    fail "ORIGINAL_AMENDMENT_PAIR_NOT_DISCOVERABLE"
+
+echo "SUBMISSIONS_HISTORY_ENDPOINT=PASS"
+echo "SUBMISSIONS_HISTORY_SHA256=$(sha "$SUB_HISTORY_BODY")"
+echo "SUBMISSIONS_HISTORY_BYTES=$(wc -c < "$SUB_HISTORY_BODY" | tr -d ' ')"
+echo "ORIGINAL_AMENDMENT_PAIR_HISTORY_VISIBILITY=PASS"
+
+section "4. COMPANYFACTS ENDPOINT"
+
+COMPANYFACTS_BODY="$TMP/companyfacts.json"
+COMPANYFACTS_HEADERS="$TMP/companyfacts.headers"
+
+fetch \
+    "$SEC_COMPANYFACTS_BASE/CIK$PROBE_CIK.json" \
+    "$COMPANYFACTS_BODY" \
+    "$COMPANYFACTS_HEADERS" ||
+    fail "SEC_COMPANYFACTS_UNAVAILABLE"
+
+grep -qi '^content-type:.*application/json' "$COMPANYFACTS_HEADERS" ||
+    fail "SEC_COMPANYFACTS_RESPONSE_SHAPE"
+
+grep -F '"facts"' "$COMPANYFACTS_BODY" >/dev/null ||
+    fail "SEC_COMPANYFACTS_RESPONSE_SHAPE"
+
+grep -F '"us-gaap"' "$COMPANYFACTS_BODY" >/dev/null ||
+    fail "SEC_COMPANYFACTS_RESPONSE_SHAPE"
+
+echo "COMPANYFACTS_ENDPOINT=PASS"
+echo "COMPANYFACTS_SHA256=$(sha "$COMPANYFACTS_BODY")"
+echo "COMPANYFACTS_BYTES=$(wc -c < "$COMPANYFACTS_BODY" | tr -d ' ')"
+echo "XBRL_STANDARD_TAXONOMY_VISIBILITY=PASS"
+echo "CASE_XBRL_CONCEPT_SELECTED=NO"
+
+section "5. FILING ARCHIVE ACCESS"
+
+ORIGINAL_INDEX="$TMP/original-index.htm"
+ORIGINAL_HEADERS="$TMP/original-index.headers"
+
+AMENDMENT_INDEX="$TMP/amendment-index.htm"
+AMENDMENT_HEADERS="$TMP/amendment-index.headers"
+
+fetch \
+    "$SEC_ARCHIVE_BASE/$PROBE_CIK_ARCHIVE/$PROBE_ORIGINAL_ACCESSION_COMPACT/$PROBE_ORIGINAL_ACCESSION-index.htm" \
+    "$ORIGINAL_INDEX" \
+    "$ORIGINAL_HEADERS" ||
+    fail "SEC_FILING_ARCHIVE_UNAVAILABLE"
+
+fetch \
+    "$SEC_ARCHIVE_BASE/$PROBE_CIK_ARCHIVE/$PROBE_AMENDMENT_ACCESSION_COMPACT/$PROBE_AMENDMENT_ACCESSION-index.htm" \
+    "$AMENDMENT_INDEX" \
+    "$AMENDMENT_HEADERS" ||
+    fail "SEC_FILING_ARCHIVE_UNAVAILABLE"
+
+grep -F "$PROBE_ORIGINAL_ACCESSION" "$ORIGINAL_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+grep -F "$PROBE_AMENDMENT_ACCESSION" "$AMENDMENT_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+grep -F "$PROBE_ORIGINAL_FORM" "$ORIGINAL_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+grep -F "$PROBE_AMENDMENT_FORM" "$AMENDMENT_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+grep -F "$PROBE_REPORT_PERIOD" "$ORIGINAL_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+grep -F "$PROBE_REPORT_PERIOD" "$AMENDMENT_INDEX" >/dev/null ||
+    fail "SEC_FILING_ARCHIVE_RESPONSE_SHAPE"
+
+echo "FILING_ARCHIVE_ACCESS=PASS"
+echo "ORIGINAL_FILING_INDEX_SHA256=$(sha "$ORIGINAL_INDEX")"
+echo "ORIGINAL_FILING_INDEX_BYTES=$(wc -c < "$ORIGINAL_INDEX" | tr -d ' ')"
+echo "AMENDMENT_FILING_INDEX_SHA256=$(sha "$AMENDMENT_INDEX")"
+echo "AMENDMENT_FILING_INDEX_BYTES=$(wc -c < "$AMENDMENT_INDEX" | tr -d ' ')"
+
+section "6. ORIGINAL / AMENDMENT PAIR CAPABILITY"
+
+echo "PROBE_ONLY=YES"
+echo "PROBE_CIK=$PROBE_CIK"
+echo "PROBE_ORIGINAL_ACCESSION=$PROBE_ORIGINAL_ACCESSION"
+echo "PROBE_ORIGINAL_FORM=$PROBE_ORIGINAL_FORM"
+echo "PROBE_AMENDMENT_ACCESSION=$PROBE_AMENDMENT_ACCESSION"
+echo "PROBE_AMENDMENT_FORM=$PROBE_AMENDMENT_FORM"
+echo "PROBE_REPORT_PERIOD=$PROBE_REPORT_PERIOD"
+
+echo "ORIGINAL_AMENDMENT_PAIR_DISCOVERABILITY=PASS"
+echo "CASE_ISSUER_SELECTED=NO"
+echo "CASE_CIK_FROZEN=NO"
+echo "CASE_ACCESSION_PAIR_FROZEN=NO"
+
+section "7. ARTIFACT SIZE ESTIMATE"
+
+SUB_CURRENT_BYTES="$(wc -c < "$SUB_CURRENT_BODY" | tr -d ' ')"
+SUB_HISTORY_BYTES="$(wc -c < "$SUB_HISTORY_BODY" | tr -d ' ')"
+COMPANYFACTS_BYTES="$(wc -c < "$COMPANYFACTS_BODY" | tr -d ' ')"
+ORIGINAL_INDEX_BYTES="$(wc -c < "$ORIGINAL_INDEX" | tr -d ' ')"
+AMENDMENT_INDEX_BYTES="$(wc -c < "$AMENDMENT_INDEX" | tr -d ' ')"
+
+TOTAL_BYTES="$(
+    awk \
+        -v a="$SUB_CURRENT_BYTES" \
+        -v b="$SUB_HISTORY_BYTES" \
+        -v c="$COMPANYFACTS_BYTES" \
+        -v d="$ORIGINAL_INDEX_BYTES" \
+        -v e="$AMENDMENT_INDEX_BYTES" \
+        'BEGIN { printf "%.0f\n", a+b+c+d+e }'
+)"
+
+echo "PRE_A0_HTTP_ARTIFACT_COUNT=5"
+echo "PRE_A0_HTTP_TOTAL_BYTES=$TOTAL_BYTES"
+echo "ARTIFACT_SIZE_ESTIMATE=PASS"
+
+section "8. GOVERNANCE"
+
+echo "SEC_API_CONNECTIVITY=PASS"
+echo "USER_AGENT_POLICY=PASS"
+echo "SUBMISSIONS_ENDPOINT=PASS"
+echo "SUBMISSIONS_HISTORY_ENDPOINT=PASS"
+echo "COMPANYFACTS_ENDPOINT=PASS"
+echo "FILING_ARCHIVE_ACCESS=PASS"
+echo "ORIGINAL_AMENDMENT_PAIR_DISCOVERABILITY=PASS"
+echo "ARTIFACT_SIZE_ESTIMATE=PASS"
+
+echo "CASE_ISSUER_SELECTED=NO"
+echo "CASE_XBRL_CONCEPT_SELECTED=NO"
+echo "CASE_REPORTING_PERIOD_SELECTED=NO"
+echo "EVALUATION_CONTRACT_FROZEN=NO"
+
+echo "CLASSIFICATION_EXECUTED=NO"
+echo "YODA_WRITES=ZERO"
+echo "YODA_STORE_CREATED=NO"
+echo "YODA_CHANGE=NO"
+echo "KYBER_CHANGE=NO"
+
+echo "PRE_A0_RESPONSES_FROZEN_AS_CASE_EVIDENCE=NO"
+echo "RAW_PUBLIC_DATA_FROZEN=NO"
+echo "A0_GATE_CONSUMED=NO"
+
+section "9. PRE-A0 RESULT"
+
+echo "PUBLIC_DISCLOSURE_EVALUATION_LINEAGE_001_PRE_A0=PASS"
+echo "PRE_A0_REVISION=$REVISION"
+echo "NEXT_GATE=A0_DESIGN_AND_SELECTION_POLICY"
