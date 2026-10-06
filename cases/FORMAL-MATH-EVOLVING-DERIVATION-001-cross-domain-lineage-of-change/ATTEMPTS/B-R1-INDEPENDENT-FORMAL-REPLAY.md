@@ -1,0 +1,81 @@
+# B-R1 — Independent Formal Replay
+
+## Status
+
+```text
+STATUS=PRE-REGISTERED
+EXECUTED=NO
+EXECUTION_POLICY=ONE_EXECUTION
+```
+
+## Research question
+
+> Can the proof states recovered from the frozen Yoda store be re-evaluated by the same frozen Lean and OxiLean authorities with the same outcomes observed before Yoda preservation?
+
+## Frozen input authorities
+
+```text
+A1_R1_EVIDENCE_MANIFEST_SHA256=
+fad7416a7528d9d6ec885836668668d20c3cb942bc04b4f509949f92227c8bca
+
+A2_FINAL_ADJUDICATION_EVIDENCE_MANIFEST_SHA256=
+e603b0ac3fe1b477a2dd6b3db71c46c7a07e3a098843067fc68c23711775accb
+
+DATA_YODA_SHA256=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+```
+
+## Frozen recovered identities
+
+```text
+STATEMENT_SHA256=9b2c0b3edf422b58e736484995b471e182cdc32d43681b3b141d9fd1e55eac12
+PROOF_A_SHA256=ba1655c87279a033c0e4ea10c8cd7da813e898d27e7ef598835dca3513869836
+PROOF_B_SHA256=529cb654f5c98c434b4583fac29db061501127eebffcd18f570a7a012dfcf248
+TRANSFORMATION_SHA256=63ce4d91c19c0ad2cec9cfb4eb600f46e9b61fd99c87d4d71562f43caa8e29ed
+```
+
+## Frozen formal authorities
+
+```text
+LEAN_TOOLCHAIN=leanprover/lean4:v4.32.0-rc1
+LEAN_GITHASH=b4812ae53eea93439ad5dce5a5c26591c31cb697
+MATHLIB_COMMIT=360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56
+LEAN4EXPORT_COMMIT=3de59f10bc4b4a0f2de698597aeb1246caa0df0a
+LEAN4EXPORT_BIN_SHA256=e6580597a1482740114b5a1a05add574334a5eeaed5f4f5c9cd670e146859009
+OXILEAN_COMMIT=9077af778fe467cba61d9c8385fb2b7e6a8d385f
+OXILEAN_BIN_SHA256=e43ee52c42e8d0fdcee4997760f4bb162fd3e07598753c135cc0c69fc63dc9e2
+```
+
+## Execution contract
+
+The replay project receives the statement and proof bytes only through `yoda get` from the frozen A2 durable store.
+
+A1-R1 evidence is used only as frozen identity / prior-outcome authority.
+
+The one-execution lock is created immediately before the first Lean replay.
+
+```text
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+## PASS contract
+
+```text
+PROOF_A_IDENTITY_SURVIVED=PASS
+PROOF_B_IDENTITY_SURVIVED=PASS
+TRANSFORMATION_IDENTITY_SURVIVED=PASS
+DERIVED_FROM_RELATION_RECOVERY=PASS
+TRANSFORMED_BY_RELATION_RECOVERY=PASS
+LEAN_AUTHORITY_REPLAY=PASS
+OXILEAN_AUTHORITY_REPLAY=PASS
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Only PASS permits `CASE_FINAL_HOMOLOGATION`.
