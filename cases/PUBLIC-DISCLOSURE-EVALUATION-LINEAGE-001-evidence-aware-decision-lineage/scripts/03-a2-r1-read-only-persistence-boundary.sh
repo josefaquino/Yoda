@@ -63,6 +63,12 @@ ACTUAL_LOCK_SHA256="$(sha "$LOCK")"
 DATA_BEFORE_SHA256="$(sha "$STORE/data.yoda")"
 DATA_BEFORE_BYTES="$(wc -c < "$STORE/data.yoda" | awk '{print $1}')"
 
+find "$STORE" -type f -print |
+LC_ALL=C sort |
+xargs sha256sum > "$TMP/store-before.sha256"
+
+STORE_BEFORE_MANIFEST_SHA256="$(sha "$TMP/store-before.sha256")"
+
 echo "EXPECTED_YODA_SHA256=$EXPECTED_YODA_SHA256"
 echo "ACTUAL_YODA_SHA256=$ACTUAL_YODA_SHA256"
 
@@ -74,6 +80,7 @@ echo "ACTUAL_DATA_YODA_SHA256=$DATA_BEFORE_SHA256"
 
 echo "EXPECTED_DATA_YODA_BYTES=$EXPECTED_DATA_YODA_BYTES"
 echo "ACTUAL_DATA_YODA_BYTES=$DATA_BEFORE_BYTES"
+echo "STORE_BEFORE_MANIFEST_SHA256=$STORE_BEFORE_MANIFEST_SHA256"
 
 test "$ACTUAL_YODA_SHA256" = "$EXPECTED_YODA_SHA256" ||
     abort "YODA_IDENTITY_MISMATCH"
@@ -138,10 +145,8 @@ do
     SOURCE_SHA256="$(sha "$source")"
     SOURCE_BYTES="$(wc -c < "$source" | awk '{print $1}')"
 
-    set +e
     "$YODA" -d "$STORE" get "$key" > "$target" 2> "$err"
     GET_RC=$?
-    set -e
 
     if test "$GET_RC" -eq 0
     then
@@ -225,13 +230,22 @@ section "4. ZERO-WRITE PROOF"
 DATA_AFTER_SHA256="$(sha "$STORE/data.yoda")"
 DATA_AFTER_BYTES="$(wc -c < "$STORE/data.yoda" | awk '{print $1}')"
 
+find "$STORE" -type f -print |
+LC_ALL=C sort |
+xargs sha256sum > "$TMP/store-after.sha256"
+
+STORE_AFTER_MANIFEST_SHA256="$(sha "$TMP/store-after.sha256")"
+
 echo "DATA_BEFORE_SHA256=$DATA_BEFORE_SHA256"
 echo "DATA_AFTER_SHA256=$DATA_AFTER_SHA256"
 echo "DATA_BEFORE_BYTES=$DATA_BEFORE_BYTES"
 echo "DATA_AFTER_BYTES=$DATA_AFTER_BYTES"
+echo "STORE_BEFORE_MANIFEST_SHA256=$STORE_BEFORE_MANIFEST_SHA256"
+echo "STORE_AFTER_MANIFEST_SHA256=$STORE_AFTER_MANIFEST_SHA256"
 
 if test "$DATA_BEFORE_SHA256" = "$DATA_AFTER_SHA256" &&
-   test "$DATA_BEFORE_BYTES" = "$DATA_AFTER_BYTES"
+   test "$DATA_BEFORE_BYTES" = "$DATA_AFTER_BYTES" &&
+   test "$STORE_BEFORE_MANIFEST_SHA256" = "$STORE_AFTER_MANIFEST_SHA256"
 then
     echo "YODA_STORE_MUTATED_BY_DIAGNOSTIC=NO"
     echo "YODA_WRITES=ZERO"
