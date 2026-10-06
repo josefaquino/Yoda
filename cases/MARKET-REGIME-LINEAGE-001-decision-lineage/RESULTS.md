@@ -11,7 +11,7 @@
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
 | A1-R2 | PASS | C11 and POSIX awk produced byte-identical features/classifications for A/B/C |
 | A2-R1 | PASS | 18 objects + 31 relations preserved; byte-exact recovery, relation recovery and Decision Lineage semantics passed |
-| B-R1 | PRE-REGISTERING | Independent replay using only Yoda-recovered snapshots, authorities and original canonical result |
+| B-R1 | PRE-REGISTERED / NOT EXECUTED | Replay inputs restricted to Yoda get; recovered C11 + awk must reproduce original canonical bytes |
 
 Historical classifications were first observed during the frozen A1-R2 execution; no thresholds, dates, snapshots or label mappings were changed after A0.
 
