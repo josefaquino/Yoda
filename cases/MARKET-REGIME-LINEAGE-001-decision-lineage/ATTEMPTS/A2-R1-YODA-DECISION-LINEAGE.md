@@ -1,0 +1,168 @@
+# A2-R1 - Yoda Decision Lineage
+
+## Status
+
+```text
+STATUS=PRE-REGISTERED
+EXECUTED=NO
+EXECUTION_POLICY=ONE_EXECUTION
+```
+
+## Research gate
+
+A2-R1 asks:
+
+> Can Yoda persist and byte-exactly recover the frozen A/B/C decision states, their source snapshots, classification contract, independent authority evidence and successive transition relations without changing Yoda or Kyber?
+
+A2 does not rerun either classifier.
+
+```text
+CLASSIFICATION_EXECUTED=NO
+```
+
+## Frozen input authorities
+
+```text
+A0_EVIDENCE_MANIFEST_SHA256=
+0440ffea6e2377fa6843f972f35d127f44727f114c2d91ae94039ff1ca4a78c8
+
+A1_R2_EVIDENCE_MANIFEST_SHA256=
+dc68f1634085ada042ab384e684e8ddbd812e7c29ab83c21d066837502c25a0a
+
+CANONICAL_RESULTS_V2_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+```
+
+Observed states are frozen:
+
+```text
+A=STRESSED
+B=FRAGILE
+C=FRAGILE
+```
+
+## Frozen Decision Lineage objects
+
+```text
+DECISION_A_SHA256=
+a5a20d8dd1f51da8fea6ddfde282539317ae74098c22426be4b9150e7997a3e7
+
+DECISION_B_SHA256=
+5c3a3e6f506a05a2314f168a5658792ac743f1e0af37a163955fd3bb0276f60a
+
+DECISION_C_SHA256=
+8b82f8a0f7f5679b0929a0fa523910c28011b81d0e66e9558a881d369113f439
+
+TRANSITION_A_TO_B_SHA256=
+5c4a8d29f7dd5b7fa651b12150faf591383383c550d2d5cfba33df3064bbab24
+
+TRANSITION_B_TO_C_SHA256=
+4d50c515b4c5e9422717a5110f9dc24c9759fb1cf6797bfb9b9b31f3c26da777
+
+OBJECT_COMMIT=
+42f179308dcc6d4a68c4d2a700ed034633f994d1
+```
+
+Transition semantics are frozen before Yoda persistence:
+
+```text
+A -> B
+STRESSED -> FRAGILE
+CLASSIFICATION_CHANGED=YES
+
+B -> C
+FRAGILE -> FRAGILE
+CLASSIFICATION_CHANGED=NO
+UNDERLYING_EVIDENCE_CHANGED=YES
+```
+
+## Yoda authority
+
+```text
+YODA_SHA256=
+1a38316b4f370225ae52431074365eb921976e79db2f4688fb8154ce9218d9eb
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+## A2 object graph
+
+```text
+OBJECT_COUNT=18
+LINK_COUNT=31
+```
+
+The persisted objects cover:
+
+```text
+3 source snapshots
+3 decision states
+2 transition records
+1 classification contract
+2 independent authority sources
+2 authority result sets
+1 canonical result set
+2 A0 source/evidence authorities
+2 A1-R2 source/evidence authorities
+```
+
+Key relations include:
+
+```text
+decision --derived-from--> snapshot
+decision --classified-by--> contract
+decision --has-evidence--> canonical result
+canonical result --supported-by--> authority evaluations
+authority evaluation --evaluated-by--> authority source
+B --supersedes--> A
+C --supersedes--> B
+decision --transition-evidence--> transition record
+transition --from-state/to-state--> decision states
+```
+
+## Recovery contract
+
+PASS requires:
+
+```text
+YODA_VERIFY=PASS
+BYTE_EXACT_RECOVERY=PASS
+
+DERIVED_FROM_RELATION_RECOVERY=PASS
+CLASSIFIED_BY_RELATION_RECOVERY=PASS
+SUPERSEDES_RELATION_RECOVERY=PASS
+TRANSITION_EVIDENCE_RELATION_RECOVERY=PASS
+AUTHORITY_RELATION_RECOVERY=PASS
+DECISION_LINEAGE_RELATION_RECOVERY=PASS
+
+STATE_A_DECISION_RECOVERY=PASS
+STATE_B_DECISION_RECOVERY=PASS
+STATE_C_DECISION_RECOVERY=PASS
+
+A_TO_B_CLASSIFICATION_CHANGE_RECOVERY=PASS
+B_TO_C_STABLE_CLASSIFICATION_RECOVERY=PASS
+B_TO_C_CHANGED_EVIDENCE_RECOVERY=PASS
+
+DECISION_LINEAGE_SEMANTICS=PASS
+FINAL_YODA_VERIFY=PASS
+A2_EVIDENCE_INTEGRITY=PASS
+
+CLASSIFICATION_EXECUTED=NO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+A2 deliberately does not use `yoda context` as a PASS gate. Relation recovery uses `yoda log`.
+
+## Frozen harness identity
+
+```text
+A2_R1_SCRIPT_SHA256=
+191adf5544895bb11973836f73434c00944c5e0cb075b5c1f321acb69c397fe5
+
+A2_R1_SCRIPT_COMMIT=
+5f3a2e6f071cdc98fea4021121bc995cdfa16139
+```
+
+Only PASS authorizes Stage B independent classification replay.
