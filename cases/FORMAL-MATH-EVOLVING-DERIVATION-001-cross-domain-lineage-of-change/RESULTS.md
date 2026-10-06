@@ -9,7 +9,8 @@
 | A1-R1 | PASS | Both pre-registered proof states verified by Lean and OxiLean on the single execution |
 | A2-R1 one-shot | NOT_EVALUATED | Harness query-tokenization mismatch after persistence/recovery gates passed |
 | A2 research question | PASS_BY_READ_ONLY_ADJUDICATION | Frozen Yoda state preserved bytes, relations, bounded context and durable identity without rerun |
-| B-R1 | PRE-REGISTERED / NOT EXECUTED | Independent Lean + OxiLean replay from Yoda-recovered A1-R1 proof states |
+| B-R1 | PASS | Frozen Lean + OxiLean replay reproduced from Yoda-recovered A1-R1 proof states |
+| Final | VALIDATED | CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED |
 
 ---
 
@@ -439,3 +440,94 @@ KYBER_CHANGE=NO
 ```
 
 This does not yet validate the complete CASE. Stage B independent formal replay remains pending.
+
+
+---
+
+## Stage B-R1
+
+```text
+STATUS=PASS
+EXECUTION_COUNT=1
+RUN_RC=0
+```
+
+The replay consumed only proof-state artifacts recovered from the frozen Yoda store and reran the same frozen formal authorities.
+
+Observed:
+
+```text
+STATEMENT_IDENTITY_SURVIVED=PASS
+PROOF_A_IDENTITY_SURVIVED=PASS
+PROOF_B_IDENTITY_SURVIVED=PASS
+TRANSFORMATION_IDENTITY_SURVIVED=PASS
+
+DERIVED_FROM_RELATION_RECOVERY=PASS
+TRANSFORMED_BY_RELATION_RECOVERY=PASS
+
+LEAN_REPLAY_A=PASS
+LEAN_REPLAY_B=PASS
+LEAN_AUTHORITY_REPLAY=PASS
+
+LEAN4EXPORT_A_IDENTITY_REPRODUCED=PASS
+LEAN4EXPORT_B_IDENTITY_REPRODUCED=PASS
+
+OXILEAN_REPLAY_A=VERIFIED
+OXILEAN_REPLAY_B=VERIFIED
+OXILEAN_AUTHORITY_REPLAY=PASS
+
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Frozen B-R1 identities:
+
+```text
+B_R1_SCRIPT_SHA256=
+c57417a93bc409a660758833d5e7db35c34911a59ec2958d026b26d3a165281e
+
+B_R1_CONSOLE_SHA256=
+f6a52bc08ea9704cb1c8c5a572fd8af85ab000889f1e4d164088b1f65b33cc3f
+
+B_R1_EXECUTION_LOCK_SHA256=
+741ccae2c834234dba01a0c5750c90c494bc8302765b3d147d79db3904413a32
+
+STAGE_B_EVIDENCE_MANIFEST_SHA256=
+040cfbb629e6262ed8b75e95859e7ca99362e85aed3df8f79d24a378f2ffd6d5
+
+REPLAY_CONTRACT_SHA256=
+01a1df4f5d7967076a933067f5d7a4f46b0d2e8c75dc4f3082603f20773cbbbd
+
+DATA_YODA_SHA256=
+5e9c916794b7c94ec01bf822ae31705b08140449bf085fbfff327724224a06ba
+```
+
+---
+
+## Final homologation
+
+```text
+FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
+CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
+
+BIOLOGICAL_ARTIFACT_LINEAGE_OF_CHANGE=PASS
+FORMAL_PROOF_LINEAGE_OF_CHANGE=PASS
+
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Claim boundary:
+
+The CASE demonstrates the same Lineage of Change derivation model across one controlled biological-artifact transition and one formal-proof transition under independent external authorities, without changing Yoda or Kyber.
+
+It does **not** establish universal cross-domain generality.
