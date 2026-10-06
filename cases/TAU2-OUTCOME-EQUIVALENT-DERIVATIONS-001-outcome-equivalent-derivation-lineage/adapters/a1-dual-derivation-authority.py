@@ -401,7 +401,9 @@ def execute(a0, out_dir):
     )
 
     final_hash_equal = (
-        result_a["live_agent_db_hash"]
+        result_a["live_agent_db_hash"] is not None
+        and result_b["live_agent_db_hash"] is not None
+        and result_a["live_agent_db_hash"]
         == result_b["live_agent_db_hash"]
     )
 
@@ -423,6 +425,12 @@ def execute(a0, out_dir):
         ),
         "trajectory_B_db_reward_1": (
             result_b["db_reward"] == 1.0
+        ),
+        "trajectory_A_db_match": (
+            result_a["db_match"] is True
+        ),
+        "trajectory_B_db_match": (
+            result_b["db_match"] is True
         ),
         "trajectory_A_communicate_reward_1": (
             result_a["communicate_reward"] == 1.0
