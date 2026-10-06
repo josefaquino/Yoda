@@ -52,6 +52,15 @@ not_evaluated()
     echo "TAU2_OUTCOME_EQUIVALENT_DERIVATIONS_001_PRE_A0=NOT_EVALUATED"
     echo "PRE_A0_REVISION=$REVISION"
     echo "FAILURE_CLASS=$1"
+
+    if test -f "$LOCK"
+    then
+        echo "PRE_A0_R1_SELECTION_LOCK_CONSUMED=YES"
+        echo "PRE_A0_R1_RERUN=NO"
+    else
+        echo "PRE_A0_R1_SELECTION_LOCK_CONSUMED=NO"
+    fi
+
     echo "TRAJECTORY_EXECUTED=NO"
     echo "MODEL_ENDPOINT_CALLED=NO"
     echo "GOLDEN_STATE_MATERIALIZED=NO"
@@ -84,6 +93,12 @@ require_cmd()
         not_evaluated "LOCAL_TOOLCHAIN_MISSING_$2"
 
     echo "$2=PASS"
+}
+
+stage_copy()
+{
+    cp "$1" "$2" ||
+        not_evaluated "PRE_A0_STAGE_MATERIALIZATION_FAILURE"
 }
 
 blob_check()
@@ -565,28 +580,28 @@ echo "ALTERNATIVE_TRANSFORMATION_PLAUSIBILITY=PASS"
 
 section "8. FREEZE SELECTION AUTHORITY"
 
-cp "$REPO/data/tau2/domains/airline/tasks.json" \
+stage_copy "$REPO/data/tau2/domains/airline/tasks.json" \
     "$AUTHORITY/tasks.json"
 
-cp "$REPO/data/tau2/domains/airline/split_tasks.json" \
+stage_copy "$REPO/data/tau2/domains/airline/split_tasks.json" \
     "$AUTHORITY/split_tasks.json"
 
-cp "$REPO/data/tau2/domains/airline/policy.md" \
+stage_copy "$REPO/data/tau2/domains/airline/policy.md" \
     "$AUTHORITY/policy.md"
 
-cp "$REPO/src/tau2/domains/airline/tools.py" \
+stage_copy "$REPO/src/tau2/domains/airline/tools.py" \
     "$AUTHORITY/tools.py"
 
-cp "$REPO/docs/evaluation.md" \
+stage_copy "$REPO/docs/evaluation.md" \
     "$AUTHORITY/evaluation.md"
 
-cp "$PREP/tool-types.tsv" \
+stage_copy "$PREP/tool-types.tsv" \
     "$AUTHORITY/tool-types.tsv"
 
-cp "$PREP/inventory.jq" \
+stage_copy "$PREP/inventory.jq" \
     "$AUTHORITY/inventory.jq"
 
-cp "$PREP/swap.jq" \
+stage_copy "$PREP/swap.jq" \
     "$AUTHORITY/swap.jq"
 
 cat > "$EVIDENCE/summary.tsv" <<EOF
@@ -619,8 +634,8 @@ YODA_CHANGE	NO
 KYBER_CHANGE	NO
 EOF
 
-cp "$0" "$EVIDENCE/pre-a0-r1-selection-script.sh"
-cp "$LOCK" "$EVIDENCE/selection-started.txt"
+stage_copy "$0" "$EVIDENCE/pre-a0-r1-selection-script.sh"
+stage_copy "$LOCK" "$EVIDENCE/selection-started.txt"
 
 (
     cd "$STAGE"
