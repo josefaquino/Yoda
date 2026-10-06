@@ -106,3 +106,21 @@ LOCK_BEFORE_FIRST_CLASSIFICATION=YES
 ```
 
 A1-R1 is the first authorized classification of the frozen A0 snapshots.
+
+
+## A1-R1 safe launcher
+
+```text
+SCRIPT=scripts/run-a1-r1-safe.sh
+
+A1_R1_SAFE_LAUNCHER_SHA256=
+5630b40d56018051328306e788228ca7c357b5744624f42b02efa1f78f29c03b
+
+A1_R1_CANONICAL_SCRIPT_UTF8_SHA256=
+0c891fb1565f42e01943c13def49473b9e515a66653b0f88a479ca065b89a440
+
+CANONICAL_SCRIPT_COMMIT=
+18acde5284ead728d0ed528730cbf5aecdead0a9
+```
+
+The launcher fetches A1-R1 by immutable commit and executes it in a child shell.
