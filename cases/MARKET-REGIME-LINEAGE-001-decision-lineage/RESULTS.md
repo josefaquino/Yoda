@@ -9,7 +9,8 @@
 | PRE-A0-R2 | PASS | FRED metadata/observations and point-in-time parameters reachable; zero Yoda writes |
 | A0-R1 | PASS | Three point-in-time snapshots frozen; evidence manifest valid; classification not executed |
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
-| A2 | BLOCKED | Requires A1 PASS |
+| A1-R2 | PRE-REGISTERED / NOT EXECUTED | Representation-only revision: fixed-point 10^5, same snapshots/thresholds/labels |
+| A2 | BLOCKED | Requires A1-R2 PASS |
 | B | BLOCKED | Requires A2 PASS |
 
 No market classifications have been observed or recorded in this CASE at preregistration time.
