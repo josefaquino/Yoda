@@ -18,6 +18,9 @@ Script:
 
 ```text
 scripts/00-pre-a0-connectivity.sh
+
+PRE_A0_SCRIPT_SHA256=
+0f056ad9e55c8af83d8e65e39c42c94a944259b01b8d861f9265216f7e7bbb49
 ```
 
 Purpose:
