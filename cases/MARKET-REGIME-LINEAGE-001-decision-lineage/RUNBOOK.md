@@ -6,7 +6,7 @@
 DESIGN_REVIEW=COMPLETE
 PREREGISTRATION=FROZEN
 PRE_A0=PASS
-A0_R1=PRE_REGISTERING
+A0_R1=PRE_REGISTERED
 A1=BLOCKED
 A2=BLOCKED
 B=BLOCKED
@@ -46,3 +46,18 @@ A1 will build two independent classifier implementations: C11 and POSIX awk/shel
 A2 will create the Yoda Decision Lineage.
 
 B will recover only from Yoda and replay both authorities.
+
+
+## A0-R1
+
+```text
+SCRIPT=scripts/01-a0-public-data-temporal-authority.sh
+
+A0_R1_SCRIPT_SHA256=
+1b52739161d3348bd875d78ee460d8f6847def18312458e948f543eb9d043617
+
+EXECUTION_POLICY=ONE_EXECUTION
+LOCK_BEFORE_FIRST_HISTORICAL_FETCH=YES
+```
+
+A0-R1 freezes public point-in-time input authority only. It does not classify any market state and does not write to Yoda.
