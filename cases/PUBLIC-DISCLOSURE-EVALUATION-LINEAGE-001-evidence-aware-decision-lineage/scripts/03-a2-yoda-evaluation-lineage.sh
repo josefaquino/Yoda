@@ -168,14 +168,23 @@ verify_identity()
         not_evaluated "$failure"
 }
 
+prep_copy()
+{
+    cp "$1" "$2" ||
+        not_evaluated "A2_INPUT_MATERIALIZATION_FAILURE"
+}
+
 test ! -e "$EXECUTION_LOCK" ||
     not_evaluated "A2_ONE_EXECUTION_POLICY_ALREADY_CONSUMED"
 
 test ! -e "$STAGE" ||
     not_evaluated "A2_STAGE_ALREADY_EXISTS"
 
-rm -rf "$PREP"
-mkdir -p "$PREP/objects"
+rm -rf "$PREP" ||
+    not_evaluated "A2_PREFLIGHT_WORKSPACE_FAILURE"
+
+mkdir -p "$PREP/objects" ||
+    not_evaluated "A2_PREFLIGHT_WORKSPACE_FAILURE"
 
 section "0. TOOLCHAIN + FROZEN YODA"
 
@@ -265,29 +274,29 @@ echo "OBJECT_COMMIT=$OBJECT_COMMIT"
 
 section "3. MATERIALIZE COMPLETE A2 INPUT SET"
 
-cp "$A0/raw/original-submission.txt" "$PREP/objects/raw-filing-A.txt"
-cp "$A0/raw/amendment-submission.txt" "$PREP/objects/raw-filing-B.txt"
-cp "$A0/raw/companyfacts.json" "$PREP/objects/companyfacts.json"
+prep_copy "$A0/raw/original-submission.txt" "$PREP/objects/raw-filing-A.txt"
+prep_copy "$A0/raw/amendment-submission.txt" "$PREP/objects/raw-filing-B.txt"
+prep_copy "$A0/raw/companyfacts.json" "$PREP/objects/companyfacts.json"
 
-cp "$A0/canonical/canonical-facts.tsv" "$PREP/objects/canonical-facts.tsv"
-cp "$A0/selection/selection.tsv" "$PREP/objects/selection.tsv"
-cp "$A0/evidence/candidate-scan.tsv" "$PREP/objects/candidate-scan.tsv"
+prep_copy "$A0/canonical/canonical-facts.tsv" "$PREP/objects/canonical-facts.tsv"
+prep_copy "$A0/selection/selection.tsv" "$PREP/objects/selection.tsv"
+prep_copy "$A0/evidence/candidate-scan.tsv" "$PREP/objects/candidate-scan.tsv"
 
-cp "$A1/contracts/evaluation-contract-v1.txt" "$PREP/objects/evaluation-contract-v1.txt"
-cp "$A1/authorities/authority-1-c11-v1.c" "$PREP/objects/authority-1-c11-v1.c"
-cp "$A1/authorities/authority-2-posix-v1.awk" "$PREP/objects/authority-2-posix-v1.awk"
-cp "$A1/results/authority-1.tsv" "$PREP/objects/authority-1-result.tsv"
-cp "$A1/results/authority-2.tsv" "$PREP/objects/authority-2-result.tsv"
-cp "$A1/results/canonical-evaluation.tsv" "$PREP/objects/canonical-evaluation.tsv"
+prep_copy "$A1/contracts/evaluation-contract-v1.txt" "$PREP/objects/evaluation-contract-v1.txt"
+prep_copy "$A1/authorities/authority-1-c11-v1.c" "$PREP/objects/authority-1-c11-v1.c"
+prep_copy "$A1/authorities/authority-2-posix-v1.awk" "$PREP/objects/authority-2-posix-v1.awk"
+prep_copy "$A1/results/authority-1.tsv" "$PREP/objects/authority-1-result.tsv"
+prep_copy "$A1/results/authority-2.tsv" "$PREP/objects/authority-2-result.tsv"
+prep_copy "$A1/results/canonical-evaluation.tsv" "$PREP/objects/canonical-evaluation.tsv"
 
-cp "$A0/contracts/A0-DESIGN-AND-SELECTION-POLICY.md" "$PREP/objects/a0-selection-policy.md"
-cp "$A0/parsers/sec-submissions-v1.c" "$PREP/objects/sec-submissions-v1.c"
-cp "$A0/parsers/sec-companyfacts-v1.c" "$PREP/objects/sec-companyfacts-v1.c"
+prep_copy "$A0/contracts/A0-DESIGN-AND-SELECTION-POLICY.md" "$PREP/objects/a0-selection-policy.md"
+prep_copy "$A0/parsers/sec-submissions-v1.c" "$PREP/objects/sec-submissions-v1.c"
+prep_copy "$A0/parsers/sec-companyfacts-v1.c" "$PREP/objects/sec-companyfacts-v1.c"
 
-cp "$A0/evidence/summary.tsv" "$PREP/objects/a0-c1-summary.tsv"
-cp "$A0/evidence/SHA256SUMS" "$PREP/objects/a0-c1-manifest.sha256"
-cp "$A1/evidence/summary.tsv" "$PREP/objects/a1-r1-summary.tsv"
-cp "$A1/evidence/SHA256SUMS" "$PREP/objects/a1-r1-manifest.sha256"
+prep_copy "$A0/evidence/summary.tsv" "$PREP/objects/a0-c1-summary.tsv"
+prep_copy "$A0/evidence/SHA256SUMS" "$PREP/objects/a0-c1-manifest.sha256"
+prep_copy "$A1/evidence/summary.tsv" "$PREP/objects/a1-r1-summary.tsv"
+prep_copy "$A1/evidence/SHA256SUMS" "$PREP/objects/a1-r1-manifest.sha256"
 
 OBJECT_COUNT="$(find "$PREP/objects" -type f | wc -l | awk '{print $1}')"
 
