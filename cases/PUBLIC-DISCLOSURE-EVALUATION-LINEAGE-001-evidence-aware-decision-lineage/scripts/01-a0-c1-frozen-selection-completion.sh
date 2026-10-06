@@ -147,8 +147,8 @@ section "0. GOVERNANCE + TOOLCHAIN"
 
 for pair in     "curl:CURL"     "awk:AWK"     "grep:GREP"     "sed:SED"     "sha256sum:SHA256SUM"     "wc:WC"     "tail:TAIL"     "find:FIND"     "sort:SORT"     "xargs:XARGS"     "cp:CP"     "mkdir:MKDIR"     "sleep:SLEEP"
 do
-    cmd="$(printf '%s\n' "$pair" | cut -d: -f1)"
-    label="$(printf '%s\n' "$pair" | cut -d: -f2)"
+    cmd="${pair%%:*}"
+    label="${pair#*:}"
     require_cmd "$cmd" "$label"
 done
 
