@@ -391,6 +391,8 @@ The project is early. The claims are intentionally narrow. The ambition is not.
 
 ## Further reading
 
+- [HISTORY.md](HISTORY.md)
+- [REPOSITORY-POLICY.md](REPOSITORY-POLICY.md)
 - [PROJECT-THESIS.md](PROJECT-THESIS.md)
 - [ONE-PAGER.md](ONE-PAGER.md)
 - [MISSION.md](MISSION.md)
