@@ -657,31 +657,31 @@ section "13. RECOVER DUAL-DERIVATION SEMANTICS"
     > "$EVIDENCE/log-outcome-equivalence.txt" ||
     fail "YODA_SEMANTIC_RECOVERY_FAILURE"
 
-grep -F "derivation-of$TAB benchmark/task/7" \
+grep -F "$(printf 'derivation-of\tbenchmark/task/7')" \
     "$EVIDENCE/log-derivation-A.txt" >/dev/null ||
     fail "DERIVATION_A_TASK_RELATION_MISSING"
 
-grep -F "derivation-of$TAB benchmark/task/7" \
+grep -F "$(printf 'derivation-of\tbenchmark/task/7')" \
     "$EVIDENCE/log-derivation-B.txt" >/dev/null ||
     fail "DERIVATION_B_TASK_RELATION_MISSING"
 
-grep -F "alternative-to$TAB derivation/A" \
+grep -F "$(printf 'alternative-to\tderivation/A')" \
     "$EVIDENCE/log-derivation-B.txt" >/dev/null ||
     fail "ALTERNATIVE_RELATION_MISSING"
 
-grep -F "produced-by$TAB derivation/A" \
+grep -F "$(printf 'produced-by\tderivation/A')" \
     "$EVIDENCE/log-outcome-A.txt" >/dev/null ||
     fail "OUTCOME_A_DERIVATION_RELATION_MISSING"
 
-grep -F "produced-by$TAB derivation/B" \
+grep -F "$(printf 'produced-by\tderivation/B')" \
     "$EVIDENCE/log-outcome-B.txt" >/dev/null ||
     fail "OUTCOME_B_DERIVATION_RELATION_MISSING"
 
-grep -F "compares$TAB outcome/A" \
+grep -F "$(printf 'compares\toutcome/A')" \
     "$EVIDENCE/log-outcome-equivalence.txt" >/dev/null ||
     fail "OUTCOME_EQUIVALENCE_A_RELATION_MISSING"
 
-grep -F "compares$TAB outcome/B" \
+grep -F "$(printf 'compares\toutcome/B')" \
     "$EVIDENCE/log-outcome-equivalence.txt" >/dev/null ||
     fail "OUTCOME_EQUIVALENCE_B_RELATION_MISSING"
 
