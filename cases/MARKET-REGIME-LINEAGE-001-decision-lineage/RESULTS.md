@@ -10,7 +10,7 @@
 | A0-R1 | PASS | Three point-in-time snapshots frozen; evidence manifest valid; classification not executed |
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
 | A1-R2 | PASS | C11 and POSIX awk produced byte-identical features/classifications for A/B/C |
-| A2-R1 | PRE-REGISTERING | Persist and recover immutable Decision Lineage in Yoda |
+| A2-R1 | PRE-REGISTERED / NOT EXECUTED | 18 frozen objects + 31 relations; byte-exact recovery and log-based relation recovery |
 | B | BLOCKED | Requires A2 PASS |
 
 Historical classifications were first observed during the frozen A1-R2 execution; no thresholds, dates, snapshots or label mappings were changed after A0.
