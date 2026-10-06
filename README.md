@@ -1,5 +1,17 @@
 # Yoda
 
+> **Canonical active repository.** Historical predecessors are preserved for provenance and are no longer the active project surface. See [HISTORY.md](HISTORY.md).
+
+## Canonical repository
+
+```text
+ACTIVE_PROJECT=Yoda
+HISTORICAL_PREDECESSORS=PRESERVED
+```
+
+Start here for the current architecture, research program, evidence, cases and product surface.
+
+
 ## The verifiable derivation layer
 
 **Information behaves less like inventory and more like lineage.**
