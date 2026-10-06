@@ -2,8 +2,8 @@
 
 **Status:** DEMONSTRATED  
 **Property class:** Architectural research property  
-**Evidence authority:** `SYNTHID-BIO-EVOLVING-PROVENANCE-001`  
-**Scope:** One controlled biological-artifact state transition with independent state-specific authority replay
+**Evidence authorities:** `SYNTHID-BIO-EVOLVING-PROVENANCE-001`, `FORMAL-MATH-EVOLVING-DERIVATION-001`  
+**Scope:** Demonstrated in one controlled biological-artifact transition and one formal-proof transition, each with independent authority replay
 
 ---
 
@@ -20,6 +20,8 @@ The general question is:
 > **Can a legitimate change create a new identity without destroying the verifiable lineage of what came before?**
 
 Within the scope of `SYNTHID-BIO-EVOLVING-PROVENANCE-001`, the observed answer was yes.
+
+A second CASE, `FORMAL-MATH-EVOLVING-DERIVATION-001`, later reproduced the same architectural property in formal mathematics without changing Yoda or Kyber.
 
 ---
 
@@ -283,6 +285,78 @@ See:
 
 ---
 
+## 6.1 Cross-domain demonstrated instance — formal mathematics
+
+A second evidence authority tested the same property in a qualitatively different domain:
+
+```text
+CASE=FORMAL-MATH-EVOLVING-DERIVATION-001
+STATUS=VALIDATED
+CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
+```
+
+The formal transition preserved two distinct proof artifacts for the same proposition:
+
+```text
+Nat.gcd 180 168 = 12
+
+Proof A
+kernel computation / rfl
+
+        |
+        | semantics-preserving proof refactor
+        v
+
+Proof B
+explicit Euclidean GCD derivation
+```
+
+Before Yoda preservation:
+
+```text
+Lean A=PASS
+Lean B=PASS
+
+OxiLean A=VERIFIED
+OxiLean B=VERIFIED
+```
+
+After recovery from the frozen Yoda store:
+
+```text
+LEAN_AUTHORITY_REPLAY=PASS
+
+LEAN4EXPORT_A_IDENTITY_REPRODUCED=PASS
+LEAN4EXPORT_B_IDENTITY_REPRODUCED=PASS
+
+OXILEAN_AUTHORITY_REPLAY=PASS
+
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Final Stage B evidence authority:
+
+```text
+STAGE_B_EVIDENCE_MANIFEST_SHA256=
+040cfbb629e6262ed8b75e95859e7ca99362e85aed3df8f79d24a378f2ffd6d5
+```
+
+The experiment also preserved two non-evaluable measurements rather than rewriting them:
+
+- A1.0 — secondary-authority capability boundary;
+- A2-R1 one-shot — harness query-tokenization mismatch.
+
+The formal-mathematics CASE therefore strengthens the claim from a single-domain observation to a cross-domain demonstrated property within the two tested scopes.
+
+It does not establish universal generality.
+
+---
 ## 7. Invariants observed in the CASE
 
 ### Identity is not history
@@ -367,7 +441,7 @@ These are related observations of the same underlying derivation architecture, n
 
 The demonstrated property supports this narrow statement:
 
-> **For one controlled biological-artifact transformation, Yoda preserved two distinct artifact states, the verifiable derivation between them, and the associated transformation and measurement evidence such that an independent authority reproduced each state's original measurement after byte-exact recovery.**
+> **Across one controlled biological-artifact transformation and one formal-proof transformation, Yoda preserved distinct states, their derivation and transformation evidence, and enabled the relevant independent authorities to reproduce the original state-specific evaluations after recovery, without Yoda or Kyber changes.**
 
 A concise interpretation is:
 
@@ -427,6 +501,7 @@ INDEPENDENT_AUTHORITY_REPLAY=PASS
 YODA_CHANGE=NO
 KYBER_CHANGE=NO
 
-GENERALITY=NOT_ESTABLISHED
+CROSS_DOMAIN_SUPPORT=BIOLOGY_PLUS_FORMAL_MATHEMATICS
+UNIVERSAL_GENERALITY=NOT_ESTABLISHED
 PRODUCTION_SCALE=NOT_ESTABLISHED
 ```
