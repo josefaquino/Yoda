@@ -365,6 +365,12 @@ def audit_only(a0):
     )
 
 
+def append_progress(path, event):
+    with open(path, "a", encoding="ascii", newline="\n") as fp:
+        fp.write(event)
+        fp.write("\n")
+
+
 def execute(a0, out_dir):
     reference, alternative, final_text = assert_frozen_contract(a0)
 
@@ -383,7 +389,10 @@ def execute(a0, out_dir):
         raise ValueError("runtime task 7 differs from frozen A0 task")
 
     out_dir.mkdir(parents=True, exist_ok=False)
+    progress_path = out_dir / "progress.tsv"
+    progress_path.write_text("event\n", encoding="ascii")
 
+    append_progress(progress_path, "TRAJECTORY_A_STARTED")
     result_a = execute_one(
         "A",
         runtime_task,
@@ -392,6 +401,8 @@ def execute(a0, out_dir):
         out_dir,
     )
 
+    append_progress(progress_path, "TRAJECTORY_A_JUDGED")
+    append_progress(progress_path, "TRAJECTORY_B_STARTED")
     result_b = execute_one(
         "B",
         runtime_task,
@@ -399,6 +410,8 @@ def execute(a0, out_dir):
         final_text,
         out_dir,
     )
+
+    append_progress(progress_path, "TRAJECTORY_B_JUDGED")
 
     final_hash_equal = (
         result_a["live_agent_db_hash"] is not None
@@ -460,6 +473,7 @@ def execute(a0, out_dir):
     }
 
     write_json(out_dir / "overall-result.json", overall)
+    append_progress(progress_path, "OVERALL_RESULT_FROZEN")
 
     print(
         json.dumps(
