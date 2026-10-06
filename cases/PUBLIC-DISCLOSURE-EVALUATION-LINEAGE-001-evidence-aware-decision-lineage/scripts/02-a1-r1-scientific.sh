@@ -259,17 +259,30 @@ EXECUTION_POLICY=ONE_EXECUTION
 LOCK_CREATED_BEFORE_FIRST_SCIENTIFIC_AUTHORITY_EXECUTION=YES
 EOF
 
+test -f "$LOCK" ||
+    not_evaluated "A1_LOCK_CREATION_FAILURE"
+
 echo "EXECUTION_POLICY=ONE_EXECUTION"
 echo "A1_EXECUTION_LOCK_SHA256=$(sha "$LOCK")"
 echo "A1_EXECUTION_GATE=PASS"
 
-mkdir -p "$INPUT" "$AUTH" "$RESULTS" "$EVIDENCE" "$CONTRACTS"
+mkdir -p "$INPUT" "$AUTH" "$RESULTS" "$EVIDENCE" "$CONTRACTS" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
 
-cp "$A0_CANONICAL" "$INPUT/canonical-facts.tsv"
-cp "$A0_CONTRACT" "$CONTRACTS/evaluation-contract-v1.txt"
-cp "$C11_SRC" "$AUTH/authority-1-c11-v1.c"
-cp "$C11_BIN" "$AUTH/authority-1-c11-v1"
-cp "$AWK_SRC" "$AUTH/authority-2-posix-v1.awk"
+cp "$A0_CANONICAL" "$INPUT/canonical-facts.tsv" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
+
+cp "$A0_CONTRACT" "$CONTRACTS/evaluation-contract-v1.txt" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
+
+cp "$C11_SRC" "$AUTH/authority-1-c11-v1.c" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
+
+cp "$C11_BIN" "$AUTH/authority-1-c11-v1" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
+
+cp "$AWK_SRC" "$AUTH/authority-2-posix-v1.awk" ||
+    scientific_fail "A1_STAGE_MATERIALIZATION_FAILURE"
 
 section "6. SCIENTIFIC AUTHORITY 1 - C11"
 
@@ -309,7 +322,8 @@ EXPECTED_ROW="$(printf 'PUBLIC-DISCLOSURE-EVALUATION-V1\tAssets\tUSD\t-\t2024-06
 grep -Fx "$EXPECTED_ROW" "$RESULTS/authority-1.tsv" >/dev/null ||
     scientific_fail "CANONICAL_EVALUATION_CONTENT_MISMATCH"
 
-cp "$RESULTS/authority-1.tsv" "$RESULTS/canonical-evaluation.tsv"
+cp "$RESULTS/authority-1.tsv" "$RESULTS/canonical-evaluation.tsv" ||
+    scientific_fail "CANONICAL_EVALUATION_MATERIALIZATION_FAILURE"
 
 echo "STATE_A_B_AUTHORITY_EQUIVALENCE=PASS"
 echo "AUTHORITY_EQUIVALENCE=PASS"
@@ -320,8 +334,11 @@ echo "CANONICAL_EVALUATION_SHA256=$(sha "$RESULTS/canonical-evaluation.tsv")"
 
 section "9. FREEZE A1 EVIDENCE"
 
-cp "$LOCK" "$EVIDENCE/execution-started.txt"
-cp "$0" "$EVIDENCE/stage-a1-r1-script.sh"
+cp "$LOCK" "$EVIDENCE/execution-started.txt" ||
+    scientific_fail "A1_EVIDENCE_MATERIALIZATION_FAILURE"
+
+cp "$0" "$EVIDENCE/stage-a1-r1-script.sh" ||
+    scientific_fail "A1_EVIDENCE_MATERIALIZATION_FAILURE"
 
 cat > "$EVIDENCE/summary.tsv" <<EOF
 CASE	$CASE
@@ -347,6 +364,9 @@ YODA_WRITES	ZERO
 YODA_CHANGE	NO
 KYBER_CHANGE	NO
 EOF
+
+test -f "$EVIDENCE/summary.tsv" ||
+    scientific_fail "A1_EVIDENCE_MATERIALIZATION_FAILURE"
 
 (
     cd "$STAGE"
@@ -386,4 +406,4 @@ echo "KYBER_CHANGE=NO"
 
 echo "NEXT_GATE=A2_YODA_EVALUATION_LINEAGE"
 
-rm -rf "$PREFLIGHT_WORK"
+rm -rf "$PREFLIGHT_WORK" || true
