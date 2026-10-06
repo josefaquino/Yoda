@@ -260,13 +260,21 @@ Do not rerun A2-R1 and do not delete its execution lock.
 
 ---
 
-## Stage B — next gate, intentionally not executed yet
+## Stage B — B-R1 pre-registered
 
-Stage B is now authorized by the A2 research-question result but is intentionally deferred.
+Stage B is authorized by the A2 research-question result.
 
-The replay stage must use only artifacts recovered from Yoda and must rerun the same frozen Lean and OxiLean authorities against the recovered A1-R1 proof states.
+```text
+REVISION=B-R1
+SCRIPT=scripts/03-r1-independent-formal-replay.sh
+EXECUTION_POLICY=ONE_EXECUTION
+```
 
-No Stage B execution is part of the current work session.
+B-R1 recovers the statement, Proof A, Proof B and transformation only from the frozen Yoda store, then replays the same frozen Lean and OxiLean authorities.
+
+No Yoda or Kyber change is permitted.
+
+B-R1 is pre-registered and not yet executed.
 
 ---
 
