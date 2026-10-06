@@ -1,0 +1,86 @@
+# A1-R1 — Observed one-shot result
+
+## Result
+
+```text
+MARKET_REGIME_LINEAGE_001_STAGE_A1=NOT_EVALUATED
+A1_REVISION=A1-R1
+FAILURE_CLASS=HARNESS_FAILURE
+A1_R1_RUN_RC=1
+```
+
+## Pre-execution authority gates
+
+```text
+SCRIPT_IDENTITY=PASS
+A0_EVIDENCE_AUTHORITY=PASS
+A0_SNAPSHOT_A_AUTHORITY=PASS
+A0_SNAPSHOT_B_AUTHORITY=PASS
+A0_SNAPSHOT_C_AUTHORITY=PASS
+
+CLASSIFICATION_CONTRACT=FROZEN
+AUTHORITY_1_IDENTITY=FROZEN
+AUTHORITY_2_IDENTITY=FROZEN
+
+AUTHORITY_1_COMPILE=PASS
+```
+
+## One-execution gate
+
+```text
+EXECUTION_POLICY=ONE_EXECUTION
+EXECUTION_GATE=PASS
+A1_R1_EXECUTION_LOCK=CONSUMED
+LOCK_CREATED_BEFORE_FIRST_CLASSIFICATION=YES
+```
+
+Frozen lock identity:
+
+```text
+A1_R1_EXECUTION_LOCK_SHA256=
+e0d24e57b3112eb605d775d645f736f557c1a31772aae63fa79a441e7a324f3c
+```
+
+## Interruption point
+
+Authority 1 (C11) returned non-zero on the first real classification attempt.
+
+The harness mapped that condition to:
+
+```text
+FAILURE_CLASS=HARNESS_FAILURE
+```
+
+Authority 2 was not executed and no authority equivalence result was produced.
+
+```text
+AUTHORITY_1_COMPLETE=NO
+AUTHORITY_2_EXECUTED=NO
+AUTHORITY_EQUIVALENCE=NOT_EVALUATED
+A1_MANIFEST=NOT_AVAILABLE
+```
+
+## Frozen execution identities
+
+```text
+A1_R1_SCRIPT_SHA256=
+0c891fb1565f42e01943c13def49473b9e515a66653b0f88a479ca065b89a440
+
+A1_R1_CONSOLE_SHA256=
+acdd01f84ae6a35bb1737c545674b2635dc9b51f95822476b96789982a8fe320
+
+AUTHORITY_1_BINARY_SHA256=
+4eca08b1bdd2a01a564307543b61c1b545b4b6545790d082fdfcae19712c8356
+```
+
+## Governance
+
+```text
+A1_R1_RERUN=NO
+LOCK_DELETE=NO
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The next permitted operation is read-only root-cause adjudication from already persisted A0/A1 artifacts. It must not invoke either classifier.
