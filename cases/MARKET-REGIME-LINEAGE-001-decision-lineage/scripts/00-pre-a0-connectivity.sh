@@ -61,7 +61,19 @@ fetch_json()
     endpoint="$2"
     shift 2
 
-    curl         --silent         --show-error         --fail         --location         --get         "$API_BASE/$endpoint"         --data-urlencode "api_key=$FRED_API_KEY"         --data-urlencode "file_type=json"         "$@"         > "$outfile"
+    {
+        printf 'data-urlencode = "api_key=%s"\\n' "$FRED_API_KEY"
+        printf 'data-urlencode = "file_type=json"\\n'
+    } |
+    curl --config - \
+        --silent \
+        --show-error \
+        --fail \
+        --location \
+        --get \
+        "$API_BASE/$endpoint" \
+        "$@" \
+        > "$outfile"
 }
 
 section "0. LOCAL TOOLCHAIN"
