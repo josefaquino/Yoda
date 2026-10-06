@@ -434,7 +434,7 @@ link "$KEY_TRANS_BC" to-state "$KEY_DEC_C"
 link "$KEY_TRANS_AB" has-evidence "$KEY_A1_SUMMARY"
 link "$KEY_TRANS_BC" has-evidence "$KEY_A1_SUMMARY"
 
-LINK_COUNT=30
+LINK_COUNT=31
 
 echo "LINK_COUNT=$LINK_COUNT"
 echo "DECISION_LINEAGE_RELATIONS=PASS"
