@@ -132,3 +132,24 @@ NEXT_GATE=A0_DESIGN_AND_SELECTION_POLICY
 ```
 
 PRE-A0 PASS does not itself authorize historical evaluation or Yoda writes.
+
+
+## Frozen harness identities
+
+```text
+PRE_A0_R1_SCRIPT_SHA256=
+ed430dcb7d71c73b0147eaa5d5e89e3424f6b5ec70486c1c6de55ddc04a2b33e
+
+PRE_A0_R1_SCRIPT_COMMIT=
+45fbd7b33d17ba7606b08b288435bc9997e88fa5
+
+SAFE_LAUNCHER_SHA256=
+57aea17a390d2c6f969091fd9ee67b9a5682f17cf8fb778fbff57cd077f493a5
+
+SAFE_LAUNCHER_COMMIT=
+2d2ca27368adc3cfa268fe98a0bcab09e9077e1d
+```
+
+The launcher executes the PRE-A0 harness in a child shell.
+
+No scientific one-execution lock exists in PRE-A0.
