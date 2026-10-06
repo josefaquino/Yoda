@@ -17,10 +17,10 @@ B=BLOCKED
 Script:
 
 ```text
-scripts/00-pre-a0-connectivity.sh
+scripts/00-pre-a0-connectivity-r2.sh
 
-PRE_A0_SCRIPT_SHA256=
-0f056ad9e55c8af83d8e65e39c42c94a944259b01b8d861f9265216f7e7bbb49
+PRE_A0_R2_SCRIPT_SHA256=
+cc582307f7e0f6b24228a0f4d8c895f04f40d4033cb7ab5f9f86fc681b4a4de1
 ```
 
 Purpose:
@@ -32,6 +32,8 @@ Purpose:
 - make zero Yoda writes.
 
 PRE-A0 is repeatable because it is a connectivity check and consumes no experimental one-shot gate.
+
+PRE-A0-R1 remains preserved as NOT_EVALUATED due to HARNESS_TRANSPORT_COMPOSITION. PRE-A0-R2 changes only request transport composition.
 
 Only PRE-A0 PASS authorizes construction of A0.
 
