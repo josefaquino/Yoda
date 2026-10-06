@@ -1,0 +1,2 @@
+state	evaluation_date	snapshot_sha256	dgs10_scaled5	nfci_scaled5	vixcls_scaled5	rate_flag	nfci_flag	vix_flag	score	classification	canonical_results_sha256
+B	2025-08-29	d1688f9b362c84018f9fc093e8a6f7b985e56e3965bdb9bf8d2bdffa3af39a34	422000	-56025	1536000	1	0	0	1	FRAGILE	bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
