@@ -206,15 +206,15 @@ test "$REPLAY_T_SHA256" = "$ORIGINAL_T_SHA256" ||
     not_evaluated "transformation byte identity mismatch after Yoda recovery"
 
 echo "STATEMENT_IDENTITY_SURVIVED=PASS"
-echo "STATEMENT_IDENTITY_SURVIVED=PASS"
 echo "PROOF_A_IDENTITY_SURVIVED=PASS"
 echo "PROOF_B_IDENTITY_SURVIVED=PASS"
 echo "TRANSFORMATION_IDENTITY_SURVIVED=PASS"
 "$YODA" -d "$A2/yoda-store" log "$KEY_B" > "$EVIDENCE/proof-B.log" ||
     not_evaluated "Proof B relation log recovery failed"
-grep -F "$KEY_A" "$EVIDENCE/proof-B.log" >/dev/null ||
+TAB="$(printf '\t')"
+grep -F "derived-from${TAB}${KEY_A}" "$EVIDENCE/proof-B.log" >/dev/null ||
     not_evaluated "derived-from relation missing before replay"
-grep -F "$KEY_T" "$EVIDENCE/proof-B.log" >/dev/null ||
+grep -F "transformed-by${TAB}${KEY_T}" "$EVIDENCE/proof-B.log" >/dev/null ||
     not_evaluated "transformed-by relation missing before replay"
 echo "DERIVED_FROM_RELATION_RECOVERY=PASS"
 echo "TRANSFORMED_BY_RELATION_RECOVERY=PASS"
