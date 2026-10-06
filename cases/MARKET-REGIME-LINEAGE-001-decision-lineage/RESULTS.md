@@ -26,3 +26,18 @@ CORRECT_A1_R1_SCRIPT_SHA256=
 A1_EXECUTION_LOCK_CONSUMED=NO
 SCRIPT_CONTENT_CHANGED=NO
 ```
+
+
+## A1-R1 root cause
+
+```text
+A1_R1_STATUS=NOT_EVALUATED
+ROOT_CAUSE_CLASS=NUMERIC_REPRESENTATION_CONTRACT_MISMATCH
+
+FIXED4_INPUT_CONTRACT_VIOLATION_COUNT=3
+A1_R1_RERUN=NO
+```
+
+All three frozen NFCI inputs contain five fractional digits while the v1 parser admitted at most four.
+
+A1-R2 is permitted as a representation-only revision. Dates, snapshot bytes, thresholds, labels and the scientific question remain frozen.
