@@ -260,29 +260,32 @@ Do not rerun A2-R1 and do not delete its execution lock.
 
 ---
 
-## Stage B — B-R1 pre-registered
-
-Stage B is authorized by the A2 research-question result.
+## Stage B — B-R1 complete
 
 ```text
 REVISION=B-R1
-SCRIPT=scripts/03-r1-independent-formal-replay.sh
-EXECUTION_POLICY=ONE_EXECUTION
+EXECUTION_COUNT=1
+STATUS=PASS
+RUN_RC=0
 ```
 
-B-R1 recovers the statement, Proof A, Proof B and transformation only from the frozen Yoda store, then replays the same frozen Lean and OxiLean authorities.
+Do not rerun B-R1 and do not delete its execution lock.
 
-No Yoda or Kyber change is permitted.
+```text
+B_R1_EXECUTION_LOCK_SHA256=
+741ccae2c834234dba01a0c5750c90c494bc8302765b3d147d79db3904413a32
 
-B-R1 is pre-registered and not yet executed.
+STAGE_B_EVIDENCE_MANIFEST_SHA256=
+040cfbb629e6262ed8b75e95859e7ca99362e85aed3df8f79d24a378f2ffd6d5
+```
+
+Lean, lean4export and OxiLean replay all reproduced the frozen A1-R1 outcomes from Yoda-recovered proof states.
 
 ---
 
 ## Final homologation
 
-Do not write final homologation constants before real A1-R1, A2, and B evidence hashes exist.
-
-Only after Stage B passes may the CASE evaluate:
+Final homologation is now authorized and recorded:
 
 ```text
 FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
