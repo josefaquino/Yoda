@@ -1,0 +1,2 @@
+from_state	to_state	contract	concept	unit	start	end	value_a_raw	value_b_raw	delta_coefficient	base_coefficient	threshold_basis_points	classification
+A	B	PUBLIC-DISCLOSURE-EVALUATION-V1	Assets	USD	-	2024-06-30	3314177	3314177	0	3314177	100	UNCHANGED
