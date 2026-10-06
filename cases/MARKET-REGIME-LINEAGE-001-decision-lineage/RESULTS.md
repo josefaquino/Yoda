@@ -13,3 +13,16 @@
 | B | BLOCKED | Requires A2 PASS |
 
 No market classifications have been observed or recorded in this CASE at preregistration time.
+
+
+## A1-R1 harness identity erratum
+
+Before A1 scientific execution, the declared script hash was corrected from a non-byte text hash to the exact UTF-8 byte SHA-256:
+
+```text
+CORRECT_A1_R1_SCRIPT_SHA256=
+0c891fb1565f42e01943c13def49473b9e515a66653b0f88a479ca065b89a440
+
+A1_EXECUTION_LOCK_CONSUMED=NO
+SCRIPT_CONTENT_CHANGED=NO
+```
