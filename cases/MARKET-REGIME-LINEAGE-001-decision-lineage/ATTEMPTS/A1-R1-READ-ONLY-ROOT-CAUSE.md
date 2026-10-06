@@ -1,0 +1,99 @@
+# A1-R1 — Read-only Root-Cause Adjudication
+
+## Result
+
+```text
+READ_ONLY_ROOT_CAUSE_DIAGNOSTIC=COMPLETE
+DIAGNOSTIC_RC=0
+A1_R1_RERUN=NO
+```
+
+## Governance
+
+```text
+AUTHORITY_1_EXECUTED=NO
+AUTHORITY_2_EXECUTED=NO
+CLASSIFICATION_COMPUTED=NO
+YODA_WRITES=ZERO
+```
+
+The consumed A1-R1 execution lock remained unchanged:
+
+```text
+A1_R1_EXECUTION_LOCK_SHA256=
+e0d24e57b3112eb605d775d645f736f557c1a31772aae63fa79a441e7a324f3c
+```
+
+## Frozen A0 input evidence
+
+```text
+STATE_A_NFCI=-0.43077
+STATE_B_NFCI=-0.56025
+STATE_C_NFCI=-0.54911
+```
+
+All three NFCI values contain five fractional digits.
+
+The A1-R1 classification contract required:
+
+```text
+FIXED_POINT_SCALE=10000
+MORE_THAN_FOUR_FRACTION_DIGITS=INVALID
+```
+
+Observed structural diagnostic:
+
+```text
+STATE_A_NFCI_FIXED4_INPUT_CONTRACT=FAIL
+STATE_B_NFCI_FIXED4_INPUT_CONTRACT=FAIL
+STATE_C_NFCI_FIXED4_INPUT_CONTRACT=FAIL
+
+FIXED4_INPUT_CONTRACT_VIOLATION_COUNT=3
+ROOT_CAUSE_SIGNAL=
+FROZEN_INPUT_PRECISION_OUTSIDE_AUTHORITY_1_FIXED4_PARSER
+```
+
+DGS10 and VIXCLS satisfied the fixed4 parser in all three states.
+
+## Adjudication
+
+```text
+A1_R1_STATUS=NOT_EVALUATED
+ROOT_CAUSE_CLASS=NUMERIC_REPRESENTATION_CONTRACT_MISMATCH
+
+FRED_AUTHORITY_FAILURE=NO
+A0_DATA_FAILURE=NO
+THRESHOLD_FAILURE=NO
+MARKET_CLASSIFICATION_FAILURE=NO
+AUTHORITY_DIVERGENCE=NOT_EVALUATED
+YODA_FAILURE=NO
+KYBER_FAILURE=NO
+```
+
+A1-R1 must never be rerun.
+
+## Permitted revision
+
+A1-R2 may change only numeric representation capacity.
+
+Frozen scientific elements that may not change:
+
+```text
+STATE_A_DATE=2025-04-25
+STATE_B_DATE=2025-08-29
+STATE_C_DATE=2025-12-26
+
+A0_SNAPSHOT_BYTES=UNCHANGED
+
+VIX_THRESHOLD=20.0000
+DGS10_THRESHOLD=4.0000
+NFCI_THRESHOLD=0.0000
+
+SCORE_0=CALM
+SCORE_1=FRAGILE
+SCORE_2_OR_3=STRESSED
+
+RESEARCH_QUESTION=UNCHANGED
+```
+
+The revision is representation-only and is explicitly motivated by frozen input precision, not by observed classification labels.
