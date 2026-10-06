@@ -382,7 +382,7 @@ EOF
 
 SYNTHETIC_SELECTED="$(
     jq \
-        --slurpfile map "$WORK/tool-map.json" \
+        --argjson map "$(cat "$WORK/tool-map.json")" \
         --argjson base "$(jq -c '.base' "$WORK/synthetic-split.json")" \
         -f "$WORK/selector.jq" \
         "$WORK/synthetic-tasks.json"
