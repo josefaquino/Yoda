@@ -1,0 +1,91 @@
+# A1-R1 Dual Derivation External Judgment — PASS
+
+## Verdict
+
+```text
+TAU2_OUTCOME_EQUIVALENT_DERIVATIONS_001_STAGE_A1=PASS
+A1_REVISION=A1-R1
+
+TRAJECTORY_A_EXTERNAL_JUDGE=PASS
+TRAJECTORY_B_EXTERNAL_JUDGE=PASS
+
+OUTCOME_EQUIVALENCE=PASS
+DERIVATION_DISTINCTNESS=PASS
+
+MODEL_ENDPOINT_CALLED=NO
+USER_SIMULATOR_EXECUTED=NO
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+
+NEXT_GATE=A2_YODA_DUAL_DERIVATION_LINEAGE
+```
+
+## One-execution authority
+
+```text
+A1_EXECUTION_LOCK_SHA256=
+e047439babba668a4bfa9a408e6a58afb926e7ca0e029f4526ace064611cfa2d
+
+A1_R1_RERUN=NO
+```
+
+## External judgment
+
+```text
+TRAJECTORY_A_FINAL_REWARD=1.0
+TRAJECTORY_B_FINAL_REWARD=1.0
+
+TRAJECTORY_A_DB_REWARD=1.0
+TRAJECTORY_B_DB_REWARD=1.0
+
+TRAJECTORY_A_COMMUNICATE_REWARD=1.0
+TRAJECTORY_B_COMMUNICATE_REWARD=1.0
+
+TRAJECTORY_A_DB_MATCH=true
+TRAJECTORY_B_DB_MATCH=true
+
+TRAJECTORY_A_TOOL_ERROR_COUNT=0
+TRAJECTORY_B_TOOL_ERROR_COUNT=0
+```
+
+## Outcome identity
+
+```text
+TRAJECTORY_A_FINAL_DB_HASH=
+0087f8266f0f2fc2091ee4fabd9c137ed8b6c8751df09ec4f650756e4ae0ccf7
+
+TRAJECTORY_B_FINAL_DB_HASH=
+0087f8266f0f2fc2091ee4fabd9c137ed8b6c8751df09ec4f650756e4ae0ccf7
+
+FINAL_DB_HASH_EQUIVALENCE=PASS
+```
+
+## Derivation identity
+
+```text
+TRAJECTORY_A_LINEAGE_SHA256=
+965417ca555dd70eff7d39e822326305b1e81b9e16864dcd7a92b43197d5d36b
+
+TRAJECTORY_B_LINEAGE_SHA256=
+1933529e5aa2902bd83a45d90f2692e07f0c3ef00ac4442db98ffdd114ae8340
+
+DERIVATION_LINEAGE_DISTINCTNESS=PASS
+```
+
+Therefore the two frozen derivations are materially distinct while both are accepted by the external tau2 authority and converge to the same final agent DB hash.
+
+## Evidence
+
+```text
+A1_EVIDENCE_INTEGRITY=PASS
+
+A1_EVIDENCE_MANIFEST_SHA256=
+d9ff35821c0b69d642a42e2653b8841c919e62477e9d0867bb0556af12edb0fd
+```
+
+## Scientific interpretation
+
+A1 demonstrates for the frozen tau2 Airline task 7 that two different deterministic tool-use derivations can both satisfy the external benchmark while producing the same final database state.
+
+This stage does not test Yoda persistence or recovery.
