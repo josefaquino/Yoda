@@ -354,18 +354,26 @@ section "4. CANONICAL SNAPSHOT STRUCTURAL AUDIT"
 for state in A B C
 do
     f="$SNAPSHOTS/state-$state.tsv"
+
     grep -F "$(printf 'evaluation_date\tseries_id\tobservation_date\tvintage_date\tvalue\tunits')" "$f" >/dev/null ||
         not_evaluated "CANONICALIZATION_FAILURE"
+
     sed -n '2p' "$f" | grep -F "$(printf '\tDGS10\t')" >/dev/null ||
         not_evaluated "CANONICALIZATION_FAILURE"
+
     sed -n '3p' "$f" | grep -F "$(printf '\tNFCI\t')" >/dev/null ||
         not_evaluated "CANONICALIZATION_FAILURE"
+
     sed -n '4p' "$f" | grep -F "$(printf '\tVIXCLS\t')" >/dev/null ||
         not_evaluated "CANONICALIZATION_FAILURE"
-    if grep -Eq '[[:blank:]]+
+
+    if grep -Eq '[[:blank:]]+$' "$f"
+    then
+        not_evaluated "CANONICALIZATION_FAILURE"
+    fi
+done
 
 echo "CANONICALIZATION=PASS"
-
 section "5. CLASSIFICATION NON-EXECUTION GATE"
 
 echo "CLASSIFICATION_EXECUTED=NO"
