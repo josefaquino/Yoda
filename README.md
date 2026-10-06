@@ -119,7 +119,7 @@ Yoda is developed through narrow, falsifiable CASEs.
 
 > **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
 
-Five evidence blocks now define the current research thesis.
+Six evidence blocks now define the current research thesis.
 
 ### 1. GENOME-LINEAGE-001 — Lineage of State
 
@@ -275,6 +275,59 @@ This strengthens the cross-domain evidence for Lineage of Change, but does not e
 
 See [`cases/FORMAL-MATH-EVOLVING-DERIVATION-001-cross-domain-lineage-of-change/`](cases/FORMAL-MATH-EVOLVING-DERIVATION-001-cross-domain-lineage-of-change/).
 
+### 6. MARKET-REGIME-LINEAGE-001 — Decision Lineage
+
+Question:
+
+> **Can Yoda preserve successive deterministic decision states and the evidence behind them such that independent implementations reproduce the original decisions after recovery?**
+
+A controlled public-data workflow froze three point-in-time market-observation states before classification.
+
+Two independent deterministic authorities — C11 and POSIX awk — agreed byte-for-byte on:
+
+```text
+A  2025-04-25  STRESSED
+B  2025-08-29  FRAGILE
+C  2025-12-26  FRAGILE
+```
+
+Yoda then preserved 18 objects and 31 explicit relations covering source snapshots, decision states, the classification contract, authority implementations, original evaluation evidence and transition evidence.
+
+The lineage captured two distinct kinds of change:
+
+```text
+A -> B
+STRESSED -> FRAGILE
+classification_changed=YES
+
+B -> C
+FRAGILE -> FRAGILE
+classification_changed=NO
+underlying_evidence_changed=YES
+```
+
+Stage B recovered the snapshots, C11 source, awk source and original evaluations **only from Yoda**, recompiled/replayed both authorities and reproduced the original canonical bytes exactly:
+
+```text
+MARKET_REGIME_LINEAGE_001=VALIDATED
+DECISION_LINEAGE=DEMONSTRATED
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The narrow demonstrated-property statement is:
+
+> **Yoda preserved not only a deterministic decision, but the evidence required to reconstruct why that decision existed at that point in time — including a later state where the label stayed the same while the supporting evidence changed.**
+
+This is an infrastructure and reproducibility result. It is not a market forecast, trading strategy, investment recommendation or claim about the true market regime.
+
+See [`cases/MARKET-REGIME-LINEAGE-001-decision-lineage/`](cases/MARKET-REGIME-LINEAGE-001-decision-lineage/).
+
 ---
 
 ## What the combined evidence suggests
@@ -293,6 +346,10 @@ Can independent forms of provenance coexist?
         ↓
 LINEAGE OF CHANGE
 How did this become what it is now?
+        ↓
+DECISION LINEAGE
+Why did a deterministic system make this decision then,
+and can that decision be reproduced from recovered evidence?
 ```
 
 The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode or Change Mode.
@@ -378,6 +435,9 @@ SYNTHID-BIO-EVOLVING-PROVENANCE-001
 
 FORMAL-MATH-EVOLVING-DERIVATION-001
 → cross-domain Lineage of Change + independent Lean/OxiLean replay
+
+MARKET-REGIME-LINEAGE-001
+→ Decision Lineage + independent replay from Yoda-recovered decision evidence
 ```
 
 The next strong falsification should be externally defined rather than another internal demonstration.
