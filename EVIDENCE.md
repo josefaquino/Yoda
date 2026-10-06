@@ -53,6 +53,8 @@ PUBLIC LANGUAGE
 | AXIOM-YODA-PROOF-LINEAGE-001 | Formal verification | independent formal decision replay | PASS |
 | SYNTHID-BIO-YODA-PROVENANCE-001 | Biological artifact provenance | composed provenance + independent measurement replay | PASS |
 | SYNTHID-BIO-EVOLVING-PROVENANCE-001 | Controlled evolving artifact | Lineage of Change + state-specific authority replay | PASS |
+| FORMAL-MATH-EVOLVING-DERIVATION-001 | Formal mathematics | cross-domain Lineage of Change + independent Lean/OxiLean replay | PASS |
+| MARKET-REGIME-LINEAGE-001 | Deterministic public-data decisions | Decision Lineage + Yoda-only independent classification replay | PASS |
 
 Negative experiments and invalid harness attempts remain evidence when they are classified honestly.
 
@@ -366,6 +368,10 @@ Can independent provenance layers coexist?
         ↓
 LINEAGE OF CHANGE
 How did this become what it is now?
+        ↓
+DECISION LINEAGE
+Why did the deterministic system decide this then,
+and can that decision be replayed from recovered evidence?
 ```
 
 These are not separate engine modes.
@@ -436,3 +442,93 @@ A useful target remains a real Design-Build-Test-Learn or other iterative workfl
 The stronger question is now not merely whether Yoda can recover a final candidate's ancestry, but whether it can preserve a longer sequence of meaningful state transitions without domain-specific engine changes.
 
 That experiment should be defined by the external problem before Yoda code or schema is added.
+
+
+---
+
+# Decision Lineage — deterministic decision replay
+
+`MARKET-REGIME-LINEAGE-001` extended the evidence program from artifact/proof state transitions to successive deterministic evaluations.
+
+Three point-in-time source states produced:
+
+```text
+A=STRESSED
+B=FRAGILE
+C=FRAGILE
+```
+
+The transition record preserved both a label change and a stable-label/new-evidence transition:
+
+```text
+A -> B
+STRESSED -> FRAGILE
+CLASSIFICATION_CHANGED=YES
+
+B -> C
+FRAGILE -> FRAGILE
+CLASSIFICATION_CHANGED=NO
+UNDERLYING_EVIDENCE_CHANGED=YES
+```
+
+Yoda preserved 18 objects and 31 explicit relations, including source snapshots, decision states, the classification contract, two independent authority implementations, original evaluation evidence and transition evidence.
+
+A2 demonstrated:
+
+```text
+BYTE_EXACT_RECOVERY=PASS
+DECISION_LINEAGE_RELATION_RECOVERY=PASS
+DECISION_LINEAGE_SEMANTICS=PASS
+FINAL_YODA_VERIFY=PASS
+```
+
+B-R1 then recovered replay inputs only from the frozen Yoda store:
+
+```text
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+
+REPLAY_AUTHORITY_1=PASS
+REPLAY_AUTHORITY_2=PASS
+REPLAY_AUTHORITY_EQUIVALENCE=PASS
+REPLAY_VS_ORIGINAL_CANONICAL=PASS
+
+STATE_A_INDEPENDENT_REPLAY=PASS
+STATE_B_INDEPENDENT_REPLAY=PASS
+STATE_C_INDEPENDENT_REPLAY=PASS
+
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+```
+
+All replayed result bytes matched:
+
+```text
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+```
+
+The Yoda store remained byte-identical through replay:
+
+```text
+DATA_YODA_SHA256_BEFORE=
+fbe0800522d44ec54a71cd26c0fe3cde0bb1cf8475ac859af0c045d054cfe84e
+
+DATA_YODA_SHA256_AFTER=
+fbe0800522d44ec54a71cd26c0fe3cde0bb1cf8475ac859af0c045d054cfe84e
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+```
+
+Final homologation:
+
+```text
+MARKET_REGIME_LINEAGE_001=VALIDATED
+DECISION_LINEAGE=DEMONSTRATED
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Formal property:
+
+`properties/DECISION-LINEAGE.md`
+
+This is an infrastructure/reproducibility result, not a market forecast or investment claim.
