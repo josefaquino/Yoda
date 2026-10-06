@@ -10,8 +10,8 @@
 | A0-R1 | PASS | Three point-in-time snapshots frozen; evidence manifest valid; classification not executed |
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
 | A1-R2 | PASS | C11 and POSIX awk produced byte-identical features/classifications for A/B/C |
-| A2-R1 | PRE-REGISTERED / NOT EXECUTED | 18 frozen objects + 31 relations; byte-exact recovery and log-based relation recovery |
-| B | BLOCKED | Requires A2 PASS |
+| A2-R1 | PASS | 18 objects + 31 relations preserved; byte-exact recovery, relation recovery and Decision Lineage semantics passed |
+| B-R1 | PRE-REGISTERING | Independent replay using only Yoda-recovered snapshots, authorities and original canonical result |
 
 Historical classifications were first observed during the frozen A1-R2 execution; no thresholds, dates, snapshots or label mappings were changed after A0.
 
@@ -69,6 +69,36 @@ dc68f1634085ada042ab384e684e8ddbd812e7c29ab83c21d066837502c25a0a
 ```
 
 Observed transition structure:
+
+```text
+A -> B  STRESSED -> FRAGILE  classification_changed=YES
+B -> C  FRAGILE  -> FRAGILE  classification_changed=NO
+                              underlying_evidence_changed=YES
+```
+
+
+## A2-R1 observed result
+
+```text
+STATUS=PASS
+EXECUTION_COUNT=1
+
+A2_R1_CONSOLE_SHA256=
+aeb58ae1c671c4e439bf0d67685c420897daa37db0107b3a271b77f395ef0a94
+
+A2_R1_EXECUTION_LOCK_SHA256=
+c57ed4f850cb9c42691b8168e913762b86aae56bbc965c4d38c525d742a173d3
+
+A2_EVIDENCE_MANIFEST_SHA256=
+5429ff7d771a575e9640f7d2d723daaebb084d934d2c31c26020f03be3419da5
+
+DATA_YODA_SHA256=
+fbe0800522d44ec54a71cd26c0fe3cde0bb1cf8475ac859af0c045d054cfe84e
+
+DATA_YODA_BYTES=24851
+```
+
+Decision Lineage semantic recovery:
 
 ```text
 A -> B  STRESSED -> FRAGILE  classification_changed=YES
