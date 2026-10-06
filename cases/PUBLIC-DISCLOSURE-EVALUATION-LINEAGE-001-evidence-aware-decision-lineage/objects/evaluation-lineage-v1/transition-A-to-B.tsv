@@ -1,0 +1,2 @@
+from_state	to_state	filing_identity_changed	selected_fact_value_changed	evaluation_classification
+A	B	YES	NO	UNCHANGED
