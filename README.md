@@ -119,7 +119,7 @@ Yoda is developed through narrow, falsifiable CASEs.
 
 > **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
 
-Four evidence blocks now define the current research thesis.
+Five evidence blocks now define the current research thesis.
 
 ### 1. GENOME-LINEAGE-001 — Lineage of State
 
@@ -227,6 +227,54 @@ See [`cases/SYNTHID-BIO-EVOLVING-PROVENANCE-001-lineage-of-change/`](cases/SYNTH
 
 Google DeepMind did not participate in or endorse either SynthID Bio experiment. Public code and publications were used as independent external authorities.
 
+### 5. FORMAL-MATH-EVOLVING-DERIVATION-001 — Cross-domain Lineage of Change
+
+Question:
+
+> **Does the same Lineage of Change model survive a formal-proof transition under independent formal authorities, without changing Yoda or Kyber?**
+
+A frozen MiniF2F theorem was represented by two different proof states of the same proposition:
+
+```text
+Nat.gcd 180 168 = 12
+```
+
+Proof A used direct kernel computation. Proof B exposed an explicit Euclidean derivation.
+
+Both proof states passed Lean and were independently VERIFIED by OxiLean before Yoda preservation.
+
+After Yoda preservation, B-R1 recovered the proof states from the frozen Yoda store and reproduced:
+
+```text
+LEAN_AUTHORITY_REPLAY=PASS
+
+LEAN4EXPORT_A_IDENTITY_REPRODUCED=PASS
+LEAN4EXPORT_B_IDENTITY_REPRODUCED=PASS
+
+OXILEAN_AUTHORITY_REPLAY=PASS
+
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+```
+
+Final result:
+
+```text
+FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
+CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The negative and non-evaluable measurements remain part of the record: A1.0 preserved an OxiLean capability boundary, and the A2-R1 one-shot preserved a harness query-tokenization mismatch rather than silently rerunning either measurement.
+
+This strengthens the cross-domain evidence for Lineage of Change, but does not establish universal generality.
+
+See [`cases/FORMAL-MATH-EVOLVING-DERIVATION-001-cross-domain-lineage-of-change/`](cases/FORMAL-MATH-EVOLVING-DERIVATION-001-cross-domain-lineage-of-change/).
+
 ---
 
 ## What the combined evidence suggests
@@ -327,6 +375,9 @@ SYNTHID-BIO-YODA-PROVENANCE-001
 
 SYNTHID-BIO-EVOLVING-PROVENANCE-001
 → Lineage of Change + state-specific replay
+
+FORMAL-MATH-EVOLVING-DERIVATION-001
+→ cross-domain Lineage of Change + independent Lean/OxiLean replay
 ```
 
 The next strong falsification should be externally defined rather than another internal demonstration.
