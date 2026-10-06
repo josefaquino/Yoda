@@ -1,0 +1,123 @@
+# A2-R1 — Read-only Persistence Boundary Adjudication — PASS
+
+## Verdict
+
+```text
+READ_ONLY_ADJUDICATION=COMPLETE
+READ_ONLY_ADJUDICATION_RC=0
+
+A2_R1_ORIGINAL_VERDICT=FAIL
+A2_R1_FAILURE_CLASS=YODA_PERSISTENCE_FAILURE
+A2_R1_RERUN=NO
+```
+
+The original A2-R1 scientific verdict remains FAIL.
+
+## Diagnostic identities
+
+```text
+READ_ONLY_DIAGNOSTIC_SHA256=
+3cffbe3044974f458361af0ac4fd78e42850e4cb26af4825b9273d286a5ac67f
+
+READ_ONLY_ADJUDICATION_CONSOLE_SHA256=
+457684d9536054a4fa13877738cb76638be754732dbf65957cee400dcfa13ecb
+```
+
+## Frozen failure evidence
+
+```text
+YODA_SHA256=
+1a38316b4f370225ae52431074365eb921976e79db2f4688fb8154ce9218d9eb
+
+A2_R1_EXECUTION_LOCK_SHA256=
+32cf7138c88b381c0b3f544f9e985cfafa5c9e5c88ea5f2d75b7599d716ca6f2
+
+PARTIAL_DATA_YODA_SHA256=
+48700481d01777910f5976ffe8d5de755288772088856dbaf59713df960f9cea
+
+PARTIAL_DATA_YODA_BYTES=4091828
+```
+
+## Exact persistence boundary
+
+Objects were probed in the exact original put order.
+
+```text
+OBJECT_1=disclosure/filing/A
+PERSISTED=YES
+BYTE_EXACT=PASS
+
+OBJECT_2=disclosure/filing/B
+PERSISTED=YES
+BYTE_EXACT=PASS
+
+OBJECT_3=disclosure/raw-filing/A
+SOURCE_BYTES=4091045
+PERSISTED=YES
+BYTE_EXACT=PASS
+
+OBJECT_4=disclosure/raw-filing/B
+SOURCE_BYTES=3836212
+PERSISTED=NO
+```
+
+All objects 5 through 25 were also absent.
+
+Therefore:
+
+```text
+EXPECTED_OBJECT_COUNT=25
+PERSISTED_OBJECT_COUNT=3
+
+FIRST_MISSING_ORDINAL=4
+FIRST_MISSING_KEY=disclosure/raw-filing/B
+
+PERSISTED_AFTER_FIRST_MISSING=NO
+PERSISTENCE_BOUNDARY=PREFIX_CONFIRMED
+
+OBJECT_INGEST_BOUNDARY_RECOVERED=YES
+```
+
+## Relation boundary
+
+A2-R1 failed during object ingestion, before the relation phase.
+
+```text
+RELATION_PHASE_STARTED=NO
+EXPECTED_LINKS_WRITTEN=0
+```
+
+## Zero-write proof
+
+```text
+DATA_BEFORE_SHA256=
+48700481d01777910f5976ffe8d5de755288772088856dbaf59713df960f9cea
+
+DATA_AFTER_SHA256=
+48700481d01777910f5976ffe8d5de755288772088856dbaf59713df960f9cea
+
+DATA_BEFORE_BYTES=4091828
+DATA_AFTER_BYTES=4091828
+
+STORE_BEFORE_MANIFEST_SHA256=
+ea3d606d991c73f13f45b1026d0a0ab0a32dec213f8793ea599788bfa0b6ba38
+
+STORE_AFTER_MANIFEST_SHA256=
+ea3d606d991c73f13f45b1026d0a0ab0a32dec213f8793ea599788bfa0b6ba38
+
+YODA_STORE_MUTATED_BY_DIAGNOSTIC=NO
+YODA_WRITES=ZERO
+```
+
+## Current root-cause classification
+
+```text
+OBSERVED_ENGINE_ERROR=terms_table_capacity_exhausted
+
+ROOT_CAUSE_LAYER=YODA_PERSISTENCE_CAPACITY
+ENGINE_INTERNAL_CAUSE=NOT_YET_SOURCE_ADJUDICATED
+```
+
+The evidence establishes the persistence boundary but does not yet establish the internal source-level mechanism.
+
+Next authorized action: read-only source adjudication.
