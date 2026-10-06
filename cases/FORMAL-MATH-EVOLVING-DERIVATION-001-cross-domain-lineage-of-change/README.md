@@ -39,8 +39,12 @@ A2 research question
 PASS_BY_READ_ONLY_ADJUDICATION
   |
   v
-B
-READY / NOT EXECUTED
+B-R1
+PASS
+  |
+  v
+FINAL HOMOLOGATION
+VALIDATED
 ```
 
 A1.0 is preserved as a **negative result with positive methodological value**.
@@ -194,7 +198,21 @@ KYBER_CHANGE=NO
 
 The durable state remained byte-identical throughout adjudication.
 
-Stage B is the next gate, but it has not been executed. The complete CASE is therefore not yet homologated.
+Stage B-R1 passed on its single pre-registered execution.
+
+The proof states recovered from the frozen Yoda store reproduced the same Lean and OxiLean outcomes observed before Yoda preservation. The Lean4export byte identities also reproduced exactly, the derivation relations remained recoverable, and the authoritative `data.yoda` state remained byte-identical.
+
+Final CASE status:
+
+```text
+FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
+CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+This is evidence across two qualitatively different domains, not a universal guarantee.
 
 ---
 
@@ -204,7 +222,7 @@ Stage B is the next gate, but it has not been executed. The complete CASE is the
 CROSS_DOMAIN_LINEAGE_OF_CHANGE
 ```
 
-This name remains provisional until the complete CASE passes.
+The complete CASE passed. The cross-domain claim is demonstrated within the combined biological + formal-mathematics evidence scope.
 
 ---
 
