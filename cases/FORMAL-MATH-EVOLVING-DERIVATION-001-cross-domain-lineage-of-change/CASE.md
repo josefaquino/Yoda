@@ -396,19 +396,39 @@ The complete CASE remains open until Stage B independently replays Lean and OxiL
 
 ---
 
-## Stage B — independent replay after recovery
+## Stage B-R1 — independent replay after recovery
 
-Stage B remains unchanged in purpose.
+Stage B-R1 passed on its single pre-registered execution.
 
-It must consume only artifacts recovered from Yoda and rerun the frozen formal authorities.
+It consumed only artifacts recovered from the frozen Yoda store and reran the same frozen Lean and OxiLean authorities.
 
-PASS requires byte-exact recovery, matching Lean evaluations, matching OxiLean evaluations, and recoverable derivation / transformation evidence.
+```text
+LEAN_AUTHORITY_REPLAY=PASS
+LEAN4EXPORT_A_IDENTITY_REPRODUCED=PASS
+LEAN4EXPORT_B_IDENTITY_REPRODUCED=PASS
+OXILEAN_AUTHORITY_REPLAY=PASS
+
+INDEPENDENT_FORMAL_REPLAY=PASS
+FORMAL_LINEAGE_OF_CHANGE_EXTERNAL_AUTHORITY_REPLAY=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Evidence manifest:
+
+```text
+STAGE_B_EVIDENCE_MANIFEST_SHA256=
+040cfbb629e6262ed8b75e95859e7ca99362e85aed3df8f79d24a378f2ffd6d5
+```
 
 ---
 
 ## Primary success criterion
 
-The CASE passes only if all evaluated stages pass with:
+The CASE passed under the following final condition:
 
 ```text
 YODA_CHANGE=NO
@@ -421,7 +441,14 @@ The intended property remains:
 CROSS_DOMAIN_LINEAGE_OF_CHANGE
 ```
 
-It is not recorded as demonstrated until the complete CASE passes.
+The complete CASE passed, so this CASE records:
+
+```text
+FORMAL_MATH_EVOLVING_DERIVATION_001=VALIDATED
+CROSS_DOMAIN_LINEAGE_OF_CHANGE=DEMONSTRATED
+```
+
+The claim remains scoped to the biological and formal-mathematics validations; universal generality is not established.
 
 ---
 
