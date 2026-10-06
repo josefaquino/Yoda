@@ -288,7 +288,8 @@ static void free_vec(EntryVec *vec)
 }
 
 static int collect_usd_entries(const char *json, size_t len,
-                               const char *concept, EntryVec *out)
+                               const char *concept, int want_val,
+                               EntryVec *out)
 {
     const char *end = json + len;
     const char *gaap_a, *gaap_b;
@@ -331,9 +332,10 @@ static int collect_usd_entries(const char *json, size_t len,
         e.form = field_string(p, obj_end + 1, "form");
         e.start = field_string(p, obj_end + 1, "start");
         e.end = field_string(p, obj_end + 1, "end");
-        e.val = field_raw(p, obj_end + 1, "val");
+        if (want_val)
+            e.val = field_raw(p, obj_end + 1, "val");
 
-        if (!e.accn || !e.form || !e.end || !e.val) {
+        if (!e.accn || !e.form || !e.end || (want_val && !e.val)) {
             free_entry(&e);
             return 0;
         }
@@ -448,7 +450,11 @@ int main(int argc, char **argv)
     json = read_all(path, &len);
     if (!json) return 4;
 
-    collect_rc = collect_usd_entries(json, len, concept, &all);
+    collect_rc = collect_usd_entries(json,
+                                     len,
+                                     concept,
+                                     strcmp(mode, "reveal") == 0,
+                                     &all);
 
     if (collect_rc == 2) {
         free(json);
