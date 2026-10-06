@@ -9,7 +9,7 @@
 | A1-R1 | PASS | Both pre-registered proof states verified by Lean and OxiLean on the single execution |
 | A2-R1 one-shot | NOT_EVALUATED | Harness query-tokenization mismatch after persistence/recovery gates passed |
 | A2 research question | PASS_BY_READ_ONLY_ADJUDICATION | Frozen Yoda state preserved bytes, relations, bounded context and durable identity without rerun |
-| B | READY / NOT EXECUTED | Independent formal replay is the next gate; intentionally deferred |
+| B-R1 | PRE-REGISTERED / NOT EXECUTED | Independent Lean + OxiLean replay from Yoda-recovered A1-R1 proof states |
 
 ---
 
