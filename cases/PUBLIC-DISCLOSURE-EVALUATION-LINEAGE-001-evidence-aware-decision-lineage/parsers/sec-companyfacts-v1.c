@@ -194,16 +194,18 @@ static const char *find_matching(const char *openp, const char *end, char open_c
     return NULL;
 }
 
-static int key_container(const char *start, const char *end, const char *key,
-                         char open_ch, char close_ch,
-                         const char **out_start, const char **out_end)
+static int key_container_status(const char *start, const char *end, const char *key,
+                                char open_ch, char close_ch,
+                                const char **out_start, const char **out_end)
 {
     const char *p = find_key_range(start, end, key);
     const char *q, *r;
 
-    if (!p) return 0;
+    if (!p) return 2;
+
     q = strchr(p, ':');
     if (!q || q >= end) return 0;
+
     q = skip_ws(q + 1, end);
     if (q >= end || *q != open_ch) return 0;
 
@@ -295,17 +297,19 @@ static int collect_usd_entries(const char *json, size_t len,
     const char *usd_a, *usd_b;
     const char *p;
 
-    if (!key_container(json, end, "us-gaap", '{', '}', &gaap_a, &gaap_b))
-        return 0;
+    int rc;
 
-    if (!key_container(gaap_a, gaap_b, concept, '{', '}', &concept_a, &concept_b))
-        return 0;
+    rc = key_container_status(json, end, "us-gaap", '{', '}', &gaap_a, &gaap_b);
+    if (rc != 1) return rc;
 
-    if (!key_container(concept_a, concept_b, "units", '{', '}', &units_a, &units_b))
-        return 0;
+    rc = key_container_status(gaap_a, gaap_b, concept, '{', '}', &concept_a, &concept_b);
+    if (rc != 1) return rc;
 
-    if (!key_container(units_a, units_b, "USD", '[', ']', &usd_a, &usd_b))
-        return 0;
+    rc = key_container_status(concept_a, concept_b, "units", '{', '}', &units_a, &units_b);
+    if (rc != 1) return rc;
+
+    rc = key_container_status(units_a, units_b, "USD", '[', ']', &usd_a, &usd_b);
+    if (rc != 1) return rc;
 
     p = usd_a + 1;
 
@@ -421,6 +425,7 @@ int main(int argc, char **argv)
     EntryVec all = {0};
     size_t oi = 0, ai = 0, on = 0, an = 0;
     int eligible;
+    int collect_rc;
 
     if (argc != 8) {
         fprintf(stderr,
@@ -443,12 +448,24 @@ int main(int argc, char **argv)
     json = read_all(path, &len);
     if (!json) return 4;
 
-    if (!collect_usd_entries(json, len, concept, &all)) {
+    collect_rc = collect_usd_entries(json, len, concept, &all);
+
+    if (collect_rc == 2) {
         free(json);
+        puts("PARSER_STATUS=PASS");
         puts("ELIGIBLE=NO");
         puts("REASON=CONCEPT_OR_USD_UNIT_NOT_AVAILABLE");
         return 0;
     }
+
+    if (collect_rc != 1) {
+        free_vec(&all);
+        free(json);
+        fprintf(stderr, "companyfacts parser structural failure\n");
+        return 6;
+    }
+
+    puts("PARSER_STATUS=PASS");
 
     eligible = select_pair(&all,
                            orig_accn,
