@@ -109,7 +109,7 @@ Lineage of Change
 derivation integrity across state transitions
 ```
 
-See [PROJECT-THESIS.md](PROJECT-THESIS.md), [MISSION.md](MISSION.md) and [`properties/LINEAGE-OF-CHANGE.md`](properties/LINEAGE-OF-CHANGE.md).
+See [PROJECT-THESIS.md](PROJECT-THESIS.md), [MISSION.md](MISSION.md), [`properties/LINEAGE-OF-CHANGE.md`](properties/LINEAGE-OF-CHANGE.md) and [`properties/DECISION-LINEAGE.md`](properties/DECISION-LINEAGE.md).
 
 ---
 
@@ -518,6 +518,7 @@ The project is early. The claims are intentionally narrow. The ambition is not.
 - [RESEARCH.md](RESEARCH.md)
 - [PRODUCT-CONTRACT.md](PRODUCT-CONTRACT.md)
 - [`properties/LINEAGE-OF-CHANGE.md`](properties/LINEAGE-OF-CHANGE.md)
+- [`properties/DECISION-LINEAGE.md`](properties/DECISION-LINEAGE.md)
 - [`cases/`](cases/)
 
 ---
