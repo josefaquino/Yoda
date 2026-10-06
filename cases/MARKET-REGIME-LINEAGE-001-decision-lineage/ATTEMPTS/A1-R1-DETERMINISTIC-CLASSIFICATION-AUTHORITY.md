@@ -1,0 +1,118 @@
+# A1-R1 — Deterministic Classification Authority
+
+## Status
+
+```text
+STATUS=PRE-REGISTERED
+EXECUTED=NO
+EXECUTION_POLICY=ONE_EXECUTION
+```
+
+## Input authority
+
+```text
+A0_EVIDENCE_MANIFEST_SHA256=
+0440ffea6e2377fa6843f972f35d127f44727f114c2d91ae94039ff1ca4a78c8
+
+STATE_A_SNAPSHOT_SHA256=
+10ce61f2bd18d1f32191a91c317759a87ca11b993f22f630818c56a96bef9410
+
+STATE_B_SNAPSHOT_SHA256=
+d1688f9b362c84018f9fc093e8a6f7b985e56e3965bdb9bf8d2bdffa3af39a34
+
+STATE_C_SNAPSHOT_SHA256=
+b0604231b66c6d24ef7e640bb5cf423ed138984a69342eff0f2585ac446006c2
+```
+
+## Frozen classifier authority
+
+```text
+CLASSIFICATION_CONTRACT_SHA256=
+955b9bde32a74c46c100bba300a7c6398606b53c13efa237b97e3f076f53a2d5
+
+AUTHORITY_1=C11
+AUTHORITY_1_SOURCE_SHA256=
+0e72cfbdeee214a40ba439c56f161e782719753eabe01647b5b4ddf04c0aa1f5
+
+AUTHORITY_2=POSIX_AWK_SHELL
+AUTHORITY_2_SOURCE_SHA256=
+a8c43eb473f07a6c0a68ffbed4bf5022453dbd558e520dcf2889eddfdc45e5b0
+
+SHARED_CLASSIFICATION_CODE=NO
+```
+
+## Classification contract
+
+```text
+VIXCLS >= 20.0000 -> VIX_FLAG=1
+DGS10  >= 4.0000  -> RATE_FLAG=1
+NFCI   >= 0.0000  -> NFCI_FLAG=1
+
+SCORE=VIX_FLAG+RATE_FLAG+NFCI_FLAG
+
+SCORE=0      -> CALM
+SCORE=1      -> FRAGILE
+SCORE=2 or 3 -> STRESSED
+
+FIXED_POINT_SCALE=10000
+COMPARISON=>=
+MORE_THAN_FOUR_FRACTION_DIGITS=INVALID
+MISSING_VALUE=INVALID
+DUPLICATE_SERIES=INVALID
+UNKNOWN_SERIES=INVALID
+```
+
+Threshold tuning after A0 data freeze remains forbidden.
+
+## Execution policy
+
+The C11 authority is compiled and its binary identity frozen before the one-execution gate.
+
+The one-execution lock is then created immediately before the first real classification.
+
+If either authority cannot execute cleanly, the measurement is NOT_EVALUATED and the consumed lock is preserved.
+
+If both authorities execute successfully but their canonical result bytes differ:
+
+```text
+A1=FAIL
+FAILURE_CLASS=AUTHORITY_IMPLEMENTATION_DIVERGENCE
+```
+
+No silent rerun is permitted.
+
+## Frozen harness identity
+
+```text
+A1_R1_SCRIPT_SHA256=
+a9d04c9ceff162911a4a3606d68d747b82df0de69db686d47c4a6ef6115ca13c
+
+A1_R1_CANONICAL_HARNESS_COMMIT=
+18acde5284ead728d0ed528730cbf5aecdead0a9
+```
+
+## PASS condition
+
+```text
+CLASSIFICATION_CONTRACT=FROZEN
+AUTHORITY_1_IDENTITY=FROZEN
+AUTHORITY_2_IDENTITY=FROZEN
+
+AUTHORITY_1_EXECUTION=PASS
+AUTHORITY_2_EXECUTION=PASS
+
+STATE_A_AUTHORITY_EQUIVALENCE=PASS
+STATE_B_AUTHORITY_EQUIVALENCE=PASS
+STATE_C_AUTHORITY_EQUIVALENCE=PASS
+
+AUTHORITY_FEATURE_EQUIVALENCE=PASS
+AUTHORITY_CLASSIFICATION_EQUIVALENCE=PASS
+
+A1_EVIDENCE_INTEGRITY=PASS
+
+YODA_WRITES=ZERO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Only PASS authorizes A2.
