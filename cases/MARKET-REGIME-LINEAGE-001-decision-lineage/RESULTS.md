@@ -9,11 +9,11 @@
 | PRE-A0-R2 | PASS | FRED metadata/observations and point-in-time parameters reachable; zero Yoda writes |
 | A0-R1 | PASS | Three point-in-time snapshots frozen; evidence manifest valid; classification not executed |
 | A1-R1 | NOT_EVALUATED | One-shot consumed; C11 authority stopped at first classification with HARNESS_FAILURE; rerun forbidden |
-| A1-R2 | PRE-REGISTERED / NOT EXECUTED | Representation-only revision: fixed-point 10^5, same snapshots/thresholds/labels |
-| A2 | BLOCKED | Requires A1-R2 PASS |
+| A1-R2 | PASS | C11 and POSIX awk produced byte-identical features/classifications for A/B/C |
+| A2-R1 | PRE-REGISTERING | Persist and recover immutable Decision Lineage in Yoda |
 | B | BLOCKED | Requires A2 PASS |
 
-No market classifications have been observed or recorded in this CASE at preregistration time.
+Historical classifications were first observed during the frozen A1-R2 execution; no thresholds, dates, snapshots or label mappings were changed after A0.
 
 
 ## A1-R1 harness identity erratum
@@ -42,3 +42,36 @@ A1_R1_RERUN=NO
 All three frozen NFCI inputs contain five fractional digits while the v1 parser admitted at most four.
 
 A1-R2 is permitted as a representation-only revision. Dates, snapshot bytes, thresholds, labels and the scientific question remain frozen.
+
+
+## A1-R2 observed result
+
+```text
+STATUS=PASS
+EXECUTION_COUNT=1
+RUN_RC=0
+
+A=STRESSED
+B=FRAGILE
+C=FRAGILE
+
+AUTHORITY_1_V2_RESULTS_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+
+AUTHORITY_2_V2_RESULTS_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+
+CANONICAL_RESULTS_V2_SHA256=
+bea0f2e397f9e00b217c6f3fccd036ef346f9d555a04941369707792927b11ba
+
+A1_R2_EVIDENCE_MANIFEST_SHA256=
+dc68f1634085ada042ab384e684e8ddbd812e7c29ab83c21d066837502c25a0a
+```
+
+Observed transition structure:
+
+```text
+A -> B  STRESSED -> FRAGILE  classification_changed=YES
+B -> C  FRAGILE  -> FRAGILE  classification_changed=NO
+                              underlying_evidence_changed=YES
+```
