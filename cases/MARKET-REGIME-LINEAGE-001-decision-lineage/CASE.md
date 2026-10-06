@@ -6,10 +6,15 @@
 
 ```text
 DESIGN_REVIEW=COMPLETE
-PRE_A0=READY
-CASE_EXECUTION_AUTHORIZED=PRE_A0_ONLY
-YODA_WRITES=ZERO
-NEXT_GATE=PRE_A0_CONNECTIVITY_AND_API_AUTHORITY
+PRE_A0_R2=PASS
+A0_R1=PASS
+A1_R1=NOT_EVALUATED
+A1_R2=PASS
+A2_R1=PRE_REGISTERED
+B=BLOCKED
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+NEXT_GATE=A2_YODA_DECISION_LINEAGE
 ```
 
 ## Research question
@@ -279,7 +284,27 @@ INVESTMENT_CLAIM=NO
 
 Inputs are canonical decimal strings.
 
-All comparisons use exact fixed-point scale 10^4 after deterministic decimal parsing.
+The initial A1-R1 representation admitted at most four fractional digits and was preserved as NOT_EVALUATED when frozen NFCI inputs were observed with five fractional digits.
+
+A1-R2 changed **numeric representation capacity only**:
+
+```text
+V1_FIXED_POINT_SCALE=10000
+V1_MAX_FRACTION_DIGITS=4
+A1_R1=NOT_EVALUATED
+
+V2_FIXED_POINT_SCALE=100000
+V2_MAX_FRACTION_DIGITS=5
+A1_R2=PASS
+
+DATES_CHANGED=NO
+A0_SNAPSHOT_BYTES_CHANGED=NO
+THRESHOLDS_CHANGED=NO
+LABEL_MAPPING_CHANGED=NO
+SCIENTIFIC_QUESTION_CHANGED=NO
+```
+
+The active classification contract therefore uses exact fixed-point scale 10^5. No rounding or truncation is permitted.
 
 Indicators:
 
@@ -394,7 +419,18 @@ Freeze point-in-time source data, metadata, canonical snapshots and temporal evi
 
 ### A1 — deterministic classification authority
 
-Freeze the two independent implementations and prove feature/classification equivalence for A/B/C.
+A1-R1 was NOT_EVALUATED because its four-decimal representation contract rejected the frozen five-decimal NFCI values.
+
+A1-R2 changed only representation capacity to five decimals and passed:
+
+```text
+A=STRESSED
+B=FRAGILE
+C=FRAGILE
+
+AUTHORITY_FEATURE_EQUIVALENCE=PASS
+AUTHORITY_CLASSIFICATION_EQUIVALENCE=PASS
+```
 
 ### A2 — Yoda Decision Lineage
 
