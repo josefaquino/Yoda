@@ -1,0 +1,111 @@
+# B-R0 Independent Dual Derivation Replay Preflight — PASS
+
+## Verdict
+
+```text
+B_R0_INDEPENDENT_REPLAY_PREFLIGHT=PASS
+
+YODA_RECOVERY_AUTHORITY=PASS
+RECOVERED_OBJECT_COUNT=10
+
+PINNED_RUNTIME=PASS
+INDEPENDENT_IMPLEMENTATION_BOUNDARY=PASS
+
+YODA_STORE_MUTATED=NO
+
+B_EXECUTION_LOCK=ABSENT
+B_STAGE=ABSENT
+INDEPENDENT_REPLAY_EXECUTED=NO
+EXTERNAL_JUDGE_EXECUTED=NO
+YODA_WRITES=ZERO
+
+NEXT_GATE=B_R1_INDEPENDENT_DUAL_DERIVATION_REPLAY
+```
+
+## Execution identities
+
+```text
+B_R0_SCRIPT_SHA256=
+88a0676f33912a3ad0fa288e76dbfdcf237e29265aeac6078bb0c91918472bde
+
+B_R0_CONSOLE_SHA256=
+b35aa7052c76dd76fd44c587b5bb0ad302e3788fe8a2a919f9c11325ed8c6a2e
+
+B_R0_EVIDENCE_MANIFEST_SHA256=
+93de5132aa3f43e8f7b5a3befd13e5270d9e372b9b0d55ee30711e7848416650
+```
+
+## Frozen A2 authority
+
+```text
+A2_LOCK_SHA256=
+678d87d60c3661209b73674961afb42a8139fef66c6cdbbe57ebb51487b39bb7
+
+A2_MANIFEST_SHA256=
+d6ac6b8d4fbd61f7c210d998f8feb407759dd3df3d068c82187653c006099a2c
+
+A2_CONSOLE_SHA256=
+f37708f77cf45ce2da56e3b2d5c11601c7f9ca5a01bc881dfa3d160b4313d4f5
+
+DATA_YODA_SHA256=
+0d790fb57c3fe092a1567327f049f0b123dd143c379f4afa21692b614f40d42a
+
+DATA_YODA_BYTES=24801
+```
+
+## Yoda recovery
+
+```text
+RECOVERED_OBJECT_COUNT=10
+
+LINEAGE_A_SHA256=
+965417ca555dd70eff7d39e822326305b1e81b9e16864dcd7a92b43197d5d36b
+
+LINEAGE_B_SHA256=
+1933529e5aa2902bd83a45d90f2692e07f0c3ef00ac4442db98ffdd114ae8340
+```
+
+## Independent implementation authority
+
+```text
+B_ADAPTER_SHA256=
+c63c1349e6eefc950f791382c1fc2caf9f1ae0e3a516107679ecd3dfbc1ca16a
+
+B_ADAPTER_COMMIT=
+fc2821cb9d590d35f3409d1b092cfbb29415a5c5
+
+B_ADAPTER_IDENTITY=PASS
+B_ADAPTER_PARSE=PASS
+B_ADAPTER_PRE_EXECUTION_AUDIT=PASS
+INDEPENDENT_IMPLEMENTATION_BOUNDARY=PASS
+```
+
+The B adapter does not reference the A1 adapter, does not call upstream get_tasks, and has no model-provider dependency.
+
+## Frozen external runtime
+
+```text
+RELEASE_TAG=v1.0.1
+RELEASE_COMMIT=fc0055dc4e0a316c3f83133267fbd6faaa770992
+
+UV_VERSION=uv 0.12.23 (x86_64-unknown-linux-gnu)
+PYTHON_VERSION=3.12.15
+TAU2_VERSION=1.0.1
+```
+
+## Read-only proof
+
+```text
+STORE_BEFORE_MANIFEST_SHA256=
+28373a1e9a0b97e6f5b508d0a3847aefea1dd615e62f8cae486895727818398c
+
+STORE_AFTER_MANIFEST_SHA256=
+28373a1e9a0b97e6f5b508d0a3847aefea1dd615e62f8cae486895727818398c
+
+YODA_STORE_MUTATED=NO
+YODA_WRITES=ZERO
+```
+
+## Interpretation
+
+B-R0 establishes that Stage B can be executed from artifacts freshly recovered from the frozen A2 Yoda store, with a separate replay implementation and the frozen tau2 authority, without consulting A0/A1 as operational replay inputs and without mutating Yoda.
