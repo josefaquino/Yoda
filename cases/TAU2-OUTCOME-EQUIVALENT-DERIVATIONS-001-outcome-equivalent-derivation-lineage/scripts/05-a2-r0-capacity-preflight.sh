@@ -86,20 +86,37 @@ extract_numeric_define()
 {
     name="$1"
 
-    value="$(
+    expr="$(
         awk -v name="$name" '
             $1 == "#define" && $2 == name {
-                v = $3
-                gsub(/[uUlL()]/, "", v)
-                if (v ~ /^[0-9]+$/) {
-                    print v
-                    exit
-                }
+                $1=""
+                $2=""
+                sub(/^[[:space:]]+/, "")
+                sub(/[[:space:]]*\/\/.*/, "")
+                sub(/[[:space:]]*\/\*.*/, "")
+                print
+                exit
             }
         ' "$YODA_SOURCE"
     )"
 
-    test -n "$value" ||
+    test -n "$expr" ||
+        return 1
+
+    expr="$(
+        printf '%s\n' "$expr" |
+        sed 's/[uUlL]//g'
+    )"
+
+    case "$expr" in
+        *[!0-9\ \(\)\<\>\+\-\*\/]*)
+            return 1
+            ;;
+    esac
+
+    value="$((expr))"
+
+    test "$value" -gt 0 ||
         return 1
 
     printf '%s\n' "$value"
