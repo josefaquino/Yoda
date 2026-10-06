@@ -8,8 +8,8 @@ CONSOLE="$HOME/cmu/market-regime-lineage-001-stage-a1-r1-console.log"
 LOCK="$HOME/cmu/$CASE/.stage-a1-r1-execution-started"
 STAGE="$HOME/cmu/$CASE/stage-a1-r1"
 
-EXPECTED="a9d04c9ceff162911a4a3606d68d747b82df0de69db686d47c4a6ef6115ca13c"
-URL="https://raw.githubusercontent.com/josefaquino/Yoda/main/cases/MARKET-REGIME-LINEAGE-001-decision-lineage/scripts/02-a1-deterministic-classification-authority.sh"
+EXPECTED="0c891fb1565f42e01943c13def49473b9e515a66653b0f88a479ca065b89a440"
+URL="https://raw.githubusercontent.com/josefaquino/Yoda/18acde5284ead728d0ed528730cbf5aecdead0a9/cases/MARKET-REGIME-LINEAGE-001-decision-lineage/scripts/02-a1-deterministic-classification-authority.sh"
 
 echo "============================================================"
 echo " A1-R1 SAFE LAUNCHER"
