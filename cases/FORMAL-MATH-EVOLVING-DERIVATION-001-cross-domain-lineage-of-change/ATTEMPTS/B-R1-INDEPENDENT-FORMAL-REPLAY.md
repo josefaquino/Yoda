@@ -46,6 +46,16 @@ OXILEAN_COMMIT=9077af778fe467cba61d9c8385fb2b7e6a8d385f
 OXILEAN_BIN_SHA256=e43ee52c42e8d0fdcee4997760f4bb162fd3e07598753c135cc0c69fc63dc9e2
 ```
 
+## Frozen harness identity
+
+```text
+B_R1_SCRIPT_SHA256=
+c57417a93bc409a660758833d5e7db35c34911a59ec2958d026b26d3a165281e
+
+B_R1_CANONICAL_HARNESS_COMMIT=
+7f74de1b1e529949df4c3ba7fa7015989c9b826a
+```
+
 ## Execution contract
 
 The replay project receives the statement and proof bytes only through `yoda get` from the frozen A2 durable store.
