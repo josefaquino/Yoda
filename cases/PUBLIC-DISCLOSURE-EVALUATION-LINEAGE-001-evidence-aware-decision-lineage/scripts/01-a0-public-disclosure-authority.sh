@@ -176,7 +176,7 @@ do
     require_cmd "$cmd" "$label"
 done
 
-if test -z "\${SEC_USER_AGENT:-}"
+if test -z "${SEC_USER_AGENT:-}"
 then
     not_evaluated "SEC_USER_AGENT_MISSING"
 fi
@@ -467,8 +467,8 @@ while IFS="$(printf '\t')" read -r AMEND_MASTER_DATE CIK FILING_PATH COMPANY_NAM
 do
     ORDINAL=$((ORDINAL + 1))
 
-    AMEND_FILE="\${FILING_PATH##*/}"
-    AMEND_ACCN="\${AMEND_FILE%.txt}"
+    AMEND_FILE="${FILING_PATH##*/}"
+    AMEND_ACCN="${AMEND_FILE%.txt}"
     CIK10="$(printf '%010d' "$CIK")"
 
     CAND="$WORK/candidate-$ORDINAL"
