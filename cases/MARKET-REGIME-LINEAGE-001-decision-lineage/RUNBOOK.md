@@ -9,7 +9,7 @@ PRE_A0=PASS
 A0_R1=PASS
 A1_R1=NOT_EVALUATED
 A2_R1=PASS
-B_R1=PRE_REGISTERING
+B_R1=PRE_REGISTERED
 ```
 
 ## PRE-A0
@@ -283,3 +283,32 @@ DATA_YODA_BYTES=24851
 
 A2_R1_RERUN=NO
 ```
+
+
+## B-R1
+
+```text
+STATUS=PRE_REGISTERED
+
+SCRIPT=scripts/05-b-r1-independent-classification-replay.sh
+
+B_R1_SCRIPT_SHA256=
+0013ed5e832d52436704010c20d43bd7a62a09cfa4b2a354d45f977e0cd24361
+
+B_R1_SCRIPT_COMMIT=
+9fd4c05d2553e0dc2632e5b3373e64d6780efa55
+
+SAFE_LAUNCHER=scripts/run-b-r1-safe.sh
+
+B_R1_SAFE_LAUNCHER_SHA256=
+a06f29b723e3fb2628ee06831f4748707415297f496084ab2be752cca9df6611
+
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+LOCAL_A0_REPLAY_INPUT=FORBIDDEN
+LOCAL_A1_REPLAY_INPUT=FORBIDDEN
+
+EXECUTION_POLICY=ONE_EXECUTION
+LOCK_BEFORE_FIRST_REPLAY_CLASSIFICATION=YES
+```
+
+B-R1 recompiles and replays both recovered authorities only against Yoda-recovered snapshots, then compares byte-for-byte with the Yoda-recovered original canonical evaluation.
