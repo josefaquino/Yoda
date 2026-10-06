@@ -1,5 +1,10 @@
 # Yoda
 
+<p align="center">
+  <img src="assets/yoda-logo.png" alt="Yoda logo" width="256">
+</p>
+
+
 > **Canonical active repository.** Historical predecessors are preserved for provenance and are no longer the active project surface. See [HISTORY.md](HISTORY.md).
 
 ## Canonical repository
