@@ -10,13 +10,17 @@ The goal is to expose the same small architecture to different forms of pressure
 
 ## Central research questions
 
-The program now has two connected questions:
+The program now has three connected questions:
 
 > **Can the same derivation layer preserve enough evidence, identity and lineage for different independent authorities to evaluate a result again later?**
 
 and:
 
 > **Can the same derivation layer preserve how a result changed from one independently identifiable state into another?**
+
+and:
+
+> **Can the same derivation layer preserve why a deterministic system made a particular decision at a particular point in time, including the evidence needed to reproduce that decision later?**
 
 Current architecture:
 
@@ -287,7 +291,77 @@ See [`properties/LINEAGE-OF-CHANGE.md`](properties/LINEAGE-OF-CHANGE.md).
 
 ---
 
-# Track D — External empirical workflow
+# Track D — Decision Lineage
+
+## MARKET-REGIME-LINEAGE-001 — VALIDATED
+
+This CASE moved from artifact and proof transitions into deterministic decision history.
+
+### Question
+
+> **Can Yoda preserve successive deterministic market-regime states and their derivation evidence such that independent implementations reproduce each original classification after recovery?**
+
+Three point-in-time public-data states were frozen before classification.
+
+Two independent authorities — C11 and POSIX awk — agreed byte-for-byte:
+
+```text
+A=STRESSED
+B=FRAGILE
+C=FRAGILE
+```
+
+Yoda then preserved the source snapshots, decision states, classification contract, authority implementations, original evaluation evidence and transition evidence.
+
+The observed lineage included both:
+
+```text
+A -> B
+STRESSED -> FRAGILE
+classification_changed=YES
+```
+
+and:
+
+```text
+B -> C
+FRAGILE -> FRAGILE
+classification_changed=NO
+underlying_evidence_changed=YES
+```
+
+Stage B recovered the snapshots and both authority implementations only from Yoda, replayed all three states and reproduced the original canonical bytes exactly.
+
+### Result
+
+```text
+MARKET_REGIME_LINEAGE_001=VALIDATED
+DECISION_LINEAGE=DEMONSTRATED
+INDEPENDENT_CLASSIFICATION_REPLAY=PASS
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Formal property:
+
+```text
+Decision Lineage
+=
+verifiable derivation of successive deterministic decisions
+```
+
+See:
+
+- `cases/MARKET-REGIME-LINEAGE-001-decision-lineage/`
+- `properties/DECISION-LINEAGE.md`
+
+The market-data workflow is the validating environment, not the product definition.
+
+---
+
+# Track E — External empirical workflow
 
 ## EXTERNALLY DEFINED ITERATIVE WORKFLOW — NEXT
 
@@ -359,9 +433,20 @@ SYNTHID-BIO-EVOLVING-PROVENANCE-001
 LINEAGE OF CHANGE
 How did this become what it is now?
         PASS
+
+FORMAL-MATH-EVOLVING-DERIVATION-001
+CROSS-DOMAIN LINEAGE OF CHANGE
+Does the same property survive formal proof evolution?
+        PASS
+
+MARKET-REGIME-LINEAGE-001
+DECISION LINEAGE
+Why did the deterministic system decide this then,
+and can the decision be reproduced from recovered evidence?
+        PASS
 ```
 
-The same small Yoda surface survived all four without a Genome Mode, Math Mode, SynthID Mode or Change Mode.
+The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode, Change Mode or Market Mode.
 
 This strengthens the hypothesis that **verifiable derivation may be a cross-domain infrastructure property**.
 
@@ -459,6 +544,12 @@ The near-term research sequence is:
 
 ```text
 single-transition Lineage of Change
+        PASS
+        ↓
+cross-domain formal Lineage of Change
+        PASS
+        ↓
+Decision Lineage
         PASS
         ↓
 external iterative workflow
