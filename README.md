@@ -119,7 +119,7 @@ Yoda is developed through narrow, falsifiable CASEs.
 
 > **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
 
-Six evidence blocks now define the current research thesis.
+Seven evidence blocks now define the current research thesis.
 
 ### 1. GENOME-LINEAGE-001 — Lineage of State
 
@@ -328,6 +328,71 @@ This is an infrastructure and reproducibility result. It is not a market forecas
 
 See [`cases/MARKET-REGIME-LINEAGE-001-decision-lineage/`](cases/MARKET-REGIME-LINEAGE-001-decision-lineage/).
 
+### 7. YODA-EDGAR-FILING-CONTEXT-001 — Successive Financial State
+
+Question:
+
+> **Can Yoda preserve successive public financial states with their exact reporting context and filing provenance without destroying earlier observed states?**
+
+The workload used public SEC EDGAR + XBRL facts for NVIDIA's `us-gaap:OtherAccruedLiabilitiesCurrent` at the same reporting date (`2022-01-30`) across five distinct filings:
+
+```text
+2022-03-18  10-K  accession 0001045810-22-000036  647000000
+2022-05-27  10-Q  accession 0001045810-22-000079  515000000
+2022-08-31  10-Q  accession 0001045810-22-000147  469000000
+2022-11-18  10-Q  accession 0001045810-22-000166  469000000
+2023-02-24  10-K  accession 0001045810-23-000017  371000000
+```
+
+The final R1 experiment reused the exact context-capable Yoda binary previously validated with real GitHub agent-task context:
+
+```text
+PRODUCT_BINARY_SHA256=
+8e99fdb4289c47dc1d03ecd59abd85d48c34204ffa23e1e9c6ac863445c1b001
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+CROSS_DOMAIN_BINARY_REUSE=PASS
+```
+
+Five source states entered with five unique SEC accession identities and four distinct values. All five identities and contexts survived Frontier, KyberDB and Lakehouse exactly:
+
+```text
+FRONTIER_UNIQUE_IDENTITIES=5
+KYBER_UNIQUE_IDENTITIES=5
+LAKEHOUSE_UNIQUE_IDENTITIES=5
+
+EXPECTED_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+
+KYBER_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+
+LAKEHOUSE_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+
+TOTAL_FAILURES=0
+YODA_EDGAR_FILING_CONTEXT_001_R1=PASS
+```
+
+A useful edge inside the case is that two filings carried the same observed value (`469000000`) while remaining distinct states because their accession numbers, filing dates and provenance differed:
+
+```text
+same value
+!=
+same state
+```
+
+The narrow demonstrated-property statement is:
+
+> **Yoda preserved five successive public financial states with exact reporting context and accession-level filing provenance across Frontier, KyberDB and Lakehouse, without losing earlier observed states and without changing Yoda or Kyber.**
+
+The initial `run-001` is preserved as `NOT_EVALUATED`: a preparation bug bound the accession field to fiscal year and collapsed five source states into two malformed identities. R1 corrected only the input/oracle binding, not the product, and then passed. The failed preparation remains part of the evidence trail.
+
+This case does **not** establish restatement, correction or supersession semantics. It does not claim accounting interpretation, forecasting, trading alpha or investment advice.
+
+See [`cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/`](cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/).
+
 ---
 
 ## What the combined evidence suggests
@@ -346,6 +411,9 @@ Can independent forms of provenance coexist?
         ↓
 LINEAGE OF CHANGE
 How did this become what it is now?
+        ↓
+SUCCESSIVE STATE PRESERVATION
+Can distinct observed states keep exact context and provenance over time?
         ↓
 DECISION LINEAGE
 Why did a deterministic system make this decision then,
@@ -438,7 +506,12 @@ FORMAL-MATH-EVOLVING-DERIVATION-001
 
 MARKET-REGIME-LINEAGE-001
 → Decision Lineage + independent replay from Yoda-recovered decision evidence
+
+YODA-EDGAR-FILING-CONTEXT-001-R1
+→ successive public financial state + exact context + filing provenance
 ```
+
+The same context-capable binary has now preserved bounded real-world context in both public software-agent tasks and public financial reporting without a finance-specific storage path.
 
 The next strong falsification should be externally defined rather than another internal demonstration.
 
@@ -461,6 +534,9 @@ Yoda is not currently claiming to be:
 - a vector database;
 - a distributed database;
 - a cloud platform;
+- a trading system;
+- an accounting interpretation engine;
+- an investment-advice system;
 - a replacement for independent domain authorities.
 
 Yoda also does not claim that every transformation is legitimate simply because its derivation was preserved.
