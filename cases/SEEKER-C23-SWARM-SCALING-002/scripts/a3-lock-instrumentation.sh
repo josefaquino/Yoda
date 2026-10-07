@@ -227,14 +227,14 @@ SMOKE_TRACE="$PREP/analyzer-smoke-reassembled.trace"
 
 {
     grep -h 'flock(.*LOCK_EX' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
-    grep -hE 'rename(at2|at)?\\(' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
+    grep -hE 'rename(at2|at)?\(' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
     grep -h 'flock(.*LOCK_UN' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
 } |
 LC_ALL=C sort -n > "$SMOKE_TRACE" ||
     prelock_fail "ANALYZER_SMOKE_REASSEMBLY_FAILURE"
 
 SMOKE_EX="$(grep -c 'flock(.*LOCK_EX' "$SMOKE_TRACE" || true)"
-SMOKE_RENAME="$(grep -cE 'rename(at2|at)?\\(' "$SMOKE_TRACE" || true)"
+SMOKE_RENAME="$(grep -cE 'rename(at2|at)?\(' "$SMOKE_TRACE" || true)"
 SMOKE_UN="$(grep -c 'flock(.*LOCK_UN' "$SMOKE_TRACE" || true)"
 
 echo "ANALYZER_SMOKE_MODE=REASSEMBLED_ACTUAL_PREFLIGHT_SYSCALLS"
