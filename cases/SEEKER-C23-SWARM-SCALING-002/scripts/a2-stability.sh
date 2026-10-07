@@ -276,7 +276,7 @@ run_scenario()
     echo "RUN=$label ROUND=$round POSITION=$position WORKERS=$workers ELAPSED_S=$elapsed_s TPS=$tps"
 }
 
-section "2. WARMUP â EXCLUDED FROM STATISTICS"
+section "2. WARMUP -- EXCLUDED FROM STATISTICS"
 
 : > "$RAW/all-runs.tsv"
 
