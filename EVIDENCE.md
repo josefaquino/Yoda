@@ -45,6 +45,7 @@ PUBLIC LANGUAGE
 | BGP-RIPE-RIS-001 | Internet routing | mutation-state equivalence | PASS |
 | YODA-GITHUB-WORK-QUEUE-001 | Agent workloads | real task identity preservation through concurrent local execution state | PASS |
 | YODA-GITHUB-WORK-CONTEXT-001 | Agent workloads | exact task identity + minimal useful context preservation | PASS |
+| YODA-EDGAR-FILING-CONTEXT-001-R1 | Public financial reporting | successive financial state + exact context + accession-level provenance | PASS |
 | AUDIT-FORENSICS-001 | Security events | exact ledger + tamper rejection | PASS |
 | GENOME-KMER-001 | Genomics | exact indexed state | PASS |
 | GENOME-REFERENCE-001 | Genomics | reference coordinate equivalence | PASS |
@@ -272,6 +273,101 @@ This does not claim that Yoda solved, semantically understood, prioritized, or m
 See:
 
 `cases/YODA-GITHUB-WORK-CONTEXT-001-real-agent-task-context/`
+
+---
+
+# Public financial reporting — successive state + exact provenance
+
+`YODA-EDGAR-FILING-CONTEXT-001-R1` tested whether the same context-capable Yoda binary used for real GitHub task context could preserve successive public financial states without a finance-specific engine path.
+
+The source chain used SEC EDGAR + XBRL facts for NVIDIA `us-gaap:OtherAccruedLiabilitiesCurrent`, unit `USD`, at reporting date `2022-01-30`:
+
+```text
+2022-03-18  10-K  0001045810-22-000036  647000000
+2022-05-27  10-Q  0001045810-22-000079  515000000
+2022-08-31  10-Q  0001045810-22-000147  469000000
+2022-11-18  10-Q  0001045810-22-000166  469000000
+2023-02-24  10-K  0001045810-23-000017  371000000
+```
+
+Frozen source property:
+
+```text
+SOURCE_STATES=5
+UNIQUE_ACCESSIONS=5
+DISTINCT_VALUES=4
+VALUE_469M_DISTINCT_STATES=2
+```
+
+R1 reused:
+
+```text
+PRODUCT_BINARY_SHA256=
+8e99fdb4289c47dc1d03ecd59abd85d48c34204ffa23e1e9c6ac863445c1b001
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+CROSS_DOMAIN_BINARY_REUSE=PASS
+```
+
+Independent read-only adjudication confirmed:
+
+```text
+EXPECTED_IDENTITIES=5
+EXPECTED_UNIQUE_IDENTITIES=5
+
+FRONTIER_UNIQUE_IDENTITIES=5
+FRONTIER_IDENTITY_EXACT_MATCH=PASS
+FRONTIER_CONTEXT_EXACT_MATCH=PASS
+
+KYBER_UNIQUE_IDENTITIES=5
+KYBER_IDENTITY_EXACT_MATCH=PASS
+KYBER_CONTEXT_EXACT_MATCH=PASS
+KYBER_UNIQUE_ACCESSIONS=5
+
+LAKEHOUSE_UNIQUE_IDENTITIES=5
+LAKEHOUSE_IDENTITY_EXACT_MATCH=PASS
+LAKEHOUSE_CONTEXT_EXACT_MATCH=PASS
+LAKEHOUSE_UNIQUE_ACCESSIONS=5
+
+TOTAL_FAILURES=0
+```
+
+Cross-layer context identity:
+
+```text
+EXPECTED_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+
+KYBER_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+
+LAKEHOUSE_CONTEXT_SHA256=
+e9b8970f469a6a5e904a22d38a71849894789bc0e317f22217f2a234c47273b5
+```
+
+Final classification:
+
+```text
+YODA_EDGAR_FILING_CONTEXT_001_R1=PASS
+VALIDATION_MODE=READ_ONLY
+PRODUCT_EXECUTION_COUNT=1
+PRODUCT_RERUN=NO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The initial `run-001` remains preserved as `NOT_EVALUATED` because a harness preparation bug bound accession identity to fiscal year and collapsed five real source states into two malformed identities. R1 corrected only the oracle/input binding. No Yoda or Kyber code changed.
+
+The demonstrated property is intentionally narrow:
+
+> **Yoda preserved five successive public financial states with exact reporting context and accession-level filing provenance across Frontier, KyberDB and Lakehouse, without losing earlier observed states and without changing Yoda or Kyber.**
+
+The experiment makes no restatement, correction, supersession, accounting-judgment, forecasting, trading-alpha or investment-advice claim.
+
+See:
+
+`cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/`
 
 ---
 
@@ -583,6 +679,9 @@ Can independent provenance layers coexist?
         ↓
 LINEAGE OF CHANGE
 How did this become what it is now?
+        ↓
+SUCCESSIVE STATE PRESERVATION
+Can distinct observed states retain exact context and provenance over time?
         ↓
 DECISION LINEAGE
 Why did the deterministic system decide this then,
