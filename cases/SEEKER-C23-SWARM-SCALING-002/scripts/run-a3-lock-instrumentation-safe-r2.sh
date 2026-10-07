@@ -11,11 +11,11 @@ CONSOLE="$HOME/cmu/seeker-c23-swarm-scaling-002-a3-lock-instrumentation-r2-conso
 LOCK="$ROOT/.a3-lock-instrumentation-execution-started"
 STAGE="$ROOT/a3-lock-instrumentation"
 
-EXPECTED_SCRIPT_SHA256="1f7354c8dd44011ed1f70da97d8cf79c8ca47094dc0daba20092fc0838c9caae"
+EXPECTED_SCRIPT_SHA256="95b8bd1b67d40298d155ff0b2f07edc57c92673dce3060d829c4340d9bcbbbca"
 EXPECTED_FRONTIER_SHA256="c26a3d75693addede036e1feb77b9b435ca887fa3d09a28cd1f7018a1768e8b5"
 EXPECTED_PREFLIGHT_CONSOLE_SHA256="14cf13fcd2b794c1ba70ec0d7eeaf77ec54fa52c9a950e8d8264e5bc7cbf9d1a"
 
-URL="https://raw.githubusercontent.com/josefaquino/Yoda/64c12beac634151e1ed8a1e1942ed66fdefeba52/cases/SEEKER-C23-SWARM-SCALING-002/scripts/a3-lock-instrumentation.sh"
+URL="https://raw.githubusercontent.com/josefaquino/Yoda/56014e7e9aa3ce722cf4a1a971f97fde656f69af/cases/SEEKER-C23-SWARM-SCALING-002/scripts/a3-lock-instrumentation.sh"
 
 echo "============================================================"
 echo " SEEKER-C23-SWARM-SCALING-002"
