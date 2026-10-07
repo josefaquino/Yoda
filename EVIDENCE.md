@@ -44,6 +44,7 @@ PUBLIC LANGUAGE
 | USGS-001 | Earthquake events | external identity + replay | PASS |
 | BGP-RIPE-RIS-001 | Internet routing | mutation-state equivalence | PASS |
 | YODA-GITHUB-WORK-QUEUE-001 | Agent workloads | real task identity preservation through concurrent local execution state | PASS |
+| YODA-GITHUB-WORK-CONTEXT-001 | Agent workloads | exact task identity + minimal useful context preservation | PASS |
 | AUDIT-FORENSICS-001 | Security events | exact ledger + tamper rejection | PASS |
 | GENOME-KMER-001 | Genomics | exact indexed state | PASS |
 | GENOME-REFERENCE-001 | Genomics | reference coordinate equivalence | PASS |
@@ -140,6 +141,137 @@ This case does not claim that Yoda solved, understood, prioritized, or modified 
 See:
 
 `cases/YODA-GITHUB-WORK-QUEUE-001-real-agent-work-queue/`
+
+---
+
+# Agent workloads — real GitHub task-context preservation
+
+`YODA-GITHUB-WORK-CONTEXT-001` reused the exact 100 public GitHub issue identities from the preceding work-queue case and changed one product property:
+
+```text
+BEFORE
+task identity
+
+        ↓
+
+AFTER
+task identity
++
+minimal useful task context
+```
+
+The preserved compact context contained:
+
+```text
+number
+title
+state
+labels
+created_at
+updated_at
+```
+
+The candidate path was:
+
+```text
+GitHub source context
+        ↓
+Frontier
+        ↓
+Agent Driver / Seeker
+        ↓
+Yoda Mesh
+        ↓
+KyberDB WAL
+        ↓
+Lakehouse NDJSON
+```
+
+Runtime:
+
+```text
+TASKS=100
+WORKERS=16
+BATCH_SIZE=10
+SYSTEM_RC=0
+PRODUCT_EXECUTION_COUNT=1
+PRODUCT_RERUN=NO
+```
+
+Independent read-only adjudication confirmed exact identity and context reconciliation:
+
+```text
+EXPECTED_IDENTITIES=100
+EXPECTED_CONTEXTS=100
+
+FRONTIER_FINAL_PROCESSING=100
+FRONTIER_FINAL_QUEUED=0
+
+KYBER_RECORDS=100
+KYBER_TO_SOURCE_CONTEXT_MATCH=1
+WAL_BYTE_EXACT_ORACLE=1
+
+LAKEHOUSE_RECORDS=100
+LAKEHOUSE_JSON_VALID=1
+LAKEHOUSE_INNER_CONTEXT_JSON_VALID=1
+LAKEHOUSE_TO_SOURCE_CONTEXT_MATCH=1
+
+MISSING_IDENTITIES=0
+DUPLICATE_IDENTITIES=0
+EXTRA_IDENTITIES=0
+
+MISSING_CONTEXTS=0
+CONTEXT_MISMATCHES=0
+EXTRA_CONTEXTS=0
+```
+
+The strongest byte-level evidence was:
+
+```text
+EXPECTED_CONTEXT_SHA256=
+c0cf7249996f0bf33602ef3e1ade9d9175279e81d38fb3f4b2b0c1fb1a02cee6
+
+KYBER_WAL_SHA256=
+c0cf7249996f0bf33602ef3e1ade9d9175279e81d38fb3f4b2b0c1fb1a02cee6
+```
+
+The complete Kyber WAL was therefore byte-for-byte identical to the independently expected key/context oracle for the tested workload.
+
+The candidate required four localized source changes:
+
+```text
+yoda_agent_driver.h
+yoda_agent_driver.c
+yoda_mesh.c
+yoda_lakehouse.c
+```
+
+KyberDB remained unchanged, and the frozen baseline remained untouched:
+
+```text
+KYBER_CHANGE=NO
+BASELINE_CHANGED=NO
+```
+
+Final classification:
+
+```text
+YODA_GITHUB_WORK_CONTEXT_001=PASS
+VALIDATION_MODE=READ_ONLY
+PRODUCT_EXECUTION_COUNT=1
+PRODUCT_RERUN=NO
+TOTAL_FAILURES=0
+```
+
+The demonstrated property is intentionally narrow:
+
+> **Yoda preserved both the identity and the minimal useful context of 100 real public agent tasks across concurrent execution, local persistence, and materialization, with zero missing, duplicate, extra, or mismatched records.**
+
+This does not claim that Yoda solved, semantically understood, prioritized, or modified the GitHub issues. It demonstrates exact preservation of bounded useful task context.
+
+See:
+
+`cases/YODA-GITHUB-WORK-CONTEXT-001-real-agent-task-context/`
 
 ---
 
