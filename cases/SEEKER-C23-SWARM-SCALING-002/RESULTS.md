@@ -91,3 +91,37 @@ A2 establishes the scaling shape but does not establish the mechanism responsibl
 LOCK_CONTENTION_ROOT_CAUSE=NOT_YET_MEASURED
 NEXT_GATE=A3_LOCK_INSTRUMENTATION
 ```
+
+
+## A3 Lock Instrumentation
+
+```text
+A3_LOCK_INSTRUMENTATION=PASS
+LOCK_CONTENTION_ROOT_CAUSE=SUPPORTED
+
+LOCK_WAIT_SHARE_1W_PCT=2.673
+LOCK_WAIT_SHARE_4W_PCT=14.482
+LOCK_WAIT_SHARE_8W_PCT=59.931
+LOCK_WAIT_SHARE_16W_PCT=87.137
+
+LOCK_WAIT_SUM_8W_VS_4W_RATIO=15.629
+LOCK_WAIT_SUM_16W_VS_4W_RATIO=94.407
+
+CRITERION_3_SHARE_4_GT_1=PASS
+CRITERION_4_SHARE_8_GE_4_PLUS_5PP=PASS
+CRITERION_5_SHARE_16_GE_4_PLUS_10PP=PASS
+CRITERION_6_SUMWAIT_8_GE_1_25X_4=PASS
+CRITERION_7_SUMWAIT_16_GE_1_50X_4=PASS
+A2_DIRECTION_CONSISTENCY=PASS
+
+A3_EXECUTION_LOCK_SHA256=
+a600d27bbdbe3c45725a57544c205ddf74a8ff473bebcfb80fbb2bcf183d0a2d
+
+A3_EVIDENCE_MANIFEST_SHA256=
+fef59c315bc2bef4f45f47bc15e214667c6b97ae7ed4548bc4cad542233e3c29
+
+A3_RERUN=NO
+NEXT_GATE=A4_BATCHED_RESERVATION
+```
+
+Scientific boundary: the shared flock is supported as a material coordination bottleneck for the frozen workload. A3 does not establish that flock is the only source of scaling loss. A3 throughput was diagnostic-only because strace perturbs execution.
