@@ -43,6 +43,7 @@ PUBLIC LANGUAGE
 | FIRMS-001 | Satellite observations | fact / decision equivalence | PASS |
 | USGS-001 | Earthquake events | external identity + replay | PASS |
 | BGP-RIPE-RIS-001 | Internet routing | mutation-state equivalence | PASS |
+| YODA-GITHUB-WORK-QUEUE-001 | Agent workloads | real task identity preservation through concurrent local execution state | PASS |
 | AUDIT-FORENSICS-001 | Security events | exact ledger + tamper rejection | PASS |
 | GENOME-KMER-001 | Genomics | exact indexed state | PASS |
 | GENOME-REFERENCE-001 | Genomics | reference coordinate equivalence | PASS |
@@ -57,6 +58,88 @@ PUBLIC LANGUAGE
 | MARKET-REGIME-LINEAGE-001 | Deterministic public-data decisions | Decision Lineage + Yoda-only independent classification replay | PASS |
 
 Negative experiments and invalid harness attempts remain evidence when they are classified honestly.
+
+
+---
+
+# Agent workloads — real GitHub work-identity preservation
+
+`YODA-GITHUB-WORK-QUEUE-001` tested the frozen Yoda C23 execution path with 100 public GitHub issues from `kubernetes/kubernetes`.
+
+The real workload path was:
+
+```text
+GitHub issues
+    ↓
+Frontier
+    ↓
+Agent Driver / Seeker
+    ↓
+Yoda Mesh
+    ↓
+Shield
+    ↓
+KyberDB WAL
+    ↓
+Lakehouse NDJSON
+```
+
+Runtime:
+
+```text
+TASKS=100
+WORKERS=16
+BATCH_SIZE=10
+SYSTEM_RC=0
+```
+
+An independent read-only validator then reconciled the existing artifacts without rerunning the product:
+
+```text
+FRONTIER_INITIAL_LINES=100
+FRONTIER_FINAL_PROCESSING=100
+FRONTIER_FINAL_QUEUED=0
+
+EXPECTED_KEYS=100
+
+WAL_RECORDS=100
+WAL_UNIQUE_KEYS=100
+EXPECTED_EQUALS_WAL=1
+
+LAKEHOUSE_RECORDS=100
+LAKEHOUSE_UNIQUE_KEYS=100
+EXPECTED_EQUALS_LAKEHOUSE=1
+
+MISSING=0
+DUPLICATE=0
+EXTRA=0
+```
+
+The executed frozen binary identity was:
+
+```text
+7510fc055e1d53b0471077f4b8cb5a32c08828a0fb9f40c2e81a8859750b55c3
+```
+
+Final classification:
+
+```text
+YODA_GITHUB_WORK_QUEUE_001=PASS
+VALIDATION_MODE=READ_ONLY
+PRODUCT_RERUN=NO
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The demonstrated property is intentionally narrow:
+
+> **The frozen Yoda C23 stack preserved the identity of 100 real public development tasks through concurrent task admission, local persistence, materialization, and exact reconciliation.**
+
+This case does not claim that Yoda solved, understood, prioritized, or modified the GitHub issues. It validates work-identity handling for a real agent-oriented workload.
+
+See:
+
+`cases/YODA-GITHUB-WORK-QUEUE-001-real-agent-work-queue/`
 
 ---
 
