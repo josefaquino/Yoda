@@ -1,0 +1,129 @@
+--- a/main.c
++++ b/main.c
+@@ -27,2 +27,2 @@
+-    char url[MAX_URL_LEN] = {0};
+-    char species[MAX_BIOME_LEN] = {0};
++    char urls[YODA_AGENT_BATCH_SIZE][MAX_URL_LEN] = {{0}};
++    char species_batch[YODA_AGENT_BATCH_SIZE][MAX_BIOME_LEN] = {{0}};
+@@ -30 +30,11 @@
+-    if (yoda_agent_reserve_task(&ctx, url, species)) {
++    size_t reserved_count = yoda_agent_reserve_tasks(
++        &ctx,
++        urls,
++        species_batch,
++        YODA_AGENT_BATCH_SIZE
++    );
++
++    if (reserved_count > 0) {
++        for (size_t i = 0; i < reserved_count; i++) {
++            const char *url = urls[i];
++            const char *species = species_batch[i];
+@@ -56,0 +67 @@
++        }
+--- a/yoda_agent_driver.c
++++ b/yoda_agent_driver.c
+@@ -47,3 +47,8 @@
+-bool yoda_agent_reserve_task(yoda_agent_ctx_t *ctx, char *out_url, char *out_species) {
+-    if (ctx == nullptr || out_url == nullptr || out_species == nullptr) {
+-        return false;
++size_t yoda_agent_reserve_tasks(
++    yoda_agent_ctx_t *ctx,
++    char out_urls[][MAX_URL_LEN],
++    char out_species[][MAX_BIOME_LEN],
++    size_t max_tasks
++) {
++    if (ctx == nullptr || out_urls == nullptr || out_species == nullptr || max_tasks == 0) {
++        return 0;
+@@ -53 +58 @@
+-    if (lock_fd < 0) return false;
++    if (lock_fd < 0) return 0;
+@@ -57 +62 @@
+-        return false;
++        return 0;
+@@ -64 +69 @@
+-        return false;
++        return 0;
+@@ -74 +79 @@
+-        return false;
++        return 0;
+@@ -78 +83,4 @@
+-    bool task_reserved = false;
++    size_t reserved_count = 0;
++    char now_str[64] = {0};
++
++    get_iso8601_time(now_str, sizeof(now_str));
+@@ -85,12 +93,17 @@
+-        if (!task_reserved && sscanf(line, "%2047s\t%63s\t%31s", url, species, status) == 3) {
+-            if (strcmp(status, "QUEUED") == 0) {
+-                task_reserved = true;
+-                snprintf(out_url, MAX_URL_LEN, "%s", url);
+-                snprintf(out_species, MAX_BIOME_LEN, "%s", species);
+-
+-                char now_str[64] = {0};
+-                get_iso8601_time(now_str, sizeof(now_str));
+-
+-                fprintf(f_tmp, "%s\t%s\tPROCESSING\tseeker_%u\t%s\n", url, species, ctx->agent_id, now_str);
+-                continue;
+-            }
++        if (reserved_count < max_tasks &&
++            sscanf(line, "%2047s\t%63s\t%31s", url, species, status) == 3 &&
++            strcmp(status, "QUEUED") == 0) {
++            snprintf(out_urls[reserved_count], MAX_URL_LEN, "%s", url);
++            snprintf(out_species[reserved_count], MAX_BIOME_LEN, "%s", species);
++
++            fprintf(
++                f_tmp,
++                "%s\t%s\tPROCESSING\tseeker_%u\t%s\n",
++                url,
++                species,
++                ctx->agent_id,
++                now_str
++            );
++
++            reserved_count++;
++            continue;
+@@ -97,0 +111 @@
++
+@@ -104 +118 @@
+-    if (task_reserved) {
++    if (reserved_count > 0) {
+@@ -113 +127,21 @@
+-    return task_reserved;
++    return reserved_count;
++}
++
++bool yoda_agent_reserve_task(yoda_agent_ctx_t *ctx, char *out_url, char *out_species) {
++    if (ctx == nullptr || out_url == nullptr || out_species == nullptr) {
++        return false;
++    }
++
++    char urls[1][MAX_URL_LEN] = {{0}};
++    char species[1][MAX_BIOME_LEN] = {{0}};
++
++    size_t reserved_count = yoda_agent_reserve_tasks(ctx, urls, species, 1);
++
++    if (reserved_count != 1) {
++        return false;
++    }
++
++    snprintf(out_url, MAX_URL_LEN, "%s", urls[0]);
++    snprintf(out_species, MAX_BIOME_LEN, "%s", species[0]);
++
++    return true;
+--- a/yoda_agent_driver.h
++++ b/yoda_agent_driver.h
+@@ -63,0 +64 @@
++constexpr size_t YODA_AGENT_BATCH_SIZE = 4;
+@@ -92,3 +93,9 @@
+-int  yoda_agent_init(yoda_agent_ctx_t *ctx, uint32_t agent_id, const char *db_path, const char *frontier_path);
+-bool yoda_agent_reserve_task(yoda_agent_ctx_t *ctx, char *out_url, char *out_species);
+-int  yoda_agent_sanitize_shield(yoda_gene_observation_t *obs);
++int    yoda_agent_init(yoda_agent_ctx_t *ctx, uint32_t agent_id, const char *db_path, const char *frontier_path);
++size_t yoda_agent_reserve_tasks(
++    yoda_agent_ctx_t *ctx,
++    char out_urls[][MAX_URL_LEN],
++    char out_species[][MAX_BIOME_LEN],
++    size_t max_tasks
++);
++bool   yoda_agent_reserve_task(yoda_agent_ctx_t *ctx, char *out_url, char *out_species);
++int    yoda_agent_sanitize_shield(yoda_gene_observation_t *obs);
