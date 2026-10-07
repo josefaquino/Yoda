@@ -125,3 +125,25 @@ NEXT_GATE=A4_BATCHED_RESERVATION
 ```
 
 Scientific boundary: the shared flock is supported as a material coordination bottleneck for the frozen workload. A3 does not establish that flock is the only source of scaling loss. A3 throughput was diagnostic-only because strace perturbs execution.
+
+
+## A4-R1 Batched Reservation Candidate
+
+```text
+A4_R1_CANDIDATE_BUILD=PASS
+BATCH_SIZE=4
+CANDIDATE_BINARY_SHA256=0970c60c22eb415b99750b8eb6384a20fc983ba0cc77f4989448b4fb1a5efd2f
+
+SERIAL_USEFUL_INVOCATIONS=25
+SERIAL_BATCH_CARDINALITY=PASS
+CONCURRENT_16W_SEMANTICS=PASS
+CONCURRENT_16W_UNIQUE_OWNERS=15
+
+A4_R1_EXECUTION_LOCK_SHA256=4522f136bd407c6b08292da99e24d146adfd607a067f4fdbafe0b7b9d659e1ee
+A4_R1_EVIDENCE_MANIFEST_SHA256=9c6a75e473295009978d3f5e1d5972d26eee1a434d8df61e58568e7a159a8c46
+
+CONTROL_PROJECT_MUTATED=NO
+PERFORMANCE_CONCLUSION=NONE
+A4_R1_RERUN=NO
+NEXT_GATE=A4_R2_CONTROLLED_PERFORMANCE
+```
