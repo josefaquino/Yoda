@@ -3,7 +3,9 @@
 ## Current state
 
 ```text
-CASE_STATUS=IN_PROGRESS
+CASE_STATUS=COMPLETE
+CASE_SCOPE_COMPLETE=YES
+FINAL_CASE_HOMOLOGATION=PASS
 
 PRE_A0=PASS_AFTER_SCHEMA_RECONSTRUCTION
 A1_APPLES_TO_APPLES=PASS
@@ -17,7 +19,12 @@ A5_BATCH_LOCK_MECHANISM=NOT_SUPPORTED
 A5_MECHANISM_REASSESSMENT=RESOLVED_MIXED
 
 ENGINEERING_CHANGE=BATCHED_RESERVATION_SIZE_4
-NEXT_GATE=A6_CASE_HOMOLOGATION
+
+CASE_RERUN=NO
+CASE_REINTERPRETATION=NO
+
+NEXT_CASE=YODA-C23-UNIFIED-SYSTEM-001
+NEXT_CASE_FIRST_GATE=R0_SOURCE_AND_BUILD_AUTHORITY
 ```
 
 ## Frozen authorities
@@ -256,3 +263,33 @@ NEXT_GATE=A6_CASE_HOMOLOGATION
 ```
 
 Bounded interpretation: batch-size-four materially reduces the frequency and cumulative cost of shared-lock coordination, but the remaining single-global-lock path is still contention dominated at high worker counts. This does not rewrite the A5 composite verdict.
+
+
+## A6 Final Case Homologation
+
+```text
+FINAL_CASE_HOMOLOGATION=PASS
+CASE_STATUS=COMPLETE
+CASE_SCOPE_COMPLETE=YES
+
+NEW_SCIENTIFIC_EXECUTION=NO
+NEW_ENGINEERING_CHANGE=NO
+READ_ONLY_HOMOLOGATION=YES
+```
+
+Final bounded conclusion:
+
+> The original single-global-lock reservation design exhibits a material coordination bottleneck beyond four workers. Batch-size-four reservation preserves the tested reservation semantics and materially improves same-session throughput while reducing useful global-lock reservations from 100 to 25 and cumulative lock wait by 73.0 percent at 8 workers and 81.2 percent at 16 workers. However, the remaining global-lock path remains contention dominated at high concurrency, so batching mitigates but does not eliminate the underlying serialization pressure.
+
+The A5 preregistered composite mechanism verdict remains:
+
+```text
+A5_BATCH_LOCK_MECHANISM=NOT_SUPPORTED
+```
+
+No consumed stage may be rerun.
+
+```text
+NEXT_CASE=YODA-C23-UNIFIED-SYSTEM-001
+NEXT_CASE_FIRST_GATE=R0_SOURCE_AND_BUILD_AUTHORITY
+```
