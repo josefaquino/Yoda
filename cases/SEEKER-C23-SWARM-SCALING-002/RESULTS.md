@@ -1,0 +1,93 @@
+# RESULTS — SEEKER-C23-SWARM-SCALING-002
+
+## Current state
+
+```text
+CASE_STATUS=IN_PROGRESS
+
+PRE_A0=PASS_AFTER_SCHEMA_RECONSTRUCTION
+A1_APPLES_TO_APPLES=PASS
+A2_STABILITY=PASS_CONSUMED
+
+A3_LOCK_INSTRUMENTATION=NEXT
+
+ENGINEERING_CHANGE=NO
+```
+
+## Frozen authorities
+
+```text
+AGENT_SHA256=
+dd96630ec0c891871d141632d453dc7893f00a81027cd7878ca85059f6eb998a
+
+CANONICAL_FRONTIER_SHA256=
+c26a3d75693addede036e1feb77b9b435ca887fa3d09a28cd1f7018a1768e8b5
+
+TASK_IDENTITY_SHA256=
+525a54a18c77fb5a61dc3adea8cf948abea2548fcafd350af29be7e34bafef28
+
+TASK_COUNT=100
+BIOME_COUNT=5
+```
+
+## A1 single-run comparison
+
+```text
+CURRENT_1W_TPS=289.45
+CURRENT_4W_TPS=482.79
+CURRENT_8W_TPS=484.60
+CURRENT_16W_TPS=463.84
+
+A1_SINGLE_RUN_MAX_WORKERS=8
+A1_SINGLE_RUN_MAX_TPS=484.60
+
+LOCK_CONTENTION_ROOT_CAUSE=NOT_MEASURED
+```
+
+A1 showed an apparent 4–8 plateau; the 8W advantage over 4W was only about 0.37 percent and was not treated as a resolved optimum.
+
+## A2 stability
+
+```text
+REPETITIONS_PER_WORKER=32
+MEASURED_SCENARIOS=128
+ORDER_DESIGN=WILLIAMS_BALANCED_4_SEQUENCE
+EFFECT_THRESHOLD_PCT=5.0
+
+MEDIAN_1W_TPS=275.598472
+MEDIAN_4W_TPS=594.324627
+MEDIAN_8W_TPS=557.457678
+MEDIAN_16W_TPS=513.164949
+
+MEDIAN_SPEEDUP_4W=2.156
+MEDIAN_SPEEDUP_8W=2.023
+MEDIAN_SPEEDUP_16W=1.862
+
+MEDIAN_8W_VS_4W_DELTA_PCT=-6.203
+
+A2_4_8_CLASSIFICATION=4_WORKER_CLEARLY_ABOVE_8
+A2_16W_CLASSIFICATION=REGRESSION
+
+A2_EXECUTION_LOCK_SHA256=
+ce1845b2d1b72171c48132c4e6a878745e8227fa4bba6887eb549a86906af852
+
+A2_EVIDENCE_MANIFEST_SHA256=
+01fa3de643602a08033e18aa60ce1e3c0207909990f227205e35f86a2d6b8621
+
+A2_RERUN=NO
+```
+
+## Current scientific interpretation
+
+For this frozen agent and canonical 100-task workload, 4 workers are the best currently resolved operating point under the preregistered 5 percent engineering-effect threshold.
+
+8 workers are 6.203 percent below 4 workers by median throughput.
+
+16 workers regress further.
+
+A2 establishes the scaling shape but does not establish the mechanism responsible for the loss.
+
+```text
+LOCK_CONTENTION_ROOT_CAUSE=NOT_YET_MEASURED
+NEXT_GATE=A3_LOCK_INSTRUMENTATION
+```
