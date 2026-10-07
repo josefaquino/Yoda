@@ -46,10 +46,10 @@ No Seeker is executed by this correction.
 
 ```text
 CORRECTED_A3_HARNESS_COMMIT=
-64c12beac634151e1ed8a1e1942ed66fdefeba52
+56014e7e9aa3ce722cf4a1a971f97fde656f69af
 
 CORRECTED_A3_HARNESS_SHA256=
-1f7354c8dd44011ed1f70da97d8cf79c8ca47094dc0daba20092fc0838c9caae
+95b8bd1b67d40298d155ff0b2f07edc57c92673dce3060d829c4340d9bcbbbca
 
 ANALYZER_SHA256=
 cfc81aa6df07533865e44c7ec4cc1bffcf15dfda922bc553533db66e4e1534d9
@@ -67,3 +67,6 @@ A3_ONE_SHOT_CONSUMED=NO
 ```
 
 The A3 preregistration remains unchanged.
+
+
+The final correction commit also normalizes the pre-lock smoke rename regular expression. This is parser-smoke infrastructure only and does not alter A3 scientific logic.
