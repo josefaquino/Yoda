@@ -223,7 +223,35 @@ echo "ACTUAL_ANALYZER_SHA256=$ACTUAL_ANALYZER_SHA256"
 test "$ACTUAL_ANALYZER_SHA256" = "$EXPECTED_ANALYZER_SHA256" ||
     prelock_fail "ANALYZER_IDENTITY_MISMATCH"
 
-awk -f "$ANALYZER" "$A3_PREFLIGHT"/smoke/trace* > "$PREP/smoke-parsed.tsv" ||
+SMOKE_TRACE="$PREP/analyzer-smoke-reassembled.trace"
+
+{
+    grep -h 'flock(.*LOCK_EX' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
+    grep -hE 'rename(at2|at)?\\(' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
+    grep -h 'flock(.*LOCK_UN' "$A3_PREFLIGHT"/smoke/trace* | head -n 1
+} |
+LC_ALL=C sort -n > "$SMOKE_TRACE" ||
+    prelock_fail "ANALYZER_SMOKE_REASSEMBLY_FAILURE"
+
+SMOKE_EX="$(grep -c 'flock(.*LOCK_EX' "$SMOKE_TRACE" || true)"
+SMOKE_RENAME="$(grep -cE 'rename(at2|at)?\\(' "$SMOKE_TRACE" || true)"
+SMOKE_UN="$(grep -c 'flock(.*LOCK_UN' "$SMOKE_TRACE" || true)"
+
+echo "ANALYZER_SMOKE_MODE=REASSEMBLED_ACTUAL_PREFLIGHT_SYSCALLS"
+echo "ANALYZER_SMOKE_LOCK_EX_LINES=$SMOKE_EX"
+echo "ANALYZER_SMOKE_RENAME_LINES=$SMOKE_RENAME"
+echo "ANALYZER_SMOKE_LOCK_UN_LINES=$SMOKE_UN"
+
+test "$SMOKE_EX" -eq 1 ||
+    prelock_fail "ANALYZER_SMOKE_LOCK_EX_REASSEMBLY_FAILURE"
+
+test "$SMOKE_RENAME" -eq 1 ||
+    prelock_fail "ANALYZER_SMOKE_RENAME_REASSEMBLY_FAILURE"
+
+test "$SMOKE_UN" -eq 1 ||
+    prelock_fail "ANALYZER_SMOKE_LOCK_UN_REASSEMBLY_FAILURE"
+
+awk -f "$ANALYZER" "$SMOKE_TRACE" > "$PREP/smoke-parsed.tsv" ||
     prelock_fail "ANALYZER_SMOKE_PARSE_FAILURE"
 
 SMOKE_VALID="$(awk -F '\t' 'NR>1 && $2==1 {n++} END {print n+0}' "$PREP/smoke-parsed.tsv")"
@@ -232,10 +260,10 @@ SMOKE_SUCCESS="$(awk -F '\t' 'NR>1 && $3==1 {n++} END {print n+0}' "$PREP/smoke-
 echo "ANALYZER_SMOKE_VALID_ROWS=$SMOKE_VALID"
 echo "ANALYZER_SMOKE_SUCCESS_ROWS=$SMOKE_SUCCESS"
 
-test "$SMOKE_VALID" -ge 1 ||
+test "$SMOKE_VALID" -eq 1 ||
     prelock_fail "ANALYZER_SMOKE_VALIDATION_FAILURE"
 
-test "$SMOKE_SUCCESS" -ge 1 ||
+test "$SMOKE_SUCCESS" -eq 1 ||
     prelock_fail "ANALYZER_SMOKE_SUCCESS_FAILURE"
 
 echo "FROZEN_AUTHORITIES=PASS"
