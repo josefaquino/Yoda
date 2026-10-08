@@ -1,9 +1,16 @@
 # Yoda
 
+## Verifiable state for autonomous systems
+
+Autonomous systems act on information that changes over time. Yoda preserves exactly what the software saw, where it came from, when it was observed, and the context that made it valid.
+
+We have demonstrated this with real GitHub software tasks and public SEC EDGAR financial states, preserving identity, context, time, and provenance across local persistence and materialization.
+
+> **Know what the system saw. Recover it exactly. Prove it.**
+
 <p align="center">
   <img src="assets/yoda-logo.png" alt="Yoda logo" width="256">
 </p>
-
 
 > **Canonical active repository.** Historical predecessors are preserved for provenance and are no longer the active project surface. See [HISTORY.md](HISTORY.md).
 
