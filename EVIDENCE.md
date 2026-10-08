@@ -46,6 +46,7 @@ PUBLIC LANGUAGE
 | YODA-GITHUB-WORK-QUEUE-001 | Agent workloads | real task identity preservation through concurrent local execution state | PASS |
 | YODA-GITHUB-WORK-CONTEXT-001 | Agent workloads | exact task identity + minimal useful context preservation | PASS |
 | YODA-EDGAR-FILING-CONTEXT-001-R1 | Public financial reporting | successive financial state + exact context + accession-level provenance | PASS |
+| YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001 | Public financial reporting | same canonical value + distinct regulatory state + exact document provenance | PASS |
 | AUDIT-FORENSICS-001 | Security events | exact ledger + tamper rejection | PASS |
 | GENOME-KMER-001 | Genomics | exact indexed state | PASS |
 | GENOME-REFERENCE-001 | Genomics | reference coordinate equivalence | PASS |
@@ -371,6 +372,135 @@ See:
 
 ---
 
+
+# Public financial reporting — same value, distinct regulatory state
+
+`YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001` tested a complementary financial-state property using public Brazilian CVM DFP data and exact linked regulatory documents.
+
+The selected reporting context was:
+
+```text
+CNPJ=08.827.501/0001-58
+CD_CVM=023396
+DT_REFER=2025-12-31
+SCOPE=DfConsolidadas
+STATEMENT=BalancoPatrimonialAtivo
+```
+
+Two distinct document presentations existed in the CVM master history:
+
+```text
+V1  ID_DOC=156154  DT_RECEB=2026-04-11
+V2  ID_DOC=156163  DT_RECEB=2026-04-13
+```
+
+Their primary structured-content identities were distinct:
+
+```text
+V1_PRIMARY_XML_SHA256=
+94ecc843369bed0dcf948189d925325dafe4b5f7f5c27cb6c3d8f7d9b0751936
+
+V2_PRIMARY_XML_SHA256=
+0cb9040499b1eac96a24a142495d2cb4fadc409d0b18858e29e6176e579a9684
+```
+
+The consolidated balance-sheet comparison showed:
+
+```text
+TOTAL_ACCOUNT_KEYS=564
+VALUE_CHANGED=0
+FORMAT_CHANGED_VALUE_SAME=82
+EXACT_VALUE_SAME=482
+UNPARSED_VALUE=0
+
+EXACT_VALUE_SAME_ZERO=482
+EXACT_VALUE_SAME_NONZERO=0
+```
+
+The frozen oracle therefore selected ten non-zero accounts from the 82 representation-changed/same-canonical-value accounts:
+
+```text
+SELECTED_ACCOUNTS=10
+DOCUMENT_PRESENTATIONS=2
+ORACLE_STATES=20
+UNIQUE_ORACLE_STATE_IDS=20
+
+EVERY_ACCOUNT_HAS_TWO_PRESENTATIONS=PASS
+EVERY_ACCOUNT_CANONICAL_VALUE_EQUAL=PASS
+EVERY_ACCOUNT_RAW_VALUE_DIFFERENT=PASS
+```
+
+The exact same context-capable product binary was reused:
+
+```text
+PRODUCT_BINARY_SHA256=
+8e99fdb4289c47dc1d03ecd59abd85d48c34204ffa23e1e9c6ac863445c1b001
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The one-shot execution produced:
+
+```text
+PRODUCT_RC=0
+
+FRONTIER_FINAL_ROWS=20
+FRONTIER_PROCESSING_ROWS=20
+FRONTIER_QUEUED_ROWS=0
+FRONTIER_STATE_MATCH=PASS
+
+KYBER_ROWS=20
+KYBER_UNIQUE_KEYS=20
+KYBER_EXACT_MATCH=PASS
+
+LAKEHOUSE_ROWS=20
+LAKEHOUSE_EXACT_MATCH=PASS
+
+TOTAL_FAILURES=0
+PRODUCT_EXECUTION_COUNT=1
+PRODUCT_RERUN=NO
+```
+
+Cross-layer key identity was exact:
+
+```text
+EXPECTED_KEY_SHA256=
+d1d54f580f2f73baf7e675d71a6dc2c36f2f4b6ef2fb570788cfd83911d92dfd
+
+KYBER_KEY_SHA256=
+d1d54f580f2f73baf7e675d71a6dc2c36f2f4b6ef2fb570788cfd83911d92dfd
+
+CROSS_LAYER_KEY_IDENTITY=PASS
+```
+
+Final classification:
+
+```text
+YODA_CVM_REAPRESENTED_FINANCIAL_STATE_001=PASS
+TEST_PROPERTY=SAME_VALUE_DISTINCT_REGULATORY_STATE
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The demonstrated property is intentionally narrow:
+
+> **Yoda preserved 20 real public financial states representing two distinct CVM document presentations across Frontier, KyberDB and Lakehouse, with exact identity and context recovery, zero mismatches, and no changes to Yoda or Kyber.**
+
+The useful observation is:
+
+> **Same value does not mean same state.**
+
+The experiment makes no correction, restatement, supersession, accounting-judgment, forecasting, trading-alpha or investment-advice claim.
+
+The rejected oracle assumption and two `mawk`-incompatible preparation attempts remain preserved as `NOT_EVALUATED`; none executed the product.
+
+See:
+
+`cases/YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001-same-value-distinct-regulatory-state/`
+
+---
+
 # Genomics — Lineage of State
 
 The genomics ladder moved from exact state to derivation:
@@ -682,6 +812,9 @@ How did this become what it is now?
         ↓
 SUCCESSIVE STATE PRESERVATION
 Can distinct observed states retain exact context and provenance over time?
+        ↓
+VALUE-INDEPENDENT STATE IDENTITY
+Can equal canonical values remain distinct when provenance differs?
         ↓
 DECISION LINEAGE
 Why did the deterministic system decide this then,

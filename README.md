@@ -4,7 +4,7 @@
 
 Autonomous systems act on information that changes over time. Yoda preserves exactly what the software saw, where it came from, when it was observed, and the context that made it valid.
 
-We have demonstrated this with real GitHub software tasks and public SEC EDGAR financial states, preserving identity, context, time, and provenance across local persistence and materialization.
+We have demonstrated this with real GitHub software tasks and public SEC EDGAR and CVM financial states, preserving identity, context, time, and provenance across local persistence and materialization.
 
 > **Know what the system saw. Recover it exactly. Prove it.**
 
@@ -126,7 +126,7 @@ Yoda is developed through narrow, falsifiable CASEs.
 
 > **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
 
-Seven evidence blocks now define the current research thesis.
+Eight evidence blocks now define the current research thesis.
 
 ### 1. GENOME-LINEAGE-001 — Lineage of State
 
@@ -400,6 +400,83 @@ This case does **not** establish restatement, correction or supersession semanti
 
 See [`cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/`](cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/).
 
+
+### 8. YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001 — Same Value, Distinct Regulatory State
+
+Question:
+
+> **Can Yoda preserve two distinct CVM regulatory presentations of the same accounting values without collapsing one state into the other?**
+
+The source oracle used two real CVM DFP document presentations for the same company and reporting date:
+
+```text
+V1  ID_DOC=156154  DT_RECEB=2026-04-11
+V2  ID_DOC=156163  DT_RECEB=2026-04-13
+```
+
+Within the consolidated balance-sheet scope, all 564 account codes existed in both primary XML documents. No canonical numeric value changed. Eighty-two non-zero accounts changed physical representation while retaining the same canonical value; the remaining 482 exact matches were zero-valued.
+
+The frozen oracle selected ten non-zero accounts, producing 20 document-specific observed states:
+
+```text
+SELECTED_ACCOUNTS=10
+DOCUMENT_PRESENTATIONS=2
+ORACLE_STATES=20
+UNIQUE_ORACLE_STATE_IDS=20
+```
+
+One example:
+
+```text
+Ativo Total
+
+V1 raw        55.373.598
+V2 raw        55373598,0000000000
+canonical     55373598
+```
+
+The exact same frozen context-capable Yoda binary preserved all 20 states:
+
+```text
+PRODUCT_BINARY_SHA256=
+8e99fdb4289c47dc1d03ecd59abd85d48c34204ffa23e1e9c6ac863445c1b001
+
+FRONTIER_FINAL_ROWS=20
+FRONTIER_STATE_MATCH=PASS
+
+KYBER_ROWS=20
+KYBER_UNIQUE_KEYS=20
+KYBER_EXACT_MATCH=PASS
+
+LAKEHOUSE_ROWS=20
+LAKEHOUSE_EXACT_MATCH=PASS
+
+CROSS_LAYER_KEY_IDENTITY=PASS
+
+TOTAL_FAILURES=0
+PRODUCT_EXECUTION_COUNT=1
+PRODUCT_RERUN=NO
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The narrow demonstrated-property statement is:
+
+> **Yoda preserved 20 real public financial states representing two distinct CVM document presentations across Frontier, KyberDB and Lakehouse, with exact identity and context recovery, zero mismatches, and no changes to Yoda or Kyber.**
+
+The useful product observation is:
+
+```text
+same canonical value
+!=
+same observed state
+```
+
+This case does not establish correction, restatement, supersession or accounting semantics.
+
+See [`cases/YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001-same-value-distinct-regulatory-state/`](cases/YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001-same-value-distinct-regulatory-state/).
+
 ---
 
 ## What the combined evidence suggests
@@ -421,6 +498,9 @@ How did this become what it is now?
         ↓
 SUCCESSIVE STATE PRESERVATION
 Can distinct observed states keep exact context and provenance over time?
+        ↓
+VALUE-INDEPENDENT STATE IDENTITY
+Can equal canonical values remain distinct when provenance differs?
         ↓
 DECISION LINEAGE
 Why did a deterministic system make this decision then,
@@ -516,9 +596,12 @@ MARKET-REGIME-LINEAGE-001
 
 YODA-EDGAR-FILING-CONTEXT-001-R1
 → successive public financial state + exact context + filing provenance
+
+YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001
+→ same canonical value + distinct regulatory document state + exact provenance
 ```
 
-The same context-capable binary has now preserved bounded real-world context in both public software-agent tasks and public financial reporting without a finance-specific storage path.
+The same context-capable binary has now preserved bounded real-world context in public software-agent tasks and in both U.S. SEC and Brazilian CVM financial-reporting workloads without a finance-specific storage path.
 
 The next strong falsification should be externally defined rather than another internal demonstration.
 
