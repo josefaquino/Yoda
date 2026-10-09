@@ -541,6 +541,38 @@ Yoda did not interpret accounting, select the metric or become a rules engine. T
 
 See [`cases/YODA-CVM-AGENTIC-CONTEXT-001-context-governed-reproducible-evaluation/`](cases/YODA-CVM-AGENTIC-CONTEXT-001-context-governed-reproducible-evaluation/) and [`properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md`](properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md).
 
+
+### 10. YODA-AGENT-DECISION-RECEIPT-001 — Portable Decision Evidence
+
+Question:
+
+> **Can Yoda turn preserved decision evidence into a portable Decision Receipt that an independent system can verify without access to Yoda, the original source or Yoda's internal evidence layout?**
+
+The CASE introduced a `decision_id`-only caller interface, a portable receipt bundle and an independent bundle-only verifier.
+
+```text
+YODA-AGENT-DECISION-RECEIPT-001=VALIDATED
+
+PORTABLE_DECISION_EVIDENCE=PASS
+THIRD_PARTY_VERIFICATION=PASS
+RESEALED_TAMPER_DETECTION=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Four receipts — two ALLOW and two REFUSE — were independently verified without Yoda, CVM, the original CASE or the decision registry.
+
+Two negative tests then altered a result and a rule-authority hash, recalculated the outer manifest and were still rejected by the same frozen verifier.
+
+The narrow demonstrated-property statement is:
+
+> **Yoda can package preserved decision evidence into a portable Decision Receipt that an independent verifier can validate without access to Yoda, the original source or Yoda's internal evidence layout. Tested alterations to the result and rule authority were rejected even after the bundle manifest was resealed.**
+
+This is not a claim of universal tamper-proofing, cryptographic authorship or non-repudiation.
+
+See [`cases/YODA-AGENT-DECISION-RECEIPT-001-portable-decision-evidence/`](cases/YODA-AGENT-DECISION-RECEIPT-001-portable-decision-evidence/), [`properties/PORTABLE-DECISION-EVIDENCE.md`](properties/PORTABLE-DECISION-EVIDENCE.md) and [`products/decision-receipt-v1/`](products/decision-receipt-v1/).
+
 ---
 
 ## What the combined evidence suggests
@@ -573,6 +605,10 @@ and can that decision be reproduced from recovered evidence?
 CONTEXT-GOVERNED REPRODUCIBLE EVALUATION
 Can preserved context and rules reproduce both an allowed operation
 and the deterministic refusal of incompatible operations?
+        ↓
+PORTABLE DECISION EVIDENCE
+Can the decision evidence cross a trust boundary and still be
+independently verified?
 ```
 
 The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode or Change Mode.
@@ -598,11 +634,17 @@ link
 log
 verify
 context
+
+# validated product layer
+decision get
+decision verify
 ```
 
 No server is required.
 No account is required.
 The current preview is local-first.
+
+Decision Receipt v1 has a frozen product contract and a validated product-layer implementation. The published repository binary should not yet be assumed to contain `yoda decision` until that product layer is integrated and released.
 
 ```bash
 ./yoda init ./memory
