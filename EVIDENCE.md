@@ -47,6 +47,7 @@ PUBLIC LANGUAGE
 | YODA-GITHUB-WORK-CONTEXT-001 | Agent workloads | exact task identity + minimal useful context preservation | PASS |
 | YODA-EDGAR-FILING-CONTEXT-001-R1 | Public financial reporting | successive financial state + exact context + accession-level provenance | PASS |
 | YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001 | Public financial reporting | same canonical value + distinct regulatory state + exact document provenance | PASS |
+| YODA-CVM-AGENTIC-CONTEXT-001 | Context-governed deterministic evaluation | recoverable state + versioned context + rule + deterministic allow/refuse replay | PASS |
 | AUDIT-FORENSICS-001 | Security events | exact ledger + tamper rejection | PASS |
 | GENOME-KMER-001 | Genomics | exact indexed state | PASS |
 | GENOME-REFERENCE-001 | Genomics | reference coordinate equivalence | PASS |
@@ -501,6 +502,111 @@ See:
 
 ---
 
+# Context-governed deterministic evaluation
+
+`YODA-CVM-AGENTIC-CONTEXT-001` tested whether preserved operational context could govern a deterministic operation strongly enough to reproduce both valid calculations and controlled refusals after Yoda-only recovery.
+
+The data authority froze eight real CVM DFP facts across two document presentations, two scopes and two source accounts.
+
+```text
+FACTS_SHA256=
+5f25cb44580cfd7b515aedeef1e767021982cf619aad956d36b9c47704157900
+
+DOCUMENT_METADATA_SHA256=
+51653999ae44445dc471af2b31ac99171afc0b5e490906f366cb39c3fdace877
+```
+
+The project-defined Context Authority v1 froze semantic mappings, one metric contract and an ordered refusal policy:
+
+```text
+net_margin = net_income / net_revenue
+
+SAME_COMPANY
+SAME_PERIOD
+SAME_SCOPE
+SAME_PRESENTATION
+SAME_CURRENCY
+SAME_SCALE
+NONZERO_DENOMINATOR
+```
+
+```text
+CONTEXT_AUTHORITY_SHA256=
+7f77a89514f9751116a8b9622ca6c35f63eb98a07e76dcefff02f750496534c0
+
+METRIC_CONTRACT_SHA256=
+45fe6311e89b866a475c1050e8490a89e47790b48545de118809563586f2f1f2
+```
+
+A deterministic C11 evaluator established the external baseline before Yoda preservation:
+
+```text
+POSITIVE_V1_CONSOLIDATED  ALLOW   -0.057183
+POSITIVE_V2_CONSOLIDATED  ALLOW    0.068161
+NEGATIVE_SCOPE            REFUSE   INCOMPATIBLE_SCOPE
+NEGATIVE_PRESENTATION     REFUSE   INCOMPATIBLE_PRESENTATION
+
+OUTCOME_ORACLE_EXACT_MATCH=PASS
+OUTCOMES_SHA256=
+e40e9d222320fe94324bc73225d5e69d59a89943986b57ada377534930a66324
+```
+
+The frozen CORE-014 product then preserved 11 objects and 8 relations:
+
+```text
+YODA_BINARY_SHA256=
+06c1d2cb98099cb2d5b44f753fa3392da4f9a2bd42d39bd0a673270b01f9bfc8
+
+PUT_COUNT=11
+LINK_COUNT=8
+RECORDS_VERIFIED=19
+GET_EXACT_MATCHES=11
+
+DATA_YODA_SHA256=
+3f1ffbe56a41f71ab305a3a50cf3d18a4e5d2bb63a77d4b6efc5d04ae049fa34
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The final R1 replay used only Yoda `get` as the source of executable evidence:
+
+```text
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+ORIGINAL_AUTHORITY_DIRECT_PATH_REFERENCES=ZERO
+
+STATE_USED_RECOVERABLE=PASS
+CONTEXT_USED_RECOVERABLE=PASS
+RULE_USED_RECOVERABLE=PASS
+EVALUATOR_RECOVERABLE=PASS
+RESULT_PRODUCED_RECOVERABLE=PASS
+
+V1_VALID_RESULT_REPRODUCED=PASS
+V2_VALID_RESULT_REPRODUCED=PASS
+INCOMPATIBLE_SCOPE_REFUSAL_REPRODUCED=PASS
+INCOMPATIBLE_PRESENTATION_REFUSAL_REPRODUCED=PASS
+
+REPLAY_VS_ORIGINAL_EXACT_MATCH=PASS
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+CONTEXT_GOVERNED_REPRODUCIBLE_EVALUATION=PASS
+```
+
+The demonstrated property is intentionally narrow:
+
+> **Yoda preserved the exact observed state, versioned context, operational rule and evaluator required to reproduce two valid calculations and deterministically refuse two incompatible calculations using only Yoda-recovered evidence, without changing Yoda or Kyber.**
+
+The first `REPLAY-008` attempt is preserved as `NOT_EXECUTED`: its forbidden-path preflight matched its own audit regex before lock acquisition. R1 changed harness mechanics only.
+
+This is an infrastructure/reproducibility result. It is not accounting interpretation, financial forecasting, investment advice or a claim that Yoda is a general rules engine.
+
+See:
+
+- `cases/YODA-CVM-AGENTIC-CONTEXT-001-context-governed-reproducible-evaluation/`
+- `properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md`
+
+---
+
 # Genomics — Lineage of State
 
 The genomics ladder moved from exact state to derivation:
@@ -819,6 +925,10 @@ Can equal canonical values remain distinct when provenance differs?
 DECISION LINEAGE
 Why did the deterministic system decide this then,
 and can that decision be replayed from recovered evidence?
+        ↓
+CONTEXT-GOVERNED REPRODUCIBLE EVALUATION
+Can recovered context and rules reproduce both an allowed operation
+and the refusal of incompatible operations?
 ```
 
 These are not separate engine modes.

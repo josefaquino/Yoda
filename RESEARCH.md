@@ -10,7 +10,7 @@ The goal is to expose the same small architecture to different forms of pressure
 
 ## Central research questions
 
-The program now has three connected questions:
+The program now has four connected questions:
 
 > **Can the same derivation layer preserve enough evidence, identity and lineage for different independent authorities to evaluate a result again later?**
 
@@ -21,6 +21,10 @@ and:
 and:
 
 > **Can the same derivation layer preserve why a deterministic system made a particular decision at a particular point in time, including the evidence needed to reproduce that decision later?**
+
+and:
+
+> **Can the same derivation layer preserve the exact context and rule that governed a deterministic operation, so both allowed operations and incompatible refusals can be reproduced later?**
 
 Current architecture:
 
@@ -36,6 +40,8 @@ history
 verification
 +
 bounded context
++
+versioned operational contracts
 ```
 
 The current thesis is not that Yoda should become the authority of truth.
@@ -361,7 +367,88 @@ The market-data workflow is the validating environment, not the product definiti
 
 ---
 
-# Track E — External empirical workflow
+# Track E — Context-governed reproducible evaluation
+
+## YODA-CVM-AGENTIC-CONTEXT-001 — VALIDATED
+
+This CASE moved from preserving deterministic decisions to preserving the explicit operational context that constrained what could be calculated or refused.
+
+### Question
+
+> **Can preserved context govern a deterministic operation over preserved state — reproducing a valid calculation and refusing an incompatible one?**
+
+The validating workload used eight real public CVM DFP facts.
+
+A project-defined Context Authority v1 froze:
+
+```text
+semantic mappings
+metric contract
+refusal policy
+```
+
+The frozen metric was:
+
+```text
+net_margin = net_income / net_revenue
+```
+
+with compatibility requirements:
+
+```text
+SAME_COMPANY
+SAME_PERIOD
+SAME_SCOPE
+SAME_PRESENTATION
+SAME_CURRENCY
+SAME_SCALE
+NONZERO_DENOMINATOR
+```
+
+A deterministic C11 evaluator established two valid calculations and two required refusals before Yoda preservation.
+
+Yoda Simple Core CORE-014 preserved the data authority, context authority, evaluator, scenarios and original outcomes as ordinary evidence objects and relations.
+
+The final replay recovered all required executable evidence through Yoda `get` only, recompiled the recovered evaluator and reproduced all four outcomes byte-exactly.
+
+### Result
+
+```text
+YODA-CVM-AGENTIC-CONTEXT-001=VALIDATED
+
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+
+STATE_USED_RECOVERABLE=PASS
+CONTEXT_USED_RECOVERABLE=PASS
+RULE_USED_RECOVERABLE=PASS
+EVALUATOR_RECOVERABLE=PASS
+RESULT_PRODUCED_RECOVERABLE=PASS
+
+V1_VALID_RESULT_REPRODUCED=PASS
+V2_VALID_RESULT_REPRODUCED=PASS
+INCOMPATIBLE_SCOPE_REFUSAL_REPRODUCED=PASS
+INCOMPATIBLE_PRESENTATION_REFUSAL_REPRODUCED=PASS
+
+REPLAY_VS_ORIGINAL_EXACT_MATCH=PASS
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+
+CONTEXT_GOVERNED_REPRODUCIBLE_EVALUATION=PASS
+
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+Formal property:
+
+`properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md`
+
+The CVM financial workflow is the validating environment, not the product definition.
+
+Yoda did not become an accounting engine or a general rules engine.
+
+---
+
+# Track F — External empirical workflow
 
 ## EXTERNALLY DEFINED ITERATIVE WORKFLOW — NEXT
 
@@ -444,9 +531,15 @@ DECISION LINEAGE
 Why did the deterministic system decide this then,
 and can the decision be reproduced from recovered evidence?
         PASS
+
+YODA-CVM-AGENTIC-CONTEXT-001
+CONTEXT-GOVERNED REPRODUCIBLE EVALUATION
+Can recovered context and rules reproduce both allowed operations
+and deterministic refusals?
+        PASS
 ```
 
-The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode, Change Mode or Market Mode.
+The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode, Change Mode, Market Mode, Finance Mode or Context Rules Mode.
 
 This strengthens the hypothesis that **verifiable derivation may be a cross-domain infrastructure property**.
 
@@ -480,6 +573,8 @@ formal authority replay PASS
 artifact-provenance replay PASS
 +
 single-transition Lineage of Change PASS
++
+Context-Governed Reproducible Evaluation PASS
 +
 externally defined multi-transition workflow PASS
 +
@@ -550,6 +645,9 @@ cross-domain formal Lineage of Change
         PASS
         ↓
 Decision Lineage
+        PASS
+        ↓
+Context-Governed Reproducible Evaluation
         PASS
         ↓
 external iterative workflow

@@ -126,7 +126,7 @@ Yoda is developed through narrow, falsifiable CASEs.
 
 > **Do not change the engine because a feature sounds useful. Change it only when repeated evidence demonstrates a structural limitation.**
 
-Eight evidence blocks now define the current research thesis.
+Nine evidence blocks now define the current research thesis.
 
 ### 1. GENOME-LINEAGE-001 — Lineage of State
 
@@ -477,6 +477,70 @@ This case does not establish correction, restatement, supersession or accounting
 
 See [`cases/YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001-same-value-distinct-regulatory-state/`](cases/YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001-same-value-distinct-regulatory-state/).
 
+### 9. YODA-CVM-AGENTIC-CONTEXT-001 — Context-Governed Reproducible Evaluation
+
+Question:
+
+> **Can preserved context govern a deterministic operation over preserved state — reproducing a valid calculation and refusing an incompatible one?**
+
+The CASE froze eight real CVM DFP facts, a versioned semantic/metric contract and a deterministic C11 evaluator before Yoda entered the experiment.
+
+The contract required compatible company, period, scope, presentation, currency and scale.
+
+Four scenarios were frozen:
+
+```text
+V1 consolidated
+→ ALLOW
+→ -0.057183
+
+V2 consolidated
+→ ALLOW
+→ 0.068161
+
+scope mismatch
+→ REFUSE
+→ INCOMPATIBLE_SCOPE
+
+presentation mismatch
+→ REFUSE
+→ INCOMPATIBLE_PRESENTATION
+```
+
+Yoda Simple Core CORE-014 then preserved 11 evidence objects and 8 explicit relations without a finance-specific engine mode.
+
+The final replay recovered all executable inputs only through Yoda `get`, recompiled the recovered evaluator and reproduced all four original outcomes byte-exactly:
+
+```text
+YODA_CVM_AGENTIC_CONTEXT_REPLAY_008_R1=PASS
+
+REPLAY_INPUT_SOURCE=YODA_GET_ONLY
+YODA_GET_EXACT_MATCHES=11
+
+STATE_USED_RECOVERABLE=PASS
+CONTEXT_USED_RECOVERABLE=PASS
+RULE_USED_RECOVERABLE=PASS
+EVALUATOR_RECOVERABLE=PASS
+RESULT_PRODUCED_RECOVERABLE=PASS
+
+REPLAY_VS_EXPECTED_EXACT_MATCH=PASS
+REPLAY_VS_ORIGINAL_EXACT_MATCH=PASS
+
+CONTEXT_GOVERNED_REPRODUCIBLE_EVALUATION=PASS
+
+DATA_YODA_IDENTITY_UNCHANGED=PASS
+YODA_CHANGE=NO
+KYBER_CHANGE=NO
+```
+
+The narrow demonstrated-property statement is:
+
+> **Yoda preserved the exact observed state, versioned context, operational rule and evaluator required to reproduce two valid calculations and deterministically refuse two incompatible calculations using only Yoda-recovered evidence, without changing Yoda or Kyber.**
+
+Yoda did not interpret accounting, select the metric or become a rules engine. The external deterministic evaluator remained responsible for applying the frozen contract.
+
+See [`cases/YODA-CVM-AGENTIC-CONTEXT-001-context-governed-reproducible-evaluation/`](cases/YODA-CVM-AGENTIC-CONTEXT-001-context-governed-reproducible-evaluation/) and [`properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md`](properties/CONTEXT-GOVERNED-REPRODUCIBLE-EVALUATION.md).
+
 ---
 
 ## What the combined evidence suggests
@@ -505,6 +569,10 @@ Can equal canonical values remain distinct when provenance differs?
 DECISION LINEAGE
 Why did a deterministic system make this decision then,
 and can that decision be reproduced from recovered evidence?
+        ↓
+CONTEXT-GOVERNED REPRODUCIBLE EVALUATION
+Can preserved context and rules reproduce both an allowed operation
+and the deterministic refusal of incompatible operations?
 ```
 
 The same small Yoda surface survived these settings without a Genome Mode, Math Mode, SynthID Mode or Change Mode.
@@ -599,9 +667,12 @@ YODA-EDGAR-FILING-CONTEXT-001-R1
 
 YODA-CVM-REAPRESENTED-FINANCIAL-STATE-001
 → same canonical value + distinct regulatory document state + exact provenance
+
+YODA-CVM-AGENTIC-CONTEXT-001
+→ context-governed reproducible evaluation + Yoda-get-only replay
 ```
 
-The same context-capable binary has now preserved bounded real-world context in public software-agent tasks and in both U.S. SEC and Brazilian CVM financial-reporting workloads without a finance-specific storage path.
+Across the financial CASEs, Yoda's existing small surfaces were reused without a finance-specific engine mode. The agentic-context CASE used the frozen Yoda Simple Core CORE-014 and preserved data, context, rule, evaluator and outcomes as ordinary evidence objects and relations.
 
 The next strong falsification should be externally defined rather than another internal demonstration.
 
