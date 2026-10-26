@@ -1,0 +1,6 @@
+*.parquet
+*.duckdb
+*.db
+fixtures/
+scores/
+*.part
