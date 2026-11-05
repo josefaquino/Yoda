@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export LC_ALL=C
+[[ $# -eq 1 && -d "$1" ]] || { echo 'Usage: yoda-verify-report REPORT_DIR' >&2; exit 2; }
+DIR=$(cd "$1" && pwd -P)
+[[ -f "$DIR/manifest.sha256" && -f "$DIR/report.json" ]] || { echo 'REPORT_VERIFY=FAIL MISSING_FILES'; exit 1; }
+if (cd "$DIR" && sha256sum -c --status manifest.sha256) && \
+   jq -e '.schema=="yoda-industrial-evidence-report/v1" and .authority.control_action=="FORBIDDEN"' "$DIR/report.json" >/dev/null; then
+  echo 'REPORT_VERIFY=PASS CHECKSUMS_ONLY NOT_DIGITALLY_SIGNED'
+else
+  echo 'REPORT_VERIFY=FAIL'
+  exit 1
+fi

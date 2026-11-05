@@ -1,0 +1,16 @@
+# Upstream Augury bundle is fetched at a pinned commit; never vendor it unintentionally.
+/upstream/
+/evidence/
+# Generated binaries and private benchmark artifacts
+/bin/
+/lego002/bin/
+/lego003/bin/
+*.log
+*.metrics
+*.klm
+*.csv
+.env
+.env.*
+*.key
+*.pem
+.DS_Store

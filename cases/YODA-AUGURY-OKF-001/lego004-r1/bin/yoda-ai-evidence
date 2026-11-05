@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# YODA-AUGURY-OKF-001 LEGO004-R1: LLM quotes; C11 gate assigns authority.
+# No changes to LEGO001-004 or frozen Yoda/Kyber components.
+set -euo pipefail
+export LC_ALL=C
+
+usage(){ printf 'Usage: %s CASE_DIR SCENARIO [--model NAME | --fixture-response JSON_FILE]\n' "$0" >&2; exit 2; }
+[[ $# -ge 2 ]] || usage
+CASE=$1; SCENARIO=$2; shift 2
+MODE=ollama; MODEL=qwen2.5:3b; FIXTURE=''
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --model) [[ $# -ge 2 ]] || usage; MODEL=$2; shift 2 ;;
+    --fixture-response) [[ $# -ge 2 ]] || usage; FIXTURE=$2; MODE=fixture; shift 2 ;;
+    *) usage ;;
+  esac
+done
+case "$SCENARIO" in fresh-confirmed|stale-confirmed|pending-observation|rejected-observation) ;; *) usage ;; esac
+case "$MODEL" in qwen2.5:3b|qwen2.5:1.5b|llama3.2:3b|llama3.2:1b|gemma:2b) ;; *) usage ;; esac
+reject(){ printf 'AI_EVIDENCE=REJECT REASON=%s CONTROL_ACTION=FORBIDDEN\n' "$1" >&2; exit 1; }
+for cmd in jq sha256sum awk sed grep mktemp; do
+  command -v "$cmd" >/dev/null 2>&1 || reject "missing_$cmd"
+done
+BUNDLE="$CASE/upstream/okf-industrial/bundles/northfield-plant"
+TRUST="$CASE/lego002/bin/yoda-okf-trust"
+GATE="$CASE/lego003/bin/yoda-okf-gate"
+SCENARIOS="$CASE/lego003/fixtures/scenarios.tsv"
+MANIFEST="$CASE/evidence/source-sha256.txt"
+[[ -d "$BUNDLE" && -x "$TRUST" && -x "$GATE" && -f "$SCENARIOS" && -f "$MANIFEST" ]] || reject missing_component
+# Validate not only upstream hashes, but the original manifest identity.
+printf '%s  %s\n' '584e1ad725fb3fb8b45e504df642998baaf05544ddcd5c2df8b8d63568c68e74' "$MANIFEST" | sha256sum -c - >/dev/null || reject manifest_modified
+(cd "$CASE/upstream/okf-industrial" && sha256sum -c "$MANIFEST" >/dev/null) || reject upstream_modified
+"$TRUST" "$BUNDLE" >/dev/null || reject source_trust_failed
+ROW=$(awk -F '\t' -v id="$SCENARIO" '$1==id{print; n++} END{if(n!=1)exit 1}' "$SCENARIOS") || reject scenario_not_unique
+CLAIM=$(printf '%s\n' "$ROW" | awk -F '\t' '{print $2}')
+AGE=$(printf '%s\n' "$ROW" | awk -F '\t' '{print $3}')
+case "$CLAIM" in cold-start|settle|pending|rejected) ;; *) reject invalid_claim ;; esac
+[[ "$AGE" =~ ^[0-9]+$ ]] || reject invalid_age
+TMP=$(mktemp -d /tmp/yoda-ai-evidence.XXXXXXXX) || reject tmp_unavailable
+trap 'rm -rf -- "$TMP"' EXIT
+printf '%s\n' "$ROW" > "$TMP/scenario.tsv"
+GATE_OUTPUT=$("$GATE" "$BUNDLE" "$TMP/scenario.tsv") || reject gate_failed
+GATE_LINE=$(printf '%s\n' "$GATE_OUTPUT" | grep '^SCENARIO=' | head -n 1) || reject gate_missing
+printf '%s\n' "$GATE_OUTPUT" | grep -Fqx 'OKF_GATE=PASS SCENARIOS=1 TELEMETRY=NOT_CONNECTED HUMAN_CONTROL=REQUIRED' || reject gate_incomplete
+DECISION=$(printf '%s\n' "$GATE_LINE" | sed -n 's/.* DECISION=\([^ ]*\) CONTROL_ACTION=FORBIDDEN DATA=SIMULATED/\1/p')
+REVIEW=$(printf '%s\n' "$GATE_LINE" | sed -n 's/.* REVIEW=\([^ ]*\) READING=.*/\1/p')
+WINDOW=$(printf '%s\n' "$GATE_LINE" | sed -n 's/.* WINDOW_MIN=\([0-9]*\) DECISION=.*/\1/p')
+[[ -n "$DECISION" && -n "$REVIEW" && -n "$WINDOW" ]] || reject gate_parse_failed
+# The authoritative quote is chosen by verified OKF lifecycle record, not by the LLM.
+case "$CLAIM" in
+ cold-start)
+   HEURISTIC="$BUNDLE/heuristics/pump-101a-cold-start.md"
+   SOURCE="$BUNDLE/references/shift-handover-cold-start.md"
+   EXPECTED_QUOTE=$(sed -n 's/^quote: "\(.*\)"$/\1/p' "$HEURISTIC") ;;
+ settle)
+   HEURISTIC="$BUNDLE/heuristics/clarifier-settling-phase.md"
+   SOURCE="$BUNDLE/references/process-note-settling-phase.md"
+   EXPECTED_QUOTE=$(sed -n 's/^quote: "\(.*\)"$/\1/p' "$HEURISTIC") ;;
+ pending|rejected)
+   SOURCE="$BUNDLE/learned.md"
+   EXPECTED_QUOTE=$(awk -v state="$CLAIM" '
+      /^  - claim: / { q=""; found_state="" }
+      /^    quote: "/ { q=$0; sub(/^    quote: "/,"",q); sub(/"$/, "", q) }
+      /^    review_status: / {
+        found_state=$2
+        if (found_state==state && length(q)>0) {print q; count++}
+      }
+      END {if(count!=1)exit 1}
+   ' "$SOURCE") || reject claim_quote_not_unique ;;
+esac
+[[ -f "$SOURCE" && -n "$EXPECTED_QUOTE" ]] || reject no_authoritative_quote
+[[ ${#EXPECTED_QUOTE} -ge 20 && ${#EXPECTED_QUOTE} -le 2000 ]] || reject invalid_authoritative_quote
+grep -Fq -- "$EXPECTED_QUOTE" "$SOURCE" || reject canonical_quote_not_in_source
+
+if [[ "$MODE" == fixture ]]; then
+  [[ -f "$FIXTURE" ]] || reject fixture_missing
+  cp -- "$FIXTURE" "$TMP/model.json" || reject fixture_copy_failed
+  ORIGIN=OFFLINE_FIXTURE
+else
+  command -v curl >/dev/null 2>&1 || reject curl_missing
+  command -v ollama >/dev/null 2>&1 || reject ollama_missing
+  ollama list | awk -v m="$MODEL" 'NR>1&&$1==m{ok=1} END{exit !ok}' || reject model_not_installed
+  jq -n --arg model "$MODEL" --arg scenario "$SCENARIO" --arg claim "$CLAIM" --arg quote "$EXPECTED_QUOTE" '
+    {model:$model,stream:false,
+     format:{type:"object",additionalProperties:false,
+       properties:{evidence_quote:{type:"string"}},required:["evidence_quote"]},
+     options:{temperature:0,num_predict:260,num_ctx:4096},
+     system:"You are a quotation extractor, NOT a decision maker. Output exactly one JSON object with the key evidence_quote. Copy one contiguous, exact substring of 20 to 200 characters from the given canonical quote. No paraphrase, ellipsis, newlines, extra fields, or control recommendations.",
+     prompt:("Fictional industrial OKF scenario " + $scenario + " / claim=" + $claim + ". Extract a verbatim excerpt ONLY from this canonical quote:\n" + $quote)}
+  ' > "$TMP/request.json" || reject request_generation_failed
+  curl --fail --silent --show-error --connect-timeout 5 --max-time 240 \
+    --header 'Content-Type: application/json' --data-binary @"$TMP/request.json" \
+    'http://127.0.0.1:11434/api/generate' > "$TMP/ollama.json" || reject ollama_request_failed
+  jq -er 'select(.done == true and (.response|type)=="string") | .response | fromjson' \
+    "$TMP/ollama.json" > "$TMP/model.json" || reject invalid_ollama_response
+  ORIGIN=OLLAMA_LOCAL
+fi
+# Fail closed for non-JSON, extra keys, absent/non-string quote, line breaks, etc.
+if ! jq -e 'type=="object" and (keys==["evidence_quote"]) and
+  (.evidence_quote|type)=="string" and
+  (.evidence_quote|length)>=20 and (.evidence_quote|length)<=200 and
+  (.evidence_quote|contains("\n")|not) and (.evidence_quote|contains("\r")|not)' \
+  "$TMP/model.json" >/dev/null; then reject model_schema_mismatch; fi
+QUOTE=$(jq -r '.evidence_quote' "$TMP/model.json") || reject quote_decode_failed
+[[ "$EXPECTED_QUOTE" == *"$QUOTE"* ]] || reject quote_not_part_of_target_claim
+grep -Fq -- "$QUOTE" "$SOURCE" || reject quote_not_in_source
+printf 'AI_EVIDENCE=PASS TARGET_CLAIM_GROUNDED=YES ORIGIN=%s\n' "$ORIGIN"
+printf 'SCENARIO=%s CLAIM=%s REVIEW=%s AGE_MIN=%s WINDOW_MIN=%s\n' "$SCENARIO" "$CLAIM" "$REVIEW" "$AGE" "$WINDOW"
+printf 'HOST_DECISION=%s DECISION_OWNER=C11_GATE CONTROL_ACTION=FORBIDDEN DATA=SIMULATED\n' "$DECISION"
+printf 'AI_GUARD=PASS TELEMETRY=NOT_CONNECTED HUMAN_CONTROL=REQUIRED\n'

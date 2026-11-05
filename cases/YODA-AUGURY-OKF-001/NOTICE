@@ -1,0 +1,12 @@
+YODA Industrial AI Evidence Guard — independent experimental implementation.
+
+The source code in this repository is licensed under Apache License 2.0.
+
+Uses the public OKF Industrial Profile maintained by Augury, retrieved at run time
+from https://github.com/augurysys/okf-industrial, commit
+72bbcc40aa729d4b929314c2e20c0961ad04843c.
+The upstream OKF Industrial Profile is Copyright 2026 Augury and licensed
+under Apache License 2.0. See its LICENSE and NOTICE in the fetched repository.
+
+This project is independent and is not endorsed by, affiliated with, or
+certified by Augury or Google. Northfield Plant is fictional demonstration data.

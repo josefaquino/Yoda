@@ -1,0 +1,5 @@
+# SCENARIO<TAB>CLAIM<TAB>ASSUMED_READING_AGE_MIN
+fresh-confirmed	cold-start	5
+stale-confirmed	cold-start	45
+pending-observation	pending	5
+rejected-observation	rejected	5

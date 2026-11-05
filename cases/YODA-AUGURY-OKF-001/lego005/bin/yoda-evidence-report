@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+# YODA-AUGURY-OKF-001 LEGO005: evidence report wrapper, no changes to previous LEGOs.
+set -euo pipefail
+export LC_ALL=C
+
+usage() {
+  printf 'Usage: %s CASE_DIR SCENARIO --out NEW_DIR [--model NAME | --fixture-response JSON]\n' "$0" >&2
+  exit 2
+}
+[[ $# -ge 4 ]] || usage
+CASE=$1; SCENARIO=$2; shift 2
+OUT=''; MODE=ollama; MODEL=qwen2.5:3b; FIXTURE=''
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --out) [[ $# -ge 2 ]] || usage; OUT=$2; shift 2 ;;
+    --model) [[ $# -ge 2 && $MODE != fixture ]] || usage; MODEL=$2; shift 2 ;;
+    --fixture-response) [[ $# -ge 2 && $MODE != fixture ]] || usage; FIXTURE=$2; MODE=fixture; shift 2 ;;
+    *) usage ;;
+  esac
+done
+[[ -n "$OUT" && "$OUT" != / && "$OUT" != . ]] || usage
+case "$SCENARIO" in fresh-confirmed|stale-confirmed|pending-observation|rejected-observation) ;; *) usage ;; esac
+fail() { printf 'REPORT=FAIL REASON=%s\n' "$1" >&2; exit 1; }
+for cmd in sha256sum jq awk sed grep git mktemp dirname basename; do
+  command -v "$cmd" >/dev/null 2>&1 || fail "missing_$cmd"
+done
+[[ -d "$CASE" ]] || fail case_missing
+CASE=$(cd "$CASE" && pwd -P)
+ROOT="$CASE/upstream/okf-industrial"
+BUNDLE="$ROOT/bundles/northfield-plant"
+RUNNER="$CASE/lego004-r1/bin/yoda-ai-evidence"
+SCENARIOS="$CASE/lego003/fixtures/scenarios.tsv"
+MANIFEST="$CASE/evidence/source-sha256.txt"
+[[ -x "$RUNNER" && -d "$BUNDLE" && -f "$SCENARIOS" && -f "$MANIFEST" ]] || fail prerequisites_missing
+[[ -d "$ROOT/.git" ]] || fail upstream_git_missing
+COMMIT=$(git -C "$ROOT" rev-parse HEAD 2>/dev/null) || fail upstream_commit_unavailable
+[[ "$COMMIT" == 72bbcc40aa729d4b929314c2e20c0961ad04843c ]] || fail unexpected_upstream_commit
+ROW=$(awk -F '\t' -v s="$SCENARIO" '$1 == s {print; n++} END {if (n!=1) exit 1}' "$SCENARIOS") || fail scenario_missing
+CLAIM=$(printf '%s\n' "$ROW" | awk -F '\t' '{print $2}')
+AGE=$(printf '%s\n' "$ROW" | awk -F '\t' '{print $3}')
+[[ "$AGE" =~ ^[0-9]+$ ]] || fail scenario_age_invalid
+case "$CLAIM" in cold-start|settle|pending|rejected) ;; *) fail unknown_claim ;; esac
+
+# The canonical text is not a captured model utterance. It is authoritative OKF content.
+case "$CLAIM" in
+  cold-start)
+    SOURCE_REL=references/shift-handover-cold-start.md
+    HEURISTIC="$BUNDLE/heuristics/pump-101a-cold-start.md"
+    QUOTE=$(sed -n 's/^quote: "\(.*\)"$/\1/p' "$HEURISTIC")
+    EVIDENCE_LEVEL=REFERENCE_DOCUMENT
+    ASSET=P-101A ;;
+  settle)
+    SOURCE_REL=references/process-note-settling-phase.md
+    HEURISTIC="$BUNDLE/heuristics/clarifier-settling-phase.md"
+    QUOTE=$(sed -n 's/^quote: "\(.*\)"$/\1/p' "$HEURISTIC")
+    EVIDENCE_LEVEL=REFERENCE_DOCUMENT
+    ASSET=P-101A ;;
+  pending|rejected)
+    SOURCE_REL=learned.md
+    QUOTE=$(awk -v state="$CLAIM" '
+      /^  - claim: / {q=""}
+      /^    quote: "/ {q=$0; sub(/^    quote: "/,"",q); sub(/"$/, "",q)}
+      /^    review_status: / {if ($2 == state && length(q)>0) {print q; n++}}
+      END {if (n!=1) exit 1}
+    ' "$BUNDLE/learned.md") || fail claim_not_unique
+    EVIDENCE_LEVEL=PROPOSAL_RECORD_ONLY
+    ASSET=INDUSTRIAL_CONTEXT ;;
+esac
+SOURCE="$BUNDLE/$SOURCE_REL"
+[[ -f "$SOURCE" && -n "$QUOTE" ]] || fail canonical_source_missing
+grep -Fq -- "$QUOTE" "$SOURCE" || fail canonical_quote_missing
+
+OUT=${OUT%/}
+PARENT=$(dirname -- "$OUT")
+[[ -d "$PARENT" ]] || fail destination_parent_missing
+[[ ! -e "$OUT" ]] || fail destination_exists
+TMP=$(mktemp -d "$PARENT/.yoda-report.XXXXXXXX") || fail temporary_directory_failed
+trap 'rm -rf -- "$TMP"' EXIT
+
+# Run the already validated AI Evidence Guard; a nonzero result produces no report.
+if [[ "$MODE" == fixture ]]; then
+  [[ -f "$FIXTURE" ]] || fail fixture_missing
+  if ! "$RUNNER" "$CASE" "$SCENARIO" --fixture-response "$FIXTURE" > "$TMP/guard.log" 2> "$TMP/guard.stderr"; then
+    cat "$TMP/guard.stderr" >&2
+    fail ai_evidence_guard_rejected
+  fi
+  ORIGIN=OFFLINE_FIXTURE
+  MODEL_ID=NONE
+  FIXTURE_SHA=$(sha256sum "$FIXTURE" | awk '{print $1}')
+else
+  if ! "$RUNNER" "$CASE" "$SCENARIO" --model "$MODEL" > "$TMP/guard.log" 2> "$TMP/guard.stderr"; then
+    cat "$TMP/guard.stderr" >&2
+    fail ai_evidence_guard_rejected
+  fi
+  ORIGIN=OLLAMA_LOCAL
+  MODEL_ID=$MODEL
+  FIXTURE_SHA=''
+fi
+
+# Pin the expected successful output contract. Do not reinterpret model decisions.
+[[ $(wc -l < "$TMP/guard.log") -eq 4 ]] || fail unexpected_guard_output_count
+grep -Fqx "AI_EVIDENCE=PASS TARGET_CLAIM_GROUNDED=YES ORIGIN=$ORIGIN" "$TMP/guard.log" || fail missing_guard_evidence
+RESULT=$(grep '^SCENARIO=' "$TMP/guard.log") || fail missing_guard_scenario
+printf '%s\n' "$RESULT" | grep -Eq "^SCENARIO=${SCENARIO} CLAIM=${CLAIM} REVIEW=(CONFIRMED|PENDING|REJECTED) AGE_MIN=${AGE} WINDOW_MIN=[0-9]+$" || fail invalid_guard_scenario
+REVIEW=$(printf '%s\n' "$RESULT" | sed -n 's/.* REVIEW=\([^ ]*\) AGE_MIN=.*/\1/p')
+WINDOW=$(printf '%s\n' "$RESULT" | sed -n 's/.* WINDOW_MIN=\([0-9]*\)$/\1/p')
+DECISION_LINE=$(grep '^HOST_DECISION=' "$TMP/guard.log") || fail missing_guard_decision
+DECISION=$(printf '%s\n' "$DECISION_LINE" | sed -n 's/^HOST_DECISION=\([^ ]*\) DECISION_OWNER=C11_GATE CONTROL_ACTION=FORBIDDEN DATA=SIMULATED$/\1/p')
+[[ -n "$DECISION" ]] || fail invalid_guard_decision
+grep -Fqx 'AI_GUARD=PASS TELEMETRY=NOT_CONNECTED HUMAN_CONTROL=REQUIRED' "$TMP/guard.log" || fail missing_guard_final
+case "$CLAIM:$REVIEW:$DECISION" in
+  cold-start:CONFIRMED:CONTEXT_ELIGIBLE_FOR_HUMAN_REVIEW|cold-start:CONFIRMED:ADVISORY_ONLY|settle:CONFIRMED:CONTEXT_ELIGIBLE_FOR_HUMAN_REVIEW|settle:CONFIRMED:ADVISORY_ONLY|pending:PENDING:HYPOTHESIS_ONLY|rejected:REJECTED:IGNORE_CLAIM) ;;
+  *) fail inconsistent_claim_authority ;;
+esac
+# Avoid accidental promotion of stale evidence when recorded age exceeds window.
+if [[ "$REVIEW" == CONFIRMED && $AGE -gt $WINDOW && "$DECISION" != ADVISORY_ONLY ]]; then fail stale_authority_mismatch; fi
+if [[ "$REVIEW" == CONFIRMED && $AGE -le $WINDOW && "$DECISION" != CONTEXT_ELIGIBLE_FOR_HUMAN_REVIEW ]]; then fail fresh_authority_mismatch; fi
+
+SOURCE_SHA=$(sha256sum "$SOURCE" | awk '{print $1}')
+MANIFEST_SHA=$(sha256sum "$MANIFEST" | awk '{print $1}')
+GUARD_SHA=$(sha256sum "$TMP/guard.log" | awk '{print $1}')
+
+jq -n \
+  --arg schema 'yoda-industrial-evidence-report/v1' \
+  --arg case_id 'YODA-AUGURY-OKF-001' \
+  --arg commit "$COMMIT" \
+  --arg manifest_sha256 "$MANIFEST_SHA" \
+  --arg scenario "$SCENARIO" \
+  --arg claim "$CLAIM" \
+  --arg asset "$ASSET" \
+  --arg review "$REVIEW" \
+  --arg decision "$DECISION" \
+  --arg source_file "$SOURCE_REL" \
+  --arg source_sha256 "$SOURCE_SHA" \
+  --arg source_level "$EVIDENCE_LEVEL" \
+  --arg canonical_quote "$QUOTE" \
+  --arg model_origin "$ORIGIN" \
+  --arg model_id "$MODEL_ID" \
+  --arg fixture_sha256 "$FIXTURE_SHA" \
+  --arg guard_sha256 "$GUARD_SHA" \
+  --argjson age "$AGE" \
+  --argjson window "$WINDOW" '
+  {schema:$schema,case_id:$case_id,
+   upstream:{repository:"augurysys/okf-industrial",commit:$commit,snapshot_manifest_sha256:$manifest_sha256,
+     bundle:"bundles/northfield-plant",fictional_example:true},
+   observation:{scenario:$scenario,asset:$asset,claim:$claim,age_minutes:$age,
+     trust_window_minutes:$window,telemetry:"NOT_CONNECTED",ages:"SIMULATED"},
+   knowledge:{review_status:$review,canonical_source:$source_file,source_sha256:$source_sha256,
+     quote:$canonical_quote,quote_scope:$source_level,quote_present_in_source:true,
+     external_document_authentication:"NOT_PERFORMED"},
+   llm:{origin:$model_origin,model:$model_id,fixture_response_sha256:(if $fixture_sha256=="" then null else $fixture_sha256 end),
+     quotation_check:"PASS",exact_model_excerpt_recorded:false},
+   authority:{decision:$decision,owner:"C11_GATE",control_action:"FORBIDDEN",human_control:"REQUIRED"},
+   audit:{guard_log_sha256:$guard_sha256,integrity:"SHA256_CHECKSUMS_ONLY",cryptographic_signature:false,
+     physical_diagnosis:"NOT_PERFORMED",realtime_sensor_validation:"NOT_PERFORMED"}}' > "$TMP/report.json" || fail json_generation_failed
+jq -e '.schema=="yoda-industrial-evidence-report/v1" and .authority.control_action=="FORBIDDEN"' "$TMP/report.json" >/dev/null || fail json_validation_failed
+
+cat > "$TMP/report.md" <<EOF
+# Yoda Industrial Evidence Report
+
+**Case:** YODA-AUGURY-OKF-001  
+**OKF commit:** \`$COMMIT\`  
+**Scenario:** \`$SCENARIO\` — illustrative, not live telemetry  
+**Asset/context:** $ASSET  
+**Decision:** \`$DECISION\` (**determined by C11 Decision Gate**)  
+**Control action:** FORBIDDEN; human review required.
+
+## Evidence and review status
+
+- Claim: \`$CLAIM\`
+- Review: \`$REVIEW\`
+- Canonical source: \`$SOURCE_REL\`
+- Source SHA-256: \`$SOURCE_SHA\`
+- Evidence scope: \`$EVIDENCE_LEVEL\`
+- Source authentication beyond local file hashes: **not performed**.
+
+> $QUOTE
+
+The canonical quote above was read from the OKF bundle. The R1 evidence guard verified that the model supplied a valid excerpt from the relevant claim, but **did not persist the model's exact excerpt**. For pending/rejected knowledge, the quote is from the proposal record, not an independently retrieved monitoring-system log.
+
+## Data and authority
+
+- Reading age: **$AGE minutes (simulated)**.
+- Policy trust window: **$WINDOW minutes**.
+- Model origin: \`$ORIGIN\`; model: \`$MODEL_ID\`.
+- Host authority: \`$DECISION\`.
+- No live sensor connection or physical fault diagnosis.
+- No automatic industrial control.
+
+## Integrity and limitations
+
+- Upstream manifest SHA-256: \`$MANIFEST_SHA\`.
+- Guard output SHA-256: \`$GUARD_SHA\`.
+- Files are checksum-protected by \`manifest.sha256\`; **not digitally signed or attested by KyberProof**.
+- Fictional Augury Northfield bundle, with simulated reading ages.
+EOF
+
+rm -f -- "$TMP/guard.stderr"
+(
+  cd "$TMP"
+  sha256sum guard.log report.json report.md > manifest.sha256
+)
+[[ ! -e "$OUT" ]] || fail destination_race
+mv -- "$TMP" "$OUT" || fail destination_move_failed
+trap - EXIT
+printf 'REPORT=PASS SCENARIO=%s DECISION=%s ORIGIN=%s\n' "$SCENARIO" "$DECISION" "$ORIGIN"
+printf 'REPORT_DIR=%s\n' "$OUT"
+printf 'REPORT_INTEGRITY=SHA256_ONLY HUMAN_CONTROL=REQUIRED\n'
