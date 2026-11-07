@@ -40,8 +40,16 @@ and extracted independently. Historical input
 manifests can contain absolute local paths.
 
 This release preserves the experimental sources
-and reported results. It is not yet certified as
-a one-command reproduction from a clean clone.
+and reported results. **CLEAN CLONE 016 passed** on
+2026-11-06: published C11 code at commit
+`e16ad1131427d08b9e29f9b9b03826e6b7c720bd`
+was recompiled and run with existing local NASA
+recordings; all three published TSV result files
+matched byte for byte.
+
+See [CLEAN CLONE 016 audit](audits/CLEAN-CLONE-016.md)
+and [verification script](scripts/yoda-nasa-clean-check-016.sh).
+This is not a clean-machine-from-scratch reproduction.
 
 ## Interpretation
 

@@ -65,3 +65,14 @@ This independent project is not affiliated with,
 sponsored by, or endorsed by NASA or Tractian.
 
 See results/REPORT.md for detailed findings.
+
+## Clean-checkout reproduction audit (016)
+
+**PASS:** Published C11 code, pinned to the original
+publication commit `e16ad1131427d08b9e29f9b9b03826e6b7c720bd`,
+reproduced all three public TSV result files byte for
+byte using the original locally stored NASA recordings.
+
+See [CLEAN CLONE 016 audit](audits/CLEAN-CLONE-016.md)
+and [published checker](scripts/yoda-nasa-clean-check-016.sh).
+This is not a new-machine-from-scratch reproduction.
