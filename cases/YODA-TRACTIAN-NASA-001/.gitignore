@@ -1,0 +1,8 @@
+datasets/
+evidence/
+*.zip
+*.rar
+*.7z
+*.o
+bin/
+*.log
