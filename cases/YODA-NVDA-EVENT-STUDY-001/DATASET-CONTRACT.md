@@ -8,10 +8,12 @@ Both comparisons must use walk-forward historical validation, never a random spl
 
 ## Data authorities
 
-- Market prices: licensed/authorized historical daily OHLCV for NVDA, QQQ, SOXX;
+- Market prices: Nasdaq public website historical JSON endpoint (subject to terms of use and availability) for NVDA, QQQ, SOXX;
   a fixed policy for split adjustments, dividend treatment and the trading calendar.
   Stooq and Yahoo direct endpoints were unavailable from the test host (HTML
-  JavaScript challenge and HTTP 429). No price data has been validated yet.
+  JavaScript challenge and HTTP 429). Nasdaq raw responses and splits still need
+  verification on the user's Debian host. Treat this as a public web endpoint,
+  not a contractual exchange-grade data feed.
 - SEC concept: `https://data.sec.gov/api/xbrl/companyconcept/CIK0001045810/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax.json`.
 - SEC submission history: `https://data.sec.gov/submissions/CIK0001045810.json`.
 - An initial earnings news release may make a figure public before the 10-Q/10-K;
