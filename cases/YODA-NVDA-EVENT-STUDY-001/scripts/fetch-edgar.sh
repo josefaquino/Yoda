@@ -22,7 +22,7 @@ download() {
       echo "SEC_DOWNLOAD_FAILED=$name" >&2
       exit 2
   fi
-  if ! grep -Eq '"cik"[[:space:]]*:[[:space:]]*1045810' "$tmp"; then
+  if ! grep -Eq '"cik"[[:space:]]*:[[:space:]]*"?0*1045810"?' "$tmp"; then
     rm -f "$tmp"
     echo "SEC_IDENTITY_FAILED=$name" >&2
     exit 2
