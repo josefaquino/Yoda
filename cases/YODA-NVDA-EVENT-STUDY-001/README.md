@@ -12,13 +12,14 @@ This is a NEW standalone application module. It does not modify the predecessor,
 
 The GitHub file API may not preserve executable bits. Run through sh:
 
-1. sh scripts/fetch.sh
-2. sh scripts/run.sh
-3. sh scripts/forecast.sh
-4. sh scripts/backtest.sh
-5. sha256sum -c evidence/FORECAST-MANIFEST.sha256
+1. sh tests/nasdaq-parser-smoke.sh (local C11 syntax + fail-closed tests)
+2. sh scripts/fetch.sh
+3. sh scripts/run.sh
+4. sh scripts/forecast.sh
+5. sh scripts/backtest.sh
+6. sha256sum -c evidence/FORECAST-MANIFEST.sha256
 
-If Stooq denies requests, manually supply authoritative provider CSV data in data/raw/NVDA.csv, data/raw/QQQ.csv, data/raw/SOXX.csv. Required columns: Date,Open,High,Low,Close,Volume. Validate currency, corporate actions and adjustment convention. Do not fabricate prices.
+The fetcher now uses the Nasdaq public website historical endpoint (stocks: NVDA; ETF: QQQ, SOXX) through curl and a strict C11 JSON parser (requires a C11 compiler, e.g. `cc`). It saves unchanged raw JSON and CSV under data/raw/, with hashes in evidence/NASDAQ-SOURCE-MANIFEST.sha256. Nasdaq's website endpoint is undocumented; it may return null, rate-limit requests or change its schema. Run `sh tests/nasdaq-parser-smoke.sh` before fetching. Verify split adjustment, source coverage, terms of use and attribution; never fabricate or blindly redistribute market data. If unavailable, supply independently authorized CSVs with the same `Date,Open,High,Low,Close,Volume` schema.
 
 Forecast outputs: results/forecast/summary.tsv, model-metadata.tsv, terminal-samples.tsv.
 Backtest outputs: results/forecast/backtest.tsv and backtest-report.txt.
