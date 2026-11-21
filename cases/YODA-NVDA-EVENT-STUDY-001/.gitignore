@@ -1,0 +1,12 @@
+data/raw/*.csv
+data/normalized/*.tsv
+results/*.tsv
+results/forecast/*
+options/quotes.tsv
+evidence/*MANIFEST*.sha256
+*.part
+
+# Nasdaq public endpoint raw responses and local C11 build
+data/raw/*.json
+build/
+evidence/nasdaq-fetch.tsv

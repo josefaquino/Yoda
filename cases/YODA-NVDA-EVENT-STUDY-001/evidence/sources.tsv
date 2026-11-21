@@ -1,0 +1,5 @@
+category	source	url	purpose
+prices	Stooq	https://stooq.com/q/d/l/	Source candidate, verify adjusted/unadjusted policy
+price_crosscheck	Yahoo	https://finance.yahoo.com/quote/NVDA/history/	Independent price check
+sec_prior_case	GitHub	https://github.com/josefaquino/Yoda/blob/main/cases/YODA-EDGAR-FILING-CONTEXT-001-successive-financial-state/RESULTS.md	Frozen Yoda precedent
+regulatory_news	Reuters	https://www.reuters.com/world/us-secs-nvidia-probe-is-examining-potential-accounting-issues-sources-say-2026-11-20/	November 20 reporting
